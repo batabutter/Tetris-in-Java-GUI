@@ -4,9 +4,12 @@ import FrontEnd.Board;
 public class Game {
     private boolean gameOver;
     private Board board;
-    public Game() {
+    private Player p1;
+    private Player p2;
+    public Game(Player player1, Player player2) {
         gameOver = false;
-        board = new Board();
+        p1 = player1;
+        p2 = player2;
     }
 
     public static boolean pieceSettled(Board board) {
@@ -19,7 +22,8 @@ public class Game {
     }
 
     public void createNewPiece() {
-        board.createNewPiece();
+        p1.getBoard().createNewPiece();
+        p2.getBoard().createNewPiece();
     }
    
 }
