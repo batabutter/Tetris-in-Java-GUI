@@ -25,5 +25,5 @@ public class Game {
         p1.getBoard().createNewPiece();
         p2.getBoard().createNewPiece();
     }
-   
+    
 }
