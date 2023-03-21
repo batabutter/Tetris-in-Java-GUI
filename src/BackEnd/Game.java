@@ -36,5 +36,5 @@ public class Game {
     public Player getPlayer() {
         return p;
     }
-   
+    
 }
