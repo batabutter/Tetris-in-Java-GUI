@@ -3,12 +3,12 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 public class PuzzlePiece {
-    private ImageIcon[] blocks = {};
+    private ImageIcon[] blocks = {new ImageIcon("images/blue.png")};
     private ImageIcon shape;
     private int xCell;
     private int yCell;
     public PuzzlePiece(){
-        shape = blocks[(int)(Math.random())*blocks.length+1];
+        shape = blocks[(int)(Math.random())*blocks.length];
     }
     public ImageIcon getShape(){
         return shape;
@@ -25,4 +25,5 @@ public class PuzzlePiece {
     public int getY(){
         return yCell;
     }
+
 }

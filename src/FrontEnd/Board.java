@@ -7,7 +7,7 @@ import java.awt.Graphics;
 
 
 public class Board {
-    PuzzlePiece currentPiece;
+    JLabel currentPiece;
     //How much the piece will move down
     final int verticalMovement = 0;
     private int startX;
@@ -32,8 +32,23 @@ public class Board {
         frame.setVisible(true);
     }
 
-    public void setCurrentPiece(PuzzlePiece piece) {
-        currentPiece = piece;
+    public void setCurrentPiece(JLabel temp) {
+        currentPiece = temp;
+    }
+
+    //Change
+    public void add(PuzzlePiece piece) {
+        JLabel temp = new JLabel(piece.getShape());
+        currentPiece = temp;
+        temp.setBounds(piece.getX(),piece.getY(), piece.getShape().getIconWidth(), piece.getShape().getIconHeight());
+        frame.add(temp);
+
+    }
+
+    public void remove() {
+
+        frame.remove(currentPiece);
+        currentPiece = null;
     }
 
     class DrawBackGround extends JPanel {

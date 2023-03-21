@@ -24,11 +24,12 @@ public class Player {
    //Creates new piece at given location
    public void createNewPiece() {
     PuzzlePiece piece = new PuzzlePiece();
-
+    board.add(piece);
     Point temp;
 
     while (!Game.pieceSettled(board)) {
         temp = movePiece(piece);
+
         board.showBoard();
 
     }
