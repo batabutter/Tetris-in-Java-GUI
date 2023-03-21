@@ -1,17 +1,18 @@
 package BackEnd;
 import FrontEnd.Board;
+import FrontEnd.Player;
 
 public class Game {
     private boolean gameOver;
-    private Board board;
-    private Player p1;
-    private Player p2;
-    public Game(Player player1, Player player2) {
+    private Player p;
+    public Game(Player player) {
         gameOver = false;
-        p1 = player1;
-        p2 = player2;
+        p = player;
     }
 
+    //This method will be given a current version of whatever board
+    //It will then anaylize the board to see if it is completely "settled"
+    //If it is, it will return a boolean
     public static boolean pieceSettled(Board board) {
         
         return false;
@@ -21,9 +22,17 @@ public class Game {
         return gameOver;
     }
 
-    public void createNewPiece() {
-        p1.getBoard().createNewPiece();
-        p2.getBoard().createNewPiece();
+    public int start() {
+
+        while (!gameOver()) {
+            p.getBoard().createNewPiece();
+        }   
+
+        return 0;
+    }
+
+    public Player getPlayer() {
+        return p;
     }
    
 }
