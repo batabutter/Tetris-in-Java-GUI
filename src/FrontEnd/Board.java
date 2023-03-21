@@ -1,5 +1,6 @@
 package FrontEnd;
 import BackEnd.*;
+import javax.swing.*;
 
 
 public class Board {
@@ -10,9 +11,11 @@ public class Board {
     private int startY;
 
     //It will tell the board where it should create the piece
-    public Board(int x, int y) {
+    //Paintcomponenet here
+    public Board(int x, int y, JFrame frame) {
         startX = x;
         startY = y;
+
     }
 
     //Will be given a start location to create the piece in
@@ -33,4 +36,7 @@ public class Board {
     public void movePiece(int x) {
         
     }
+
+
+    
 }
