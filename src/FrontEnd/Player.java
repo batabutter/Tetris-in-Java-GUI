@@ -1,5 +1,8 @@
 package FrontEnd;
+import BackEnd.Game;
+import BackEnd.PuzzlePiece;
 import javax.swing.*;
+import java.awt.Point;
 
 public class Player {
     private boolean automated;
@@ -14,5 +17,18 @@ public class Player {
     return board;
    }
 
-   
+   public Point movePiece(PuzzlePiece piece) {
+    return null;
+   }
+
+   //Creates new piece at given location
+   public void createNewPiece() {
+    PuzzlePiece piece = new PuzzlePiece();
+    Point temp;
+
+    while (!Game.pieceSettled(board)) {
+        temp = movePiece(piece);
+    }
+
+}
 }

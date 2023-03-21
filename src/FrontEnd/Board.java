@@ -1,6 +1,7 @@
 package FrontEnd;
 import BackEnd.*;
 import javax.swing.*;
+import java.awt.Point;
 
 
 public class Board {
@@ -18,25 +19,9 @@ public class Board {
 
     }
 
-    //Will be given a start location to create the piece in
-    public void createNewPiece() {
-        PuzzlePiece piece = new PuzzlePiece();
-
-        while (!Game.pieceSettled(this)) {
-            movePiece(0);
-        }
-
-    }
     public void setCurrentPiece(PuzzlePiece piece) {
         currentPiece = piece;
     }
-
-    //x is the horizontal movement
-    //It will check i
-    public void movePiece(int x) {
-        
-    }
-
 
     
 }

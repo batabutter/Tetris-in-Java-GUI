@@ -5,9 +5,11 @@ import FrontEnd.Player;
 public class Game {
     private boolean gameOver;
     private Player p;
+    private Board board;
     public Game(Player player) {
         gameOver = false;
         p = player;
+        board = player.getBoard();
     }
 
     //This method will be given a current version of whatever board
@@ -25,7 +27,7 @@ public class Game {
     public int start() {
 
         while (!gameOver()) {
-            p.getBoard().createNewPiece();
+            p.createNewPiece();
         }   
 
         return 0;
