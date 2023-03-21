@@ -6,6 +6,7 @@ public class Game {
     private boolean gameOver;
     private Player p;
     private Board board;
+    
     public Game(Player player) {
         gameOver = false;
         p = player;
