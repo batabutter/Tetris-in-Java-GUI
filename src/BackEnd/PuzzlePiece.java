@@ -5,15 +5,19 @@ import java.util.*;
 import java.awt.*;
 import FrontEnd.Board;
 public class PuzzlePiece {
-    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png")};
+    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png"), new ImageIcon("images/teal.png"), 
+    new ImageIcon("images/red.png"), new ImageIcon("images/purple.png"), new ImageIcon("images/orange.png"),
+    new ImageIcon("images/green.png"), new ImageIcon("images/blue.png")};
+
     private ImageIcon shape;
     private Dimension size;
     private JLabel pieceLabel;
     //Temp
     private int xCell = 0;
     private int yCell = 0;
+
     public PuzzlePiece(){
-        shape = blocks[(int)(Math.random())*blocks.length];
+        shape = blocks[(int)(Math.random()*blocks.length)];
         pieceLabel = new JLabel(shape);
         size = pieceLabel.getPreferredSize();
     }
