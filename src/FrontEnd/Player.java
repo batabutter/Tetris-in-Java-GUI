@@ -12,7 +12,7 @@ public class Player {
     private boolean keyAdded;
     
     public Player(int xStart, int yStart, JFrame frame) {
-        this.board = new Board(xStart,xStart, frame);
+        this.board = new Board(xStart,yStart, frame);
         this.frame = frame;
         keyAdded = false;
    }
@@ -47,7 +47,7 @@ public class Player {
 
             //We would have to change the speed as we go on, but this is a good demo
             //For now, it moves the piece down every two seconds
-            if ((end-start) % 1.5 == 0) {
+            if ((end-start) % board.getDropSpeed() == 0) {
                 board.movePieceDown();
             }
         }

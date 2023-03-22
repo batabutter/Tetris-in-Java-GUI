@@ -5,7 +5,7 @@ import java.util.*;
 import java.awt.*;
 import FrontEnd.Board;
 public class PuzzlePiece {
-    private ImageIcon[] blocks = {new ImageIcon("images/blue.png")};
+    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png")};
     private ImageIcon shape;
     private Dimension size;
     private JLabel pieceLabel;
@@ -42,6 +42,14 @@ public class PuzzlePiece {
 
     public JLabel getLabel() {
         return pieceLabel;
+    }
+
+    public int getWidth() {
+        return size.width;
+    }
+
+    public int getHeight() {
+        return size.height;
     }
 
 }

@@ -11,6 +11,8 @@ public class Board {
     final int verticalMovement = 0;
     final static public int boardHeight = 600;
     final static public int boardWidth = 300;
+    final static public int squareDim = boardWidth / 10;
+    private double dropSpeed;
     private int startX;
     private int startY;
     private JFrame frame;
@@ -20,11 +22,16 @@ public class Board {
     public Board(int x, int y, JFrame frame) {
         startX = x;
         startY = y;
+        dropSpeed = 1.5;
         this.frame = frame;
     }
 
     public JFrame getFrame() {
         return frame;
+    }
+
+    public double getDropSpeed() {
+        return dropSpeed;
     }
 
     public void showBoard() {
@@ -64,25 +71,37 @@ public class Board {
         
         public void paintComponent(Graphics g) {
             
-            g.fillRect(startX, startY, (int) startX+boardWidth, boardHeight);
-            g.setColor(new Color(176,174,173));
-            g.drawRect(startX-20, startY-20, (int) startX+boardWidth + 2*(20), boardHeight + 2*(20));
+            g.fillRect(startX, startY, boardWidth, boardHeight);
+            g.drawRect(startX-20, startY-20, (int) boardWidth + 2*(20), boardHeight + 2*(20));
+
+            int squareDim = boardWidth / 10;
+            g.setColor(new Color(112,112,112));
+            
+            for (int i = 0; i <= boardWidth; i= i+squareDim) {
+                g.drawLine(startX+i, startY, startX+i, startY + boardHeight);
+            }
+
+            for (int i = 0; i <= boardHeight; i+= squareDim) {
+                g.drawLine(startX, startY+i, startX+boardWidth, startY + i);
+            }
         }
     }
+
+    //We most likely are going to have to rework some of these methods in order to account for different types of collisions
 
     public void movePieceRight(){
         PuzzlePiece piece = currentPiece;
 
-        if (piece.getX()+20 <= Board.boardWidth)
-            piece.setX(piece.getX()+20);
+        if ((piece.getX()+20) + piece.getWidth() <= startX+Board.boardWidth)
+            piece.setX(piece.getX()+squareDim);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void movePieceLeft() {
         PuzzlePiece piece = currentPiece;
 
-        if (piece.getX()-20 >= startX)
-            piece.setX(piece.getX()-20);
+        if (piece.getX()-squareDim >= startX)
+            piece.setX(piece.getX()-squareDim);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
@@ -90,8 +109,8 @@ public class Board {
     public void movePieceDown() {
         PuzzlePiece piece = currentPiece;
 
-        if (piece.getY()+20 <= Board.boardHeight)
-            piece.setY(piece.getY()+20);
+        if ((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)
+            piece.setY(piece.getY()+squareDim);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
