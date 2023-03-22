@@ -11,18 +11,26 @@ public class Player {
     private boolean automated;
     private Board board;
     private JFrame frame;
+    private boolean keyAdded;
     
-    public Player(JFrame frame) {
-        this.board = new Board(100,100, frame);
+    public Player(int xStart, int yStart, JFrame frame) {
+        this.board = new Board(xStart,xStart, frame);
         this.frame = frame;
+        keyAdded = false;
    }
 
    public Board getBoard(){
     return board;
    }
 
-   public Point movePiece(JLabel piece) {
-    return null;
+   public void movePiece(PuzzlePiece piece) {
+    
+    KeyboardControls k = new KeyboardControls(piece);
+    if (!keyAdded) {
+        frame.addKeyListener(k);
+        keyAdded = true;
+    }
+
    }
 
    //Creates new piece at given location
@@ -31,12 +39,11 @@ public class Player {
         PuzzlePiece piece = new PuzzlePiece();
         System.out.println("Stuck");
         board.add(piece);
-        KeyboardControls k = new KeyboardControls(piece);
-        frame.addKeyListener(k);
         board.showBoard();
 
         while (!Game.pieceSettled(board)) {
-
+            //The move piece method will modify the location of the piece, to be specialized in other classes
+            movePiece(piece);
         }
     }
 

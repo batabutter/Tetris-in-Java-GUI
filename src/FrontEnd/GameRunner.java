@@ -13,7 +13,7 @@ public class GameRunner {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        HumanPlayer human = new HumanPlayer(frame);
+        Player human = new Player(100,100,frame);
         ComputerPlayer computer = new ComputerPlayer(frame);
 
 
