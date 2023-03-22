@@ -59,6 +59,14 @@ public class PuzzlePiece {
     public void setShape(ImageIcon icon) {
         shape = icon;
         pieceLabel.setIcon(shape);
+        //pieceLabel.setPreferredSize(new Dimension(1000, 1000));
+        size = pieceLabel.getPreferredSize();
+
+        pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+    }
+
+    public void updateSize() {
+        size = pieceLabel.getPreferredSize();
     }
 
 }

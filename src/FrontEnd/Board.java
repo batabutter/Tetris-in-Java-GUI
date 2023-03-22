@@ -79,8 +79,8 @@ public class Board {
         
         public void paintComponent(Graphics g) {
             
-            g.fillRect(startX, startY, boardWidth, boardHeight);
             g.drawRect(startX-20, startY-20, (int) boardWidth + 2*(20), boardHeight + 2*(20));
+            g.fillRect(startX, startY, boardWidth, boardHeight);
 
             g.setColor(new Color(112,112,112));
             
@@ -124,40 +124,37 @@ public class Board {
     public void rotatePiece() {
         PuzzlePiece piece = currentPiece;
         ImageIcon shape = piece.getShape();
-        Image image = shape.getImage();
-        BufferedImage rotated = (BufferedImage) image;
 
-        rotated = rotate(rotated, 90.0);
-        ImageIcon temp = new ImageIcon(rotated.getScaledInstance(boardWidth, boardHeight, boardHeight));
+        BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
+        ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
 
         piece.setShape(temp);
-
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
-    public BufferedImage rotate(BufferedImage image, Double degrees) {
-        // Calculate the new size of the image based on the angle of rotaion
-        double radians = Math.toRadians(degrees);
-        double sin = Math.abs(Math.sin(radians));
-        double cos = Math.abs(Math.cos(radians));
-        int newWidth = (int) Math.round(image.getWidth() * cos + image.getHeight() * sin);
-        int newHeight = (int) Math.round(image.getWidth() * sin + image.getHeight() * cos);
-    
-        // Create a new image
-        BufferedImage rotate = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = rotate.createGraphics();
-        // Calculate the "anchor" point around which the image will be rotated
-        int x = (newWidth - image.getWidth()) / 2;
-        int y = (newHeight - image.getHeight()) / 2;
-        // Transform the origin point around the anchor point
-        AffineTransform at = new AffineTransform();
-        at.setToRotation(radians, x + (image.getWidth() / 2), y + (image.getHeight() / 2));
-        at.translate(x, y);
-        g2d.setTransform(at);
-        // Paint the originl image
-        g2d.drawImage(image, 0, 0, null);
-        g2d.dispose();
-        return rotate;
+    public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
+        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = bufferedImage.createGraphics();
+        icon.paintIcon(null, graphics, 0, 0);
+        graphics.dispose();//from   w  ww.j a  va  2  s.  co m
+        return bufferedImage;
     }
+
+    public static BufferedImage rotate(BufferedImage bimg, Double angle) {
+	    double sin = Math.abs(Math.sin(Math.toRadians(angle))),
+	           cos = Math.abs(Math.cos(Math.toRadians(angle)));
+	    int w = bimg.getWidth();
+	    int h = bimg.getHeight();
+	    int neww = (int) Math.floor(w*cos + h*sin),
+	        newh = (int) Math.floor(h*cos + w*sin);
+	    BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+	    Graphics2D graphic = rotated.createGraphics();
+	    graphic.translate((neww-w)/2, (newh-h)/2);
+	    graphic.rotate(Math.toRadians(angle), w/2, h/2);
+	    graphic.drawRenderedImage(bimg, null);
+	    graphic.dispose();
+	    return rotated;
+	}
     
 }
