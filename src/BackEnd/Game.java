@@ -29,7 +29,6 @@ public class Game {
 
         while (!gameOver()) {
             p.createNewPiece();
-            System.out.println("Problem");
         }   
 
         return 0;

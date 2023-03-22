@@ -35,7 +35,6 @@ public class Player {
    //Most likely are just going to specify how this method works ofr both computer and human
    public void createNewPiece() {
         PuzzlePiece piece = new PuzzlePiece();
-        System.out.println("Stuck");
         board.add(piece);
         board.showBoard();
         double start = System.currentTimeMillis() / 1000.00;
