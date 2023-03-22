@@ -19,8 +19,10 @@ public class Test {
         //Whichever game ends first 
 
         //Game game = new Game(human);
-        Game game = new Game(computer);
-        game.start();
+        //game.start();
+
+        Game game2 = new Game(computer);
+        game2.start();
 
     }
 }

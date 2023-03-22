@@ -79,7 +79,6 @@ public class Board {
             g.fillRect(startX, startY, boardWidth, boardHeight);
             g.drawRect(startX-20, startY-20, (int) boardWidth + 2*(20), boardHeight + 2*(20));
 
-            int squareDim = boardWidth / 10;
             g.setColor(new Color(112,112,112));
             
             for (int i = 0; i <= boardWidth; i= i+squareDim) {
