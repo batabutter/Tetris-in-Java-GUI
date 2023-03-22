@@ -1,7 +1,7 @@
 import FrontEnd.GameRunner;
 import javax.swing.*;
 import java.awt.Point;
-import FrontEnd.HumanPlayer;
+import FrontEnd.Player;
 import BackEnd.Game;
 
 public class Test {
@@ -10,7 +10,7 @@ public class Test {
         frame.setSize(1000,800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        HumanPlayer human = new HumanPlayer(frame);
+        Player human = new Player(frame);
 
         //You would want to get both games, running at the same time
         //Whichever game ends first 
