@@ -58,11 +58,6 @@ public class PuzzlePiece {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
-    public void moveDown(JFrame frame, int x) {
-        setY(yCell+x);
-        SwingUtilities.updateComponentTreeUI(frame);
-    }
-
     public void rotate(JFrame frame) {
         SwingUtilities.updateComponentTreeUI(frame);
     }
