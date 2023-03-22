@@ -34,6 +34,11 @@ public class Board {
         return dropSpeed;
     }
 
+    //This might also need to be changed depending on how Tetris changes the speed depending on the level
+    public void setDropSpeed(double speed) {
+        dropSpeed = speed;
+    }
+
     public void showBoard() {
         DrawBackGround temp = new DrawBackGround();
         frame.add(temp);
