@@ -75,22 +75,18 @@ public class Player {
             //Double check if this is needed
 			if (event.getKeyCode() == KeyEvent.VK_UP) {
                 board.rotatePiece();
-                System.out.println("Roatated the piece");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_DOWN) {
                 board.movePieceDown();
-                System.out.println("down");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
                 board.movePieceRight();
-                System.out.println("right");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_LEFT) {
                 board.movePieceLeft();
-                System.out.println("left");
 			}
 		}
 
