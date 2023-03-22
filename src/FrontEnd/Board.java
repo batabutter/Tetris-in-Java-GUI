@@ -62,7 +62,7 @@ public class Board {
 
         
         public void paintComponent(Graphics g) {
-            g.fillRect(startX, startY, (int) startX+200, 400);
+            g.fillRect(startX, startY, (int) startX+300, 600);
         }
     }
     

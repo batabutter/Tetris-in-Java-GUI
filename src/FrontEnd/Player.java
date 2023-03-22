@@ -40,16 +40,22 @@ public class Player {
         System.out.println("Stuck");
         board.add(piece);
         board.showBoard();
+        double start = System.currentTimeMillis() / 1000.00;
+        double end = 0;
 
         while (!Game.pieceSettled(board)) {
-            //The move piece method will modify the location of the piece, to be specialized in other classes
             movePiece(piece);
+            end = System.currentTimeMillis()/ 1000.00;
+
+            //We would have to change the speed as we go on, but this is a good demo
+            //For now, it moves the piece down every two seconds
+            if ((end-start) % 1.5 == 0) {
+                piece.moveDown(frame);
+            }
         }
     }
 
     class KeyboardControls implements KeyListener {
-        private int width;
-        private int height;
         private int x;
         private int y;
         private PuzzlePiece piece;
@@ -59,9 +65,6 @@ public class Player {
             x = piece.getX();
             y = piece.getY();
             Dimension size = piece.getLabel().getPreferredSize();
-            
-            width = size.width;
-            height = size.height;
         }
         
         public void keyTyped(KeyEvent e) {
@@ -73,35 +76,22 @@ public class Player {
 		public void keyPressed(KeyEvent event) {
             //Double check if this is needed
 			if (event.getKeyCode() == KeyEvent.VK_UP) {
-                y = piece.getY() - 20;
-                piece.setX(x);
-                piece.setY(y);
-                SwingUtilities.updateComponentTreeUI(frame);
-                System.out.println("up");
-                System.out.println("Width > "+width);
+                piece.rotate(frame);
+                System.out.println("Roatated the piece");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_DOWN) {
-                y = piece.getY() + 20;
-                piece.setX(x);
-                piece.setY(y);
-                SwingUtilities.updateComponentTreeUI(frame);
+                piece.moveDown(frame);
                 System.out.println("down");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
-                x = piece.getX() + 20;
-                piece.setX(x);
-                piece.setY(y);
-                SwingUtilities.updateComponentTreeUI(frame);
+                piece.moveRight(frame);
                 System.out.println("right");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_LEFT) {
-                x = piece.getX() - 20;
-                piece.setX(x);
-                piece.setY(y);
-                SwingUtilities.updateComponentTreeUI(frame);
+                piece.moveLeft(frame);
                 System.out.println("left");
 			}
 		}
