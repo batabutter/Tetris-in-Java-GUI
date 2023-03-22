@@ -14,13 +14,10 @@ public class GameRunner {
         frame.setVisible(true);
 
         Player human = new Player(100,100,frame);
-        ComputerPlayer computer = new ComputerPlayer(frame);
-
 
         //You would want to get both games, running at the same time
         //Whichever game ends first 
         Game game = new Game(human);
-        Game computerGame = new Game(computer);
         
         //This will be changed to run both games at once using threads.
         //The next thread should be run in this class
