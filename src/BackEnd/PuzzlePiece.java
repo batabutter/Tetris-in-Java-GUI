@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.*;
+import FrontEnd.Board;
 public class PuzzlePiece {
     private ImageIcon[] blocks = {new ImageIcon("images/blue.png")};
     private ImageIcon shape;
@@ -43,22 +44,4 @@ public class PuzzlePiece {
         return pieceLabel;
     }
 
-    public void moveRight(JFrame frame){
-        setX(xCell+20);
-        SwingUtilities.updateComponentTreeUI(frame);
-    }
-
-    public void moveLeft(JFrame frame) {
-        setX(xCell-20);
-        SwingUtilities.updateComponentTreeUI(frame);
-    }
-
-    public void moveDown(JFrame frame) {
-        setY(yCell+20);
-        SwingUtilities.updateComponentTreeUI(frame);
-    }
-
-    public void rotate(JFrame frame) {
-        SwingUtilities.updateComponentTreeUI(frame);
-    }
 }

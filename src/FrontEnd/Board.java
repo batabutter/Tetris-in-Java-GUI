@@ -1,7 +1,6 @@
 package FrontEnd;
 import BackEnd.*;
 import javax.swing.*;
-import java.awt.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -10,6 +9,8 @@ public class Board {
     PuzzlePiece currentPiece;
     //How much the piece will move down
     final int verticalMovement = 0;
+    final static public int boardHeight = 600;
+    final static public int boardWidth = 300;
     private int startX;
     private int startY;
     private JFrame frame;
@@ -62,8 +63,42 @@ public class Board {
 
         
         public void paintComponent(Graphics g) {
-            g.fillRect(startX, startY, (int) startX+300, 600);
+            
+            g.fillRect(startX, startY, (int) startX+boardWidth, boardHeight);
+            g.setColor(new Color(176,174,173));
+            g.drawRect(startX-20, startY-20, (int) startX+boardWidth + 2*(20), boardHeight + 2*(20));
         }
+    }
+
+    public void movePieceRight(){
+        PuzzlePiece piece = currentPiece;
+
+        if (piece.getX()+20 <= Board.boardWidth)
+            piece.setX(piece.getX()+20);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void movePieceLeft() {
+        PuzzlePiece piece = currentPiece;
+
+        if (piece.getX()-20 >= startX)
+            piece.setX(piece.getX()-20);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    //Maybe change where this calculation is done
+    public void movePieceDown() {
+        PuzzlePiece piece = currentPiece;
+
+        if (piece.getY()+20 <= Board.boardHeight)
+            piece.setY(piece.getY()+20);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void rotatePiece() {
+        PuzzlePiece piece = currentPiece;
+
+        SwingUtilities.updateComponentTreeUI(frame);
     }
     
 }

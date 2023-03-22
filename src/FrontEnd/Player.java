@@ -2,13 +2,11 @@ package FrontEnd;
 import BackEnd.Game;
 import BackEnd.PuzzlePiece;
 import javax.swing.*;
-import java.awt.Point;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 public class Player {
-    private boolean automated;
     private Board board;
     private JFrame frame;
     private boolean keyAdded;
@@ -50,7 +48,7 @@ public class Player {
             //We would have to change the speed as we go on, but this is a good demo
             //For now, it moves the piece down every two seconds
             if ((end-start) % 1.5 == 0) {
-                piece.moveDown(frame);
+                board.movePieceDown();
             }
         }
     }
@@ -76,22 +74,22 @@ public class Player {
 		public void keyPressed(KeyEvent event) {
             //Double check if this is needed
 			if (event.getKeyCode() == KeyEvent.VK_UP) {
-                piece.rotate(frame);
+                board.rotatePiece();
                 System.out.println("Roatated the piece");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_DOWN) {
-                piece.moveDown(frame);
+                board.movePieceDown();
                 System.out.println("down");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
-                piece.moveRight(frame);
+                board.movePieceRight();
                 System.out.println("right");
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_LEFT) {
-                piece.moveLeft(frame);
+                board.movePieceLeft();
                 System.out.println("left");
 			}
 		}
@@ -102,4 +100,6 @@ public class Player {
 			
 		}
     }
+
+    
 }
