@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 
 public class Player {
     private Board board;
+    //private JFrame frame;
     private JFrame frame;
     private boolean keyAdded;
     
