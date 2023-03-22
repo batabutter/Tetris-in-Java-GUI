@@ -56,4 +56,9 @@ public class PuzzlePiece {
         return size.height;
     }
 
+    public void setShape(ImageIcon icon) {
+        shape = icon;
+        pieceLabel.setIcon(shape);
+    }
+
 }
