@@ -100,24 +100,24 @@ public class Board {
 
             g.setColor(Color.yellow);
             g.setFont(new Font("Arial", Font.BOLD, 28));
-            g.drawString("Next:", boardWidth + 105+startX, 120);
+            g.drawString("Next:", boardWidth + 90+startX, 120);
 
             g.setColor(Color.gray);
-            g.drawRect(boardWidth + 50 + startX, startY, 200, 200);
+            g.drawRect(boardWidth + 30 + startX, startY, 200, 200);
 
             g.setColor(Color.yellow);
             g.setFont(new Font("Arial", Font.BOLD, 28));
-            g.drawString("Score:", boardWidth + 105+startX, 350 + startY);
+            g.drawString("Score:", boardWidth + 90+startX, 350 + startY);
 
             g.setColor(Color.gray);
-            g.drawRect(boardWidth + 50 + startX, startY+300, 200, 300);
+            g.drawRect(boardWidth + 30 + startX, startY+300, 200, 300);
 
             g.setColor(Color.yellow);
             g.setFont(new Font("Arial", Font.BOLD, 28));
-            g.drawString("Hold:", startX -200, 120);
+            g.drawString("Hold:", startX -180, 120);
 
             g.setColor(Color.gray);
-            g.drawRect(startX -250, startY, 200, 200);
+            g.drawRect(startX -230, startY, 200, 200);
 
             g.setColor(Color.white);
             g.drawLine(frame.getWidth()/2, 0, frame.getWidth()/2, frame.getHeight());
