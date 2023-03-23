@@ -4,6 +4,7 @@ import BackEnd.PuzzlePiece;
 
 public class ComputerPlayer extends Player{
     private double startTime;
+    
     public ComputerPlayer(int xStart, int yStart, JFrame frame) {
         super(xStart, yStart, frame);
         startTime = System.currentTimeMillis() / 1000.0;

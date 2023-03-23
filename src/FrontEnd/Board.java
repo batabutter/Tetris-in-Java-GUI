@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.Image;
+import java.awt.Font;
 
 public class Board {
     PuzzlePiece currentPiece;
@@ -27,6 +28,8 @@ public class Board {
         startY = y;
         dropSpeed = 1.5;
         this.frame = frame;
+        DrawBackGround temp = new DrawBackGround();
+        frame.add(temp);
     }
 
     public JFrame getFrame() {
@@ -63,6 +66,7 @@ public class Board {
         piece.setX(startX);
         piece.setY(startY);
         frame.add(temp);
+        SwingUtilities.updateComponentTreeUI(frame);
         System.out.println(temp.getX());
     }
 
@@ -91,6 +95,34 @@ public class Board {
             for (int i = 0; i <= boardHeight; i+= squareDim) {
                 g.drawLine(startX, startY+i, startX+boardWidth, startY + i);
             }
+
+            //In the future, variables should be created to designate where they are
+
+            g.setColor(Color.yellow);
+            g.setFont(new Font("Arial", Font.BOLD, 28));
+            g.drawString("Next:", boardWidth + 105+startX, 120);
+
+            g.setColor(Color.gray);
+            g.drawRect(boardWidth + 50 + startX, startY, 200, 200);
+
+            g.setColor(Color.yellow);
+            g.setFont(new Font("Arial", Font.BOLD, 28));
+            g.drawString("Score:", boardWidth + 105+startX, 350 + startY);
+
+            g.setColor(Color.gray);
+            g.drawRect(boardWidth + 50 + startX, startY+300, 200, 300);
+
+            g.setColor(Color.yellow);
+            g.setFont(new Font("Arial", Font.BOLD, 28));
+            g.drawString("Hold:", startX -200, 120);
+
+            g.setColor(Color.gray);
+            g.drawRect(startX -250, startY, 200, 200);
+
+            g.setColor(Color.white);
+            g.drawLine(frame.getWidth()/2, 0, frame.getWidth()/2, frame.getHeight());
+
+
         }
     }
 
@@ -112,7 +144,6 @@ public class Board {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
-    //Maybe change where this calculation is done
     public void movePieceDown() {
         PuzzlePiece piece = currentPiece;
 

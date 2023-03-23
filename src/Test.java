@@ -10,11 +10,12 @@ public class Test extends Thread{
     static JFrame frame = new JFrame("Tetris");
     public static void main(String args[]) {
         Test thread = new Test();
-        frame.setSize(1000,800);
+        frame.setSize(1800,800);
         frame.setBackground(Color.black);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         thread.start();
-        ComputerPlayer computer=  new ComputerPlayer(600, 70, frame);
+        ComputerPlayer computer=  new ComputerPlayer(1200, 70, frame);
 
         //You would want to get both games, running at the same time
         //Whichever game ends first 
@@ -27,7 +28,7 @@ public class Test extends Thread{
 
     }
     public void run(){
-        Player human = new Player(100,20,frame);
+        Player human = new Player(300,70,frame);
         Game game = new Game(human);
         game.start();
     }

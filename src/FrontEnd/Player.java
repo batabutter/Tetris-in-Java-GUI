@@ -38,6 +38,7 @@ public class Player {
         PuzzlePiece piece = new PuzzlePiece();
         board.add(piece);
         board.showBoard();
+        SwingUtilities.updateComponentTreeUI(frame);
         double start = System.currentTimeMillis() / 1000.00;
         double end = 0;
 
@@ -46,8 +47,8 @@ public class Player {
             end = System.currentTimeMillis()/ 1000.00;
 
             //We would have to change the speed as we go on, but this is a good demo
-            //For now, it moves the piece down every two seconds
-            if ((end-start) % board.getDropSpeed() == 0) {
+            //For now, it moves the piece down every second
+            if (((end-start) % board.getDropSpeed() == 0)) {
                 board.movePieceDown();
             }
         }
