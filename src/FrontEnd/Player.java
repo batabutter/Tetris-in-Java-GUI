@@ -11,9 +11,13 @@ public class Player {
     //private JFrame frame;
     private JFrame frame;
     private boolean keyAdded;
-    
+    private int xStart;
+    private int yStart;
+
     public Player(int xStart, int yStart, JFrame frame) {
         this.board = new Board(xStart,yStart, frame);
+        this.xStart = xStart;
+        this.yStart = yStart;
         this.frame = frame;
         keyAdded = false;
    }
@@ -38,17 +42,19 @@ public class Player {
         PuzzlePiece piece = new PuzzlePiece();
         board.add(piece);
         board.showBoard();
-        SwingUtilities.updateComponentTreeUI(frame);
+        //SwingUtilities.updateComponentTreeUI(frame);
+
+        //SwingUtilities.updateComponentTreeUI(frame);
         double start = System.currentTimeMillis() / 1000.00;
         double end = 0;
 
-        while (!Game.pieceSettled(board)) {
-            movePiece(piece);
+        while (!board.pieceSettled()) {
+            movePiece(board.getCurrentPiece());
             end = System.currentTimeMillis()/ 1000.00;
-
             //We would have to change the speed as we go on, but this is a good demo
             //For now, it moves the piece down every second
             if (((end-start) % board.getDropSpeed() == 0)) {
+                System.out.println("Time elasped > "+(end-start));
                 board.movePieceDown();
             }
         }

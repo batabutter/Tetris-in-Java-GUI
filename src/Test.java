@@ -10,10 +10,17 @@ public class Test extends Thread{
     static JFrame frame = new JFrame("Tetris");
     public static void main(String args[]) {
         Test thread = new Test();
+        //frame.setPreferredSize(new Dimension(1600,800));
         frame.setSize(1600,800);
         frame.setBackground(Color.black);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+
+
+        //Most important piece of code in the entire project
+        frame.setLayout(null);
+
+
         thread.start();
         ComputerPlayer computer=  new ComputerPlayer(1050, 70, frame);
 

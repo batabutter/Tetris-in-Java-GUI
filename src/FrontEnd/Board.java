@@ -2,6 +2,7 @@ package FrontEnd;
 import BackEnd.*;
 import javax.swing.*;
 import java.awt.Color;
+import java.awt.*;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
@@ -17,6 +18,7 @@ public class Board {
     final static public int boardWidth = 300;
     final static public int squareDim = boardWidth / 10;
     private double dropSpeed;
+    private boolean boardShown;
     private int startX;
     private int startY;
     private JFrame frame;
@@ -28,8 +30,7 @@ public class Board {
         startY = y;
         dropSpeed = 1.5;
         this.frame = frame;
-        DrawBackGround temp = new DrawBackGround();
-        frame.add(temp);
+        boardShown = false;
     }
 
     public JFrame getFrame() {
@@ -45,9 +46,27 @@ public class Board {
         dropSpeed = speed;
     }
 
+    //Change this to be an image
+    //Keep in mind: scalesmooth could cause some issues
+    //the background should onnly be added once
     public void showBoard() {
-        DrawBackGround temp = new DrawBackGround();
-        frame.add(temp);
+        System.out.println("clomp");
+        if (!boardShown) {
+            /* 
+            Dimension size = frame.getPreferredSize();
+            BufferedImage backGround = new BufferedImage(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
+            Graphics g = backGround.getGraphics();
+            DrawBackGround temp = new DrawBackGround();
+            temp.paintComponent(g);
+
+            JLabel backGroundImg = new JLabel();
+            backGroundImg.setIcon(new ImageIcon(backGround.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));
+            frame.add(backGroundImg);
+            */
+
+            boardShown = true;
+        }
+        
         frame.setVisible(true);
     }
 
@@ -62,12 +81,10 @@ public class Board {
     //Change
     public void add(PuzzlePiece piece) {
         currentPiece = piece;
-        JLabel temp = piece.getLabel();
         piece.setX(startX);
         piece.setY(startY);
-        frame.add(temp);
-        SwingUtilities.updateComponentTreeUI(frame);
-        System.out.println(temp.getX());
+        //piece.getLabel().setBounds(startX, startY, piece.getWidth(), piece.getHeight());
+        frame.add(piece.getLabel());
     }
 
     public PuzzlePiece remove() {
@@ -82,7 +99,7 @@ public class Board {
 
         
         public void paintComponent(Graphics g) {
-            
+
             g.drawRect(startX-20, startY-20, (int) boardWidth + 2*(20), boardHeight + 2*(20));
             g.fillRect(startX, startY, boardWidth, boardHeight);
 
@@ -133,7 +150,7 @@ public class Board {
 
         if ((piece.getX()+20) + piece.getWidth() <= startX+Board.boardWidth)
             piece.setX(piece.getX()+squareDim);
-        SwingUtilities.updateComponentTreeUI(frame);
+        //SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void movePieceLeft() {
@@ -149,7 +166,16 @@ public class Board {
 
         if ((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)
             piece.setY(piece.getY()+squareDim);
-        SwingUtilities.updateComponentTreeUI(frame);
+
+        //SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public boolean pieceSettled () {
+        PuzzlePiece piece = currentPiece;
+        if (((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)) {
+            return false;
+        }
+        return true;
     }
 
     public void rotatePiece() {
@@ -160,7 +186,8 @@ public class Board {
         ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
 
         piece.setShape(temp);
-        SwingUtilities.updateComponentTreeUI(frame);
+        System.out.println("Roating to ("+piece.getX()+", "+piece.getY()+")");
+        //SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {

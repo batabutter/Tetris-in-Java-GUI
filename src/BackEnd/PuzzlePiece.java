@@ -13,8 +13,8 @@ public class PuzzlePiece {
     private Dimension size;
     private JLabel pieceLabel;
     //Temp
-    private int xCell = 0;
-    private int yCell = 0;
+    private int xCell;
+    private int yCell;
 
     public PuzzlePiece(){
         shape = blocks[(int)(Math.random()*blocks.length)];
@@ -59,10 +59,10 @@ public class PuzzlePiece {
     public void setShape(ImageIcon icon) {
         shape = icon;
         pieceLabel.setIcon(shape);
-        //pieceLabel.setPreferredSize(new Dimension(1000, 1000));
-        size = pieceLabel.getPreferredSize();
 
+        size = pieceLabel.getPreferredSize();
         pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+
     }
 
     public void updateSize() {
