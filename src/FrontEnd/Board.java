@@ -18,7 +18,6 @@ public class Board {
     final static public int boardWidth = 300;
     final static public int squareDim = boardWidth / 10;
     private double dropSpeed;
-    private boolean boardShown;
     private int startX;
     private int startY;
     private JFrame frame;
@@ -30,7 +29,6 @@ public class Board {
         startY = y;
         dropSpeed = 1.5;
         this.frame = frame;
-        boardShown = false;
     }
 
     public JFrame getFrame() {
@@ -49,26 +47,6 @@ public class Board {
     //Change this to be an image
     //Keep in mind: scalesmooth could cause some issues
     //the background should onnly be added once
-    public void showBoard() {
-        System.out.println("clomp");
-        if (!boardShown) {
-            /* 
-            Dimension size = frame.getPreferredSize();
-            BufferedImage backGround = new BufferedImage(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
-            Graphics g = backGround.getGraphics();
-            DrawBackGround temp = new DrawBackGround();
-            temp.paintComponent(g);
-
-            JLabel backGroundImg = new JLabel();
-            backGroundImg.setIcon(new ImageIcon(backGround.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));
-            frame.add(backGroundImg);
-            */
-
-            boardShown = true;
-        }
-        
-        frame.setVisible(true);
-    }
 
     public void setCurrentPiece(PuzzlePiece temp) {
         currentPiece = temp;
@@ -85,6 +63,7 @@ public class Board {
         piece.setY(startY);
         //piece.getLabel().setBounds(startX, startY, piece.getWidth(), piece.getHeight());
         frame.add(piece.getLabel());
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public PuzzlePiece remove() {
@@ -95,54 +74,6 @@ public class Board {
         return temp;
     }
 
-    class DrawBackGround extends JPanel {
-
-        
-        public void paintComponent(Graphics g) {
-
-            g.drawRect(startX-20, startY-20, (int) boardWidth + 2*(20), boardHeight + 2*(20));
-            g.fillRect(startX, startY, boardWidth, boardHeight);
-
-            g.setColor(new Color(112,112,112));
-            
-            for (int i = 0; i <= boardWidth; i= i+squareDim) {
-                g.drawLine(startX+i, startY, startX+i, startY + boardHeight);
-            }
-
-            for (int i = 0; i <= boardHeight; i+= squareDim) {
-                g.drawLine(startX, startY+i, startX+boardWidth, startY + i);
-            }
-
-            //In the future, variables should be created to designate where they are
-
-            g.setColor(Color.yellow);
-            g.setFont(new Font("Arial", Font.BOLD, 28));
-            g.drawString("Next:", boardWidth + 90+startX, 120);
-
-            g.setColor(Color.gray);
-            g.drawRect(boardWidth + 30 + startX, startY, 200, 200);
-
-            g.setColor(Color.yellow);
-            g.setFont(new Font("Arial", Font.BOLD, 28));
-            g.drawString("Score:", boardWidth + 90+startX, 350 + startY);
-
-            g.setColor(Color.gray);
-            g.drawRect(boardWidth + 30 + startX, startY+300, 200, 300);
-
-            g.setColor(Color.yellow);
-            g.setFont(new Font("Arial", Font.BOLD, 28));
-            g.drawString("Hold:", startX -180, 120);
-
-            g.setColor(Color.gray);
-            g.drawRect(startX -230, startY, 200, 200);
-
-            g.setColor(Color.white);
-            g.drawLine(frame.getWidth()/2, 0, frame.getWidth()/2, frame.getHeight());
-
-
-        }
-    }
-
     //We most likely are going to have to rework some of these methods in order to account for different types of collisions
 
     public void movePieceRight(){
@@ -150,7 +81,7 @@ public class Board {
 
         if ((piece.getX()+20) + piece.getWidth() <= startX+Board.boardWidth)
             piece.setX(piece.getX()+squareDim);
-        //SwingUtilities.updateComponentTreeUI(frame);
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void movePieceLeft() {
@@ -167,7 +98,7 @@ public class Board {
         if ((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)
             piece.setY(piece.getY()+squareDim);
 
-        //SwingUtilities.updateComponentTreeUI(frame);
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public boolean pieceSettled () {

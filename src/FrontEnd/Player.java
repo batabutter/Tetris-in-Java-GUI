@@ -41,7 +41,7 @@ public class Player {
    public void createNewPiece() {
         PuzzlePiece piece = new PuzzlePiece();
         board.add(piece);
-        board.showBoard();
+        //board.showBoard();
         //SwingUtilities.updateComponentTreeUI(frame);
 
         //SwingUtilities.updateComponentTreeUI(frame);
