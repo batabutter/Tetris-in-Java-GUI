@@ -28,7 +28,9 @@ public class Game {
     public int start() {
 
         while (!gameOver()) {
-            p.createNewPiece();
+            PuzzlePiece piece = new PuzzlePiece();
+            PuzzlePiece nextPiece = new PuzzlePiece();
+            p.createNewPiece(piece, nextPiece);
         }   
 
         return 0;

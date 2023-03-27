@@ -63,7 +63,7 @@ public class Board {
         piece.setY(startY);
         //piece.getLabel().setBounds(startX, startY, piece.getWidth(), piece.getHeight());
         frame.add(piece.getLabel());
-        SwingUtilities.updateComponentTreeUI(frame);
+        //SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public PuzzlePiece remove() {
