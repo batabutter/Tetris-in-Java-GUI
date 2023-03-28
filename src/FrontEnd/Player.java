@@ -13,6 +13,7 @@ public class Player {
     private boolean keyAdded;
     private int xStart;
     private int yStart;
+    private int moveDir;
 
     public Player(int xStart, int yStart, JFrame frame) {
         this.board = new Board(xStart,yStart, frame);
@@ -20,6 +21,7 @@ public class Player {
         this.yStart = yStart;
         this.frame = frame;
         keyAdded = false;
+        moveDir = 0;
    }
 
    public Board getBoard(){
@@ -33,7 +35,19 @@ public class Player {
         frame.addKeyListener(k);
         keyAdded = true;
     }
-
+    if (moveDir == 1) {
+        moveDir = 0;
+        board.movePieceDown();
+    } else if (moveDir == 2) {
+        moveDir = 0;
+        board.movePieceRight();
+    } else if (moveDir == 3) {
+        moveDir = 0;
+        board.movePieceLeft();
+    } else if (moveDir ==4) {
+        moveDir = 0;
+        board.rotatePiece();
+    }
    }
 
    //Creates new piece at given location
@@ -54,7 +68,7 @@ public class Player {
             //For now, it moves the piece down every second
             if (((end-start) % board.getDropSpeed() == 0)) {
                 try {
-                Thread.sleep(200);
+                Thread.sleep(20);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -87,19 +101,19 @@ public class Player {
 		public void keyPressed(KeyEvent event) {
             //Double check if this is needed
 			if (event.getKeyCode() == KeyEvent.VK_UP) {
-                board.rotatePiece();
+                moveDir = 4;
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_DOWN) {
-                board.movePieceDown();
+                moveDir = 1;
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
-                board.movePieceRight();
+                moveDir = 2;
 			}
 			
 			if (event.getKeyCode() == KeyEvent.VK_LEFT) {
-                board.movePieceLeft();
+                moveDir = 3;
 			}
 		}
 

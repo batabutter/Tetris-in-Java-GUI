@@ -120,20 +120,13 @@ public class Board {
         
 
         if (allLines.size() > 0) {
-            Hitbox futureHit = new Hitbox(piece.getX()+1, piece.getY(), piece.getHitbox().getPieceType());
+            Hitbox futureHit = new Hitbox(piece.getX()+1, piece.getY()+1, piece.getHitbox().getPieceType());
             ArrayList<Line2D> temp = futureHit.getPoints();
-
-            /* 
-            System.out.println("Checking > ");
-            for (Line2D a : temp) {
-                System.out.println("("+a.getX1()+", "+a.getX2()+", "+a.getY1()+", "+a.getY2()+")");
-            }
-            */
-            
 
             for (int i = 0; i < temp.size(); i ++) {
                 for (int k = 0; k < allLines.size(); k++) {
                     if (temp.get(i).intersectsLine(allLines.get(k))) {
+                        
                         return true;
                     }
                 }
