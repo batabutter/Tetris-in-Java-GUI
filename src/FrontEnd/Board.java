@@ -3,12 +3,14 @@ import BackEnd.*;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.*;
+import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.Image;
 import java.awt.Font;
+import java.awt.geom.Line2D;
 
 public class Board {
     PuzzlePiece currentPiece;
@@ -21,6 +23,7 @@ public class Board {
     private int startX;
     private int startY;
     private JFrame frame;
+    private ArrayList<Line2D> allLines;
 
     //It will tell the board where it should create the piece
     //Paintcomponenet here
@@ -29,6 +32,7 @@ public class Board {
         startY = y;
         dropSpeed = 1.5;
         this.frame = frame;
+        allLines = new ArrayList<Line2D>();
     }
 
     public JFrame getFrame() {
@@ -54,6 +58,16 @@ public class Board {
 
     public PuzzlePiece getCurrentPiece() {
         return currentPiece;
+    }
+
+    //This will cause a memory leak
+
+    public void update() {
+        ArrayList<Line2D> lines = currentPiece.getHitbox().getPoints();
+        for (Line2D temp : lines) {
+            allLines.add(new Line2D.Float((float)temp.getX1(), (float)temp.getY1(), (float)temp.getX2(), (float)temp.getY2()));
+        }
+        currentPiece.getHitbox().clearLines();
     }
 
     //Change
@@ -103,9 +117,35 @@ public class Board {
 
     public boolean pieceSettled () {
         PuzzlePiece piece = currentPiece;
+        
+
+        if (allLines.size() > 0) {
+            Hitbox futureHit = new Hitbox(piece.getX()+1, piece.getY(), piece.getHitbox().getPieceType());
+            ArrayList<Line2D> temp = futureHit.getPoints();
+
+            /* 
+            System.out.println("Checking > ");
+            for (Line2D a : temp) {
+                System.out.println("("+a.getX1()+", "+a.getX2()+", "+a.getY1()+", "+a.getY2()+")");
+            }
+            */
+            
+
+            for (int i = 0; i < temp.size(); i ++) {
+                for (int k = 0; k < allLines.size(); k++) {
+                    if (temp.get(i).intersectsLine(allLines.get(k))) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        
         if (((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)) {
             return false;
         }
+
+        
         return true;
     }
 
@@ -117,7 +157,6 @@ public class Board {
         ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
 
         piece.setShape(temp);
-        System.out.println("Roating to ("+piece.getX()+", "+piece.getY()+")");
         //SwingUtilities.updateComponentTreeUI(frame);
     }
 

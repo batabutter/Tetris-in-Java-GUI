@@ -57,6 +57,9 @@ public class Player {
                 board.movePieceDown();
             }
         }
+        board.update();
+
+
     }
 
     class KeyboardControls implements KeyListener {
