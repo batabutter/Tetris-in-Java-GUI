@@ -53,7 +53,11 @@ public class Player {
             //We would have to change the speed as we go on, but this is a good demo
             //For now, it moves the piece down every second
             if (((end-start) % board.getDropSpeed() == 0)) {
-                System.out.println("Time elasped > "+(end-start));
+                try {
+                Thread.sleep(200);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
                 board.movePieceDown();
             }
         }
