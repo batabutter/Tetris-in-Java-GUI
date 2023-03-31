@@ -13,19 +13,17 @@ public class Hitbox {
     private int yStart;
     private int[][] gridLoc;
     private int[][] specialConditions;
-    private int[][] visPiece;
 
     public Hitbox(int pieceType, PuzzlePiece piece, int xStart, int yStart) {
         //Always creates a hitbox starting at 0,0
         points = new ArrayList<Line2D>();
         this.pieceType = pieceType;
-        visPiece = new int[20][10];
         this.piece= piece;
         this.xStart = xStart;
         this.yStart = yStart;
         switch (pieceType){
             case 0: 
-                gridLoc = new int[4][2];
+                this.gridLoc = new int[4][2];
                 specialConditions = new int[4][2];
 
                 gridLoc[0][0] = (piece.getX() - xStart) / Board.squareDim;
@@ -59,33 +57,8 @@ public class Hitbox {
                 // ----------
 
                 break;
-
-                case 1: gridLoc = new int[4][2];
-                    specialConditions = new int[4][2];
-
-                    gridLoc[0][0] = (piece.getX() - xStart) / Board.squareDim;
-                    gridLoc[0][1] = (piece.getY() - yStart) / Board.squareDim;
-                    specialConditions[0][0] = 0;
-                    specialConditions[0][1] = 0;  
-
-                    gridLoc[1][0] = (piece.getX() - xStart) / Board.squareDim;
-                    gridLoc[1][1] = (piece.getY() - yStart) / Board.squareDim + 1;
-                    specialConditions[1][0] = 0;
-                    specialConditions[1][1] = 1;  
-
-                    gridLoc[2][0] = (piece.getX() - xStart) / Board.squareDim;
-                    gridLoc[2][1] = (piece.getY() - yStart) / Board.squareDim + 2;
-                    specialConditions[2][0] = 1;
-                    specialConditions[2][1] = 0;  
-
-                    gridLoc[3][0] = (piece.getX() - xStart) / Board.squareDim;
-                    gridLoc[3][1] = (piece.getY() - yStart) / Board.squareDim + 3;
-                    specialConditions[3][0] = 1;
-                    specialConditions[3][1] = 1;  
-                    
-                    createHitbox(xStart,yStart);
         }
-        printGridLoc();
+        //printGridLoc();
     }
 
     public void updateGridLoc() {
@@ -123,7 +96,7 @@ public class Hitbox {
         System.out.println("----------------------------------------------------");
     }
 
-    public int[][] getVisPiece() {
+    public int[][] getGrid() {
         int[][] temp = new int[20][10];
 
         for (int i = 0; i < gridLoc.length; i++) {
@@ -131,7 +104,7 @@ public class Hitbox {
             int y = gridLoc[i][0];
             temp[x][y] = 1;
         }
-        return visPiece;
+        return temp;
     }
 
     public Hitbox(int xStart, int yStart, int pieceType) {

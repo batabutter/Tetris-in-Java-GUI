@@ -10,7 +10,7 @@ public class PuzzlePiece {
     new ImageIcon("images/green.png"), new ImageIcon("images/blue.png")};
     */
 
-    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png"), new ImageIcon("images/teal.png")};
+    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png")};
 
     private ImageIcon shape;
     private Dimension size;

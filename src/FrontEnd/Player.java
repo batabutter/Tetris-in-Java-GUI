@@ -76,7 +76,7 @@ public class Player {
             }
         }
         board.update();
-
+        board.printGrid();
 
     }
 

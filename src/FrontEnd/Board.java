@@ -28,6 +28,7 @@ public class Board {
     private ArrayList<BufferedImage> filledCells;
     //Array board > 
     private BoardGrid arrBoard;
+    private int[][] grid;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -37,6 +38,7 @@ public class Board {
         allLines = new ArrayList<Line2D>();
         arrBoard = new BoardGrid(startX, startY);
         filledCells = new ArrayList<BufferedImage>();
+        this.grid = new int[20][10];
     }
     
     public int getXStart(){
@@ -76,18 +78,25 @@ public class Board {
         for (Line2D temp : lines) {
             allLines.add(new Line2D.Float((float)temp.getX1(), (float)temp.getY1(), (float)temp.getX2(), (float)temp.getY2()));
         }
+        //First : Update the 2D Array > 
+        int[][] temp = currentPiece.getHitbox().getGrid();
+        for (int i = 0; i < temp.length; i++) {
+            for (int k = 0; k < temp[0].length; k++) {
+                if (temp[i][k] == 1) {
+                    grid[i][k] = 1;
+                }
+            }
+        }
         currentPiece.getHitbox().clear();
-
-        //First convert the whole thing to image
-        //frame.remove(currentPiece.getLabel());
-    
-
-        //Add logic to clear lines
-
     }
 
-    public void collideWithCurrent() {
-
+    public void printGrid() {
+        for (int i = 0; i < grid.length; i++) {
+            for (int k = 0; k < grid[0].length; k++) {
+               System.out.print(grid[i][k]+" ");
+            }
+            System.out.println("\n");
+        }
     }
 
     //Change
