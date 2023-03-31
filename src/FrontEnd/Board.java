@@ -29,7 +29,6 @@ public class Board {
     //Array board > 
     private BoardGrid arrBoard;
     private ArrayList<PuzzlePiece> boardPieces;
-    private int[][] grid;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -39,7 +38,7 @@ public class Board {
         allLines = new ArrayList<Line2D>();
         arrBoard = new BoardGrid(startX, startY);
         filledCells = new ArrayList<BufferedImage>();
-        this.grid = new int[20][10];
+        arrBoard = new BoardGrid(startX, startY);
     }
     
     public int getXStart(){
@@ -79,47 +78,11 @@ public class Board {
         for (Line2D temp : lines) {
             allLines.add(new Line2D.Float((float)temp.getX1(), (float)temp.getY1(), (float)temp.getX2(), (float)temp.getY2()));
         }
-        //First : Update the 2D Array with the piece data> 
-        int[][] temp = currentPiece.getHitbox().getGrid();
-        for (int i = 0; i < temp.length; i++) {
-            for (int k = 0; k < temp[0].length; k++) {
-                if (temp[i][k] == 1) {
-                    grid[i][k] = 1;
-                }
-            }
-        }
-
-        //Second: Create a way to determine how many lines are filled and where the locations are 
-
-
-
-        //Third: Create a buffered image based on the grid data. Everytime a piece is placed. a buffered image is created for every line,
-        //can have multiple per line
-
-
-
-
-
-        //Fourth: Move the buffered images accordingly, creating the appropiate hitboxes for those buffered images, adding them to the list, and
-        //updating their locations and displaying them to the JFrame
-        //Also updating "allLines" to account for the new hitboxes created
-
-
         
-
-
-        //Lastly, clear the current piece of all of it's data to avoid any memory leaks
+        //clear the current piece of all of it's data to avoid any memory leaks
         currentPiece.getHitbox().clear();
     }
 
-    public void printGrid() {
-        for (int i = 0; i < grid.length; i++) {
-            for (int k = 0; k < grid[0].length; k++) {
-               System.out.print(grid[i][k]+" ");
-            }
-            System.out.println("\n");
-        }
-    }
 
     //Change
     public void add(PuzzlePiece piece) {
@@ -165,6 +128,7 @@ public class Board {
 
     }
 
+    //Change to be more simplistic
     public boolean pieceSettled () {
         PuzzlePiece piece = currentPiece;
 

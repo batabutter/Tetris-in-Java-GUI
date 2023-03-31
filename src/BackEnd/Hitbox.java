@@ -21,7 +21,7 @@ public class Hitbox {
         this.piece= piece;
         this.xStart = xStart;
         this.yStart = yStart;
-        switch (pieceType){
+        switch (pieceType) {
             case 0: 
                 this.gridLoc = new int[4][2];
                 specialConditions = new int[4][2];
@@ -169,6 +169,20 @@ public class Hitbox {
 
     }
 
+    public int[][] getGridLocations() {
+        return gridLoc;
+    }
+
+
+    //This should alwyas be the last value in gridLoc
+    public int[] getBottomMostLocation() {
+        return gridLoc[gridLoc.length-1];
+    }
+
+    private void changeBottomMostLocation() {
+
+    }
+
     public void clear() {
         points.clear();
         gridLoc = null;
@@ -177,8 +191,5 @@ public class Hitbox {
     public int getPieceType() {
         return pieceType;
     }
-
-
-
 
 }

@@ -76,8 +76,6 @@ public class Player {
             }
         }
         board.update();
-        board.printGrid();
-
     }
 
     class KeyboardControls implements KeyListener {
