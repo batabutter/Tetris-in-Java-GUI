@@ -11,28 +11,40 @@ import java.awt.geom.AffineTransform;
 import java.awt.Image;
 import java.awt.Font;
 import java.awt.geom.Line2D;
+import java.awt.Rectangle;
+import BackEnd.BoardGrid;
 
 public class Board {
     PuzzlePiece currentPiece;
-    //How much the piece will move down
-    final int verticalMovement = 0;
     final static public int boardHeight = 600;
     final static public int boardWidth = 300;
     final static public int squareDim = boardWidth / 10;
     private double dropSpeed;
+    private BufferedImage pieces;
     private int startX;
     private int startY;
     private JFrame frame;
     private ArrayList<Line2D> allLines;
+    private ArrayList<BufferedImage> filledCells;
+    //Array board > 
+    private BoardGrid arrBoard;
 
-    //It will tell the board where it should create the piece
-    //Paintcomponenet here
     public Board(int x, int y, JFrame frame) {
         startX = x;
         startY = y;
         dropSpeed = 1.5;
         this.frame = frame;
         allLines = new ArrayList<Line2D>();
+        arrBoard = new BoardGrid(startX, startY);
+        filledCells = new ArrayList<BufferedImage>();
+    }
+    
+    public int getXStart(){
+        return startX;
+    }
+
+    public int getYStart() {
+        return startY;
     }
 
     public JFrame getFrame() {
@@ -48,10 +60,6 @@ public class Board {
         dropSpeed = speed;
     }
 
-    //Change this to be an image
-    //Keep in mind: scalesmooth could cause some issues
-    //the background should onnly be added once
-
     public void setCurrentPiece(PuzzlePiece temp) {
         currentPiece = temp;
     }
@@ -63,11 +71,23 @@ public class Board {
     //This will cause a memory leak
 
     public void update() {
+
         ArrayList<Line2D> lines = currentPiece.getHitbox().getPoints();
         for (Line2D temp : lines) {
             allLines.add(new Line2D.Float((float)temp.getX1(), (float)temp.getY1(), (float)temp.getX2(), (float)temp.getY2()));
         }
-        currentPiece.getHitbox().clearLines();
+        currentPiece.getHitbox().clear();
+
+        //First convert the whole thing to image
+        //frame.remove(currentPiece.getLabel());
+    
+
+        //Add logic to clear lines
+
+    }
+
+    public void collideWithCurrent() {
+
     }
 
     //Change
@@ -95,7 +115,7 @@ public class Board {
 
         if ((piece.getX()+20) + piece.getWidth() <= startX+Board.boardWidth)
             piece.setX(piece.getX()+squareDim);
-        SwingUtilities.updateComponentTreeUI(frame);
+
     }
 
     public void movePieceLeft() {
@@ -103,7 +123,7 @@ public class Board {
 
         if (piece.getX()-squareDim >= startX)
             piece.setX(piece.getX()-squareDim);
-        SwingUtilities.updateComponentTreeUI(frame);
+        
     }
 
     public void movePieceDown() {
@@ -112,12 +132,10 @@ public class Board {
         if ((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)
             piece.setY(piece.getY()+squareDim);
 
-        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public boolean pieceSettled () {
         PuzzlePiece piece = currentPiece;
-        
 
         if (allLines.size() > 0) {
             Hitbox futureHit = new Hitbox(piece.getX()+1, piece.getY()+1, piece.getHitbox().getPieceType());

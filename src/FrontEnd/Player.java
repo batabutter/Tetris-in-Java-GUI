@@ -55,7 +55,7 @@ public class Player {
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
         board.add(piece);
         //board.showBoard();
-        //SwingUtilities.updateComponentTreeUI(frame);
+        SwingUtilities.updateComponentTreeUI(frame);
 
         //SwingUtilities.updateComponentTreeUI(frame);
         double start = System.currentTimeMillis() / 1000.00;

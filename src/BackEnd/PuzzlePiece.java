@@ -10,7 +10,7 @@ public class PuzzlePiece {
     new ImageIcon("images/green.png"), new ImageIcon("images/blue.png")};
     */
 
-    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png")};
+    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png"), new ImageIcon("images/teal.png")};
 
     private ImageIcon shape;
     private Dimension size;
@@ -19,13 +19,19 @@ public class PuzzlePiece {
     private int xCell;
     private int yCell;
     private Hitbox hitbox;
+    private int xStart;
+    private int yStart;
 
-    public PuzzlePiece(){
+    public PuzzlePiece(int xStart, int yStart){
         int index = (int)(Math.random()*blocks.length);
         shape = blocks[index];
+        this.xStart = xStart;
+        this.yStart = yStart;
+        xCell = xStart;
+        yCell = yStart;
         pieceLabel = new JLabel(shape);
         size = pieceLabel.getPreferredSize();
-        hitbox = new Hitbox(index, this);
+        hitbox = new Hitbox(index, this, xStart, yStart);
     }
 
     public Hitbox getHitbox() {
@@ -41,6 +47,7 @@ public class PuzzlePiece {
         xCell = cell;
         hitbox.updateLocation(xCell, yCell);
         pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+        hitbox.updateGridLoc();
     }
 
     public int getX(){
@@ -50,6 +57,7 @@ public class PuzzlePiece {
         yCell = cell;
         hitbox.updateLocation(xCell, yCell);
         pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+        hitbox.updateGridLoc();
 
     }
     public int getY(){

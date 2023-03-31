@@ -28,8 +28,8 @@ public class Game {
     public int start() {
 
         while (!gameOver()) {
-            PuzzlePiece piece = new PuzzlePiece();
-            PuzzlePiece nextPiece = new PuzzlePiece();
+            PuzzlePiece piece = new PuzzlePiece(board.getXStart(), board.getYStart());
+            PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart(), board.getYStart());
             p.createNewPiece(piece, nextPiece);
         }   
 
