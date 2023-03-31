@@ -28,6 +28,7 @@ public class Board {
     private ArrayList<BufferedImage> filledCells;
     //Array board > 
     private BoardGrid arrBoard;
+    private ArrayList<PuzzlePiece> boardPieces;
     private int[][] grid;
 
     public Board(int x, int y, JFrame frame) {
@@ -99,10 +100,12 @@ public class Board {
 
 
 
-        //Fourth: Move the buffered images accordingly, undating their locations and displaying them to the JFrame
+        //Fourth: Move the buffered images accordingly, creating the appropiate hitboxes for those buffered images, adding them to the list, and
+        //updating their locations and displaying them to the JFrame
+        //Also updating "allLines" to account for the new hitboxes created
 
 
-
+        
 
 
         //Lastly, clear the current piece of all of it's data to avoid any memory leaks
