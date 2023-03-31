@@ -21,45 +21,72 @@ public class Hitbox {
         this.piece= piece;
         this.xStart = xStart;
         this.yStart = yStart;
+        int xCell = (piece.getX() - piece.xStart()) / Board.squareDim;
+        int yCell = (piece.getY() - piece.yStart()) / Board.squareDim;
+        this.gridLoc = new int[4][2];
+
+        //Does this cause a memory leak?
         switch (pieceType) {
-            case 0: 
-                this.gridLoc = new int[4][2];
-                specialConditions = new int[4][2];
-
-                gridLoc[0][0] = (piece.getX() - xStart) / Board.squareDim;
-                gridLoc[0][1] = (piece.getY() - yStart) / Board.squareDim;
-                specialConditions[0][0] = 0;
-                specialConditions[0][1] = 0;  
-
-                gridLoc[1][0] = (piece.getX() - xStart) / Board.squareDim;
-                gridLoc[1][1] = (piece.getY() - yStart) / Board.squareDim+ 1;
-                specialConditions[1][0] = 0;
-                specialConditions[1][1] = 1;  
-
-                gridLoc[2][0] = (piece.getX() - xStart) / Board.squareDim + 1;
-                gridLoc[2][1] = (piece.getY() - yStart) / Board.squareDim;
-                specialConditions[2][0] = 1;
-                specialConditions[2][1] = 0;  
-
-                gridLoc[3][0] = (piece.getX() - xStart) / Board.squareDim + 1;
-                gridLoc[3][1] = (piece.getY() - yStart) / Board.squareDim + 1;
-                specialConditions[3][0] = 1;
-                specialConditions[3][1] = 1;  
-
-                //Don't forget that we had it start at 0
-                createHitbox(xStart,yStart);
-                
-                // ----------
-                // |        |
-                // |        |
-                // |        |
-                // |        |
-                // ----------
-
+            case 0 :
+                int[][] temp = {{xCell,yCell},
+                                {xCell,yCell+1},
+                                {xCell + 1,yCell},
+                                {xCell + 1,yCell + 1}};
+                this.specialConditions = temp;
                 break;
+            case 1: 
+                int[][] temp2 = {{xCell,yCell},
+                                {xCell,yCell+1},
+                                {xCell,yCell+2},
+                                {xCell,yCell + 3}};
+                this.specialConditions = temp2;
+            break;
+
+            case 2:
+                int[][] temp3 = {{xCell,yCell},
+                                {xCell+1,yCell},
+                                {xCell+1,yCell+1},
+                                {xCell+2,yCell + 1}};
+                this.specialConditions = temp3;
+            break;
+
+            case 3:
+                int[][] temp4 = {{xCell,yCell+1},
+                                {xCell+1,yCell+1},
+                                {xCell+1,yCell},
+                                {xCell+2,yCell + 1}};
+                this.specialConditions = temp4;
+            break;
+
+            case 4:
+                int[][] temp5 = {{xCell,yCell+1},
+                                {xCell+1,yCell+1},
+                                {xCell+2,yCell+1},
+                                {xCell+3,yCell}};
+                this.specialConditions = temp5;
+            break;
+
+            case 5:
+                int[][] temp6 = {{xCell,yCell},
+                                {xCell,yCell+1},
+                                {xCell+1,yCell+1},
+                                {xCell+2,yCell+1}};
+                this.specialConditions = temp6;
+            break;
+
+            case 6:
+                int[][] temp7 = {{xCell,yCell+1},
+                                {xCell+1,yCell+1},
+                                {xCell+1,yCell},
+                                {xCell+2,yCell}};
+                this.specialConditions = temp7;
+            break;
+
         }
-        //printGridLoc();
     }
+
+
+
 
     public void updateGridLoc() {
         int tempY;
@@ -68,6 +95,7 @@ public class Hitbox {
             for (int i = 0; i < gridLoc.length; i++) {
                 tempY = (piece.getY()- yStart) / Board.squareDim;
                 tempX = (piece.getX() - xStart) / Board.squareDim;
+
                 gridLoc[i][0] = tempX + specialConditions[i][0];
                 gridLoc[i][1] = tempY + specialConditions[i][1];
             }
@@ -77,14 +105,14 @@ public class Hitbox {
     public void printGridLoc() {
         int[][] temp = new int[20][10];
 
+        System.out.println("----------------------------------------------------");
         for (int i = 0; i < gridLoc.length; i++) {
             int x = gridLoc[i][1];
             int y = gridLoc[i][0];
-            //System.out.println("at location > ("+gridLoc[i][0] +", "+gridLoc[i][1]);
+            System.out.println("at location > ("+gridLoc[i][0] +", "+gridLoc[i][1]);
             temp[x][y] = 1;
         }
         
-        System.out.println("----------------------------------------------------");
         for (int k = 0; k < temp.length; k++) {
 
             for (int m = 0; m < temp[0].length; m++) {
@@ -112,55 +140,15 @@ public class Hitbox {
         yCell = yStart;
         this.pieceType = pieceType;
         points = new ArrayList<Line2D>();
-        createHitbox(xCell, yCell);
+
     }
 
     public ArrayList<Line2D> getPoints() {
         return points;
     }
 
-    private void createHitbox(int xCell, int yCell) {
-        switch (pieceType){
-            case 0: 
-                points.add(new Line2D.Float(xCell, yCell, xCell+60, yCell));
-                points.add(new Line2D.Float(xCell, yCell, xCell, yCell+60));
-                points.add(new Line2D.Float(xCell, yCell+60, xCell+60, yCell+60));
-                points.add(new Line2D.Float(xCell+60, yCell+60, xCell+60, yCell));
 
-                // ----------
-                // |        |
-                // |        |
-                // |        |
-                // |        |
-                // ----------
-
-                break;
-
-            case 1:
-                points.add(new Line2D.Float(xCell, yCell, xCell+30, yCell));
-                points.add(new Line2D.Float(xCell, yCell, xCell, yCell+120));
-                points.add(new Line2D.Float(xCell, yCell+120, xCell+30, yCell+120));
-                points.add(new Line2D.Float(xCell+30, yCell+120, xCell+30, yCell));
-                break;
-        }
-    }
-
-    public void updateLocation(int xCell, int yCell) {
-        //xCell = piece.getX();
-        //yCell = piece.getY();
-
-        switch (pieceType) {
-            case 0:
-                points.get(0).setLine(xCell, yCell, xCell+60, yCell);
-                points.get(1).setLine(xCell, yCell, xCell, yCell+60);
-                points.get(2).setLine(xCell, yCell+60, xCell+60, yCell+60);
-                points.get(3).setLine(xCell+60, yCell+60, xCell+60, yCell);
-            break;
-        }
-
-
-    }
-
+ 
     public void rotateHitBox() {
 
     }

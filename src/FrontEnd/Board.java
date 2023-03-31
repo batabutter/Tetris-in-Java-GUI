@@ -74,24 +74,21 @@ public class Board {
 
     public void update() {
 
-        ArrayList<Line2D> lines = currentPiece.getHitbox().getPoints();
-        for (Line2D temp : lines) {
-            allLines.add(new Line2D.Float((float)temp.getX1(), (float)temp.getY1(), (float)temp.getX2(), (float)temp.getY2()));
-        }
+
+        arrBoard.updateGrid(currentPiece);
         
         //clear the current piece of all of it's data to avoid any memory leaks
         currentPiece.getHitbox().clear();
     }
 
 
-    //Change
     public void add(PuzzlePiece piece) {
         currentPiece = piece;
-        piece.setX(startX);
-        piece.setY(startY);
-        //piece.getLabel().setBounds(startX, startY, piece.getWidth(), piece.getHeight());
+        //For some reason, the piece wouldn't show unless I set it twice.
+        //So yeah...
+        piece.setX(piece.xStart() + 4*30);
+        piece.setY(piece.yStart());
         frame.add(piece.getLabel());
-        //SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public PuzzlePiece remove() {
@@ -106,16 +103,21 @@ public class Board {
 
     public void movePieceRight(){
         PuzzlePiece piece = currentPiece;
+        PuzzlePiece testColPiece = new PuzzlePiece(currentPiece.xStart(), currentPiece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
+        testColPiece.setX(currentPiece.getX() + squareDim);
+        testColPiece.setY(currentPiece.getY());
 
-        if ((piece.getX()+20) + piece.getWidth() <= startX+Board.boardWidth)
+        if ((piece.getX()+squareDim) + piece.getWidth() <= startX+Board.boardWidth && arrBoard.validLocationX(testColPiece))
             piece.setX(piece.getX()+squareDim);
 
     }
 
     public void movePieceLeft() {
         PuzzlePiece piece = currentPiece;
-
-        if (piece.getX()-squareDim >= startX)
+        PuzzlePiece testColPiece = new PuzzlePiece(currentPiece.xStart(), currentPiece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
+        testColPiece.setX(currentPiece.getX() - squareDim);
+        testColPiece.setY(currentPiece.getY());
+        if (piece.getX()-squareDim >= startX && arrBoard.validLocationX(testColPiece))
             piece.setX(piece.getX()-squareDim);
         
     }
@@ -123,8 +125,10 @@ public class Board {
     public void movePieceDown() {
         PuzzlePiece piece = currentPiece;
 
-        if ((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)
+        if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight)
             piece.setY(piece.getY()+squareDim);
+
+        //currentPiece.getHitbox().printGridLoc();
 
     }
 
@@ -132,27 +136,15 @@ public class Board {
     public boolean pieceSettled () {
         PuzzlePiece piece = currentPiece;
 
-        if (allLines.size() > 0) {
-            Hitbox futureHit = new Hitbox(piece.getX()+1, piece.getY()+1, piece.getHitbox().getPieceType());
-            ArrayList<Line2D> temp = futureHit.getPoints();
+        PuzzlePiece testColPiece = new PuzzlePiece(piece.xStart(), piece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
+        testColPiece.setX(currentPiece.getX());
+        testColPiece.setY(currentPiece.getY() + squareDim);
+        return !arrBoard.validLocationY(testColPiece);
 
-            for (int i = 0; i < temp.size(); i ++) {
-                for (int k = 0; k < allLines.size(); k++) {
-                    if (temp.get(i).intersectsLine(allLines.get(k))) {
-                        
-                        return true;
-                    }
-                }
-            }
-        }
+    }
 
-        
-        if (((piece.getY()+20)+piece.getHeight() <= startY+Board.boardHeight)) {
-            return false;
-        }
-
-        
-        return true;
+    public int next(int start) {
+        return start + squareDim;
     }
 
     public void rotatePiece() {
@@ -163,7 +155,6 @@ public class Board {
         ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
 
         piece.setShape(temp);
-        //SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
@@ -171,7 +162,7 @@ public class Board {
                 BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = bufferedImage.createGraphics();
         icon.paintIcon(null, graphics, 0, 0);
-        graphics.dispose();//from   w  ww.j a  va  2  s.  co m
+        graphics.dispose();
         return bufferedImage;
     }
 

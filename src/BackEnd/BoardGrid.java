@@ -16,7 +16,7 @@ public class BoardGrid {
     }
 
 
-    public void updateGrid (PuzzlePiece currentPiece) {
+    public void updateGrid(PuzzlePiece currentPiece) {
 
         //First : Update the 2D Array with the piece data> 
         int[][] temp = currentPiece.getHitbox().getGrid();
@@ -57,6 +57,46 @@ public class BoardGrid {
             System.out.println("\n");
         }
     }
+
+    public boolean validLocationY(PuzzlePiece piece) {
+        int[][] locations = piece.getHitbox().getGridLocations();
+        for (int i = 0; i < locations.length; i++) {
+            int x = locations[i][0];
+            int y = locations[i][1];
+            //System.out.println("at location > ("+locations[i][0] +", "+locations[i][1]);
+            if (y == board.length){
+                return false;
+            } 
+
+            if (board[y][x] == 1)
+                return false;
+
+        }
+
+        //System.out.println("valid");
+
+        return true;
+    }
+
+    public boolean validLocationX(PuzzlePiece piece) {
+        int[][] locations = piece.getHitbox().getGridLocations();
+        for (int i = 0; i < locations.length; i++) {
+            int x = locations[i][0];
+            int y = locations[i][1];
+            if (x == board[0].length){
+                return false;
+            } 
+
+            if (board[y][x] == 1)
+                return false;
+
+        }
+
+        //System.out.println("valid");
+
+        return true;
+    }
+
 
     public int[][] getCurrentState(PuzzlePiece currentPiece) {
         int[][] temp = currentPiece.getHitbox().getGrid();
