@@ -70,7 +70,7 @@ public class Board {
         return currentPiece;
     }
 
-    //This will cause a memory leak
+    //This will cause a memory leak (maybe)
 
     public void update() {
 
@@ -78,7 +78,7 @@ public class Board {
         for (Line2D temp : lines) {
             allLines.add(new Line2D.Float((float)temp.getX1(), (float)temp.getY1(), (float)temp.getX2(), (float)temp.getY2()));
         }
-        //First : Update the 2D Array > 
+        //First : Update the 2D Array with the piece data> 
         int[][] temp = currentPiece.getHitbox().getGrid();
         for (int i = 0; i < temp.length; i++) {
             for (int k = 0; k < temp[0].length; k++) {
@@ -87,6 +87,25 @@ public class Board {
                 }
             }
         }
+
+        //Second: Create a way to determine how many lines are filled and where the locations are 
+
+
+
+        //Third: Create a buffered image based on the grid data. Everytime a piece is placed. a buffered image is created for every line,
+        //can have multiple per line
+
+
+
+
+
+        //Fourth: Move the buffered images accordingly, undating their locations and displaying them to the JFrame
+
+
+
+
+
+        //Lastly, clear the current piece of all of it's data to avoid any memory leaks
         currentPiece.getHitbox().clear();
     }
 
