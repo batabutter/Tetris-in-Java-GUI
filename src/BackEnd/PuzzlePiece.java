@@ -23,6 +23,8 @@ public class PuzzlePiece {
     private Hitbox hitbox;
     private int xStart;
     private int yStart;
+    private int farthestX;
+
 
     public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType){
         int index = pieceType;
@@ -31,14 +33,15 @@ public class PuzzlePiece {
         this.pieceType = index;
 
         //System.out.println("piece type here > " + index);
-        shape = blocks[index];
+        shape = blocks[this.pieceType];
         this.xStart = boardXStart;
         this.yStart = boardYStart;
         xCell = xStart;
         yCell = yStart;
         pieceLabel = new JLabel(shape);
         size = pieceLabel.getPreferredSize();
-        hitbox = new Hitbox(index, this, xStart, yStart);
+        hitbox = new Hitbox(this.pieceType, this, xStart, yStart);
+        farthestX = -1;
     }
 
     public int getPieceType() {
@@ -76,7 +79,6 @@ public class PuzzlePiece {
         yCell = cell;
         pieceLabel.setBounds(xCell, yCell, size.width, size.height);
         hitbox.updateGridLoc();
-
     }
     public int getY(){
         return yCell;
@@ -95,11 +97,6 @@ public class PuzzlePiece {
     }
 
     public void setShape(ImageIcon icon) {
-        //Rotate the spots on the grid as well
-        //Once it's rotated and the coordinates are set, check to see if the piece is valid or not
-
-
-
         shape = icon;
         pieceLabel.setIcon(shape);
 
@@ -108,8 +105,33 @@ public class PuzzlePiece {
 
     }
 
+    public void setShape(ImageIcon icon, int size, int width) {
+        shape = icon;
+        pieceLabel.setIcon(shape);
+        pieceLabel.setBounds(xCell, yCell, size, width);
+
+    }
+
     public void updateSize() {
         size = pieceLabel.getPreferredSize();
     }
 
+    public int getFarthestX() {
+        return farthestX;
+    }
+
+    public void setFarthestX(int n) {
+        farthestX = n;
+    }
+
+    //Returns a boolean value: if the piece was successfully rotated or not
+    public void changeToPiece(PuzzlePiece piece) {
+        hitbox.setGridLoc(piece.getHitbox().getGridLocations());
+        hitbox.setSpecialConditions(piece.getHitbox().getGridLocations());
+        //piece = null;
+    }
+
+    public void setHitbox(Hitbox h) {
+        hitbox = h;
+    }
 }

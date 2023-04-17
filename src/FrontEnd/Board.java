@@ -29,6 +29,7 @@ public class Board {
     //Array board > 
     private BoardGrid arrBoard;
     private ArrayList<PuzzlePiece> boardPieces;
+    private int timesRotated;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -36,9 +37,9 @@ public class Board {
         dropSpeed = 1.5;
         this.frame = frame;
         allLines = new ArrayList<Line2D>();
-        arrBoard = new BoardGrid(startX, startY);
         filledCells = new ArrayList<BufferedImage>();
-        arrBoard = new BoardGrid(startX, startY);
+        arrBoard = new BoardGrid();
+        timesRotated = 0;
     }
     
     public int getXStart(){
@@ -63,7 +64,9 @@ public class Board {
     }
 
     public void setCurrentPiece(PuzzlePiece temp) {
+        frame.remove(currentPiece.getLabel());
         currentPiece = temp;
+        frame.add(currentPiece.getLabel());
     }
 
     public PuzzlePiece getCurrentPiece() {
@@ -89,6 +92,7 @@ public class Board {
         piece.setX(piece.xStart() + 4*30);
         piece.setY(piece.yStart());
         frame.add(piece.getLabel());
+        currentPiece.getHitbox().printGridLoc();
     }
 
     public PuzzlePiece remove() {
@@ -103,11 +107,29 @@ public class Board {
 
     public void movePieceRight(){
         PuzzlePiece piece = currentPiece;
-        PuzzlePiece testColPiece = new PuzzlePiece(currentPiece.xStart(), currentPiece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
-        testColPiece.setX(currentPiece.getX() + squareDim);
-        testColPiece.setY(currentPiece.getY());
 
-        if ((piece.getX()+squareDim) + piece.getWidth() <= startX+Board.boardWidth && arrBoard.validLocationX(testColPiece))
+        int[][] futureLocations = new int[4][2];
+        int[][] currentLocations = piece.getHitbox().getGridLocations();
+        int[][] grid = arrBoard.getBoard();
+
+        for (int i = 0 ; i < futureLocations.length; i++) {
+            futureLocations[i][0] = currentLocations[i][0] + 1;
+            futureLocations[i][1] = currentLocations[i][1];
+        }
+
+        for (int n = 0; n < futureLocations.length; n++) {
+            System.out.println(n + ": "+"("+futureLocations[n][0]+", "+futureLocations[n][1]+")");
+        }
+
+        boolean cont = true;
+        for (int k = 0; k < futureLocations.length; k++) {
+            if ((futureLocations[k][0] >= arrBoard.getWidth()) || (grid[futureLocations[k][1]][futureLocations[k][0]] == 1)) {
+                cont = false;
+                //System.out.println("Invalid!");
+            }
+        }
+
+        if (cont)
             piece.setX(piece.getX()+squareDim);
 
     }
@@ -120,6 +142,7 @@ public class Board {
         if (piece.getX()-squareDim >= startX && arrBoard.validLocationX(testColPiece))
             piece.setX(piece.getX()-squareDim);
         
+        currentPiece.getHitbox().printGridLoc();
     }
 
     public void movePieceDown() {
@@ -129,6 +152,7 @@ public class Board {
             piece.setY(piece.getY()+squareDim);
 
         //currentPiece.getHitbox().printGridLoc();
+        
 
     }
 
@@ -136,11 +160,30 @@ public class Board {
     public boolean pieceSettled () {
         PuzzlePiece piece = currentPiece;
 
-        PuzzlePiece testColPiece = new PuzzlePiece(piece.xStart(), piece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
-        testColPiece.setX(currentPiece.getX());
-        testColPiece.setY(currentPiece.getY() + squareDim);
-        return !arrBoard.validLocationY(testColPiece);
+        int[][] futureLocations = new int[4][2];
+        int[][] currentLocations = piece.getHitbox().getGridLocations();
+        int[][] grid = arrBoard.getBoard();
 
+        for (int i = 0 ; i < futureLocations.length; i++) {
+            futureLocations[i][0] = currentLocations[i][0];
+            futureLocations[i][1] = currentLocations[i][1] + 1;
+        }
+        
+        for (int k = 0; k < futureLocations.length; k++) {
+            if (futureLocations[k][1] >= arrBoard.getHeight()) {
+                return true;
+            }
+
+            if (grid[futureLocations[k][1]][futureLocations[k][0]] == 1) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public void setTimesRotated(int n) {
+        timesRotated = n;
     }
 
     public int next(int start) {
@@ -149,12 +192,28 @@ public class Board {
 
     public void rotatePiece() {
         PuzzlePiece piece = currentPiece;
-        ImageIcon shape = piece.getShape();
+        PuzzlePiece tempPiece = arrBoard.rotatePiece(currentPiece, timesRotated);
 
-        BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
-        ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
+        if (tempPiece != null) {
+            timesRotated++;
+            ImageIcon shape = piece.getShape();
 
-        piece.setShape(temp);
+            BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
+            ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
+
+            //This causes a memory leak, I need ot fix once I get it working
+            piece.setShape(temp);
+            piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
+            piece.getHitbox().setSpecialConditions(tempPiece.getHitbox().getSpecialLocations());
+            
+            /* 
+            System.out.println("Board > ");
+            currentPiece.getHitbox().printGridLoc();
+            System.out.println("-----------------------------------------------------------");
+            
+            */
+        }
+
     }
 
     public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {

@@ -76,6 +76,7 @@ public class Player {
             }
         }
         board.update();
+        board.setTimesRotated(0);
     }
 
     class KeyboardControls implements KeyListener {

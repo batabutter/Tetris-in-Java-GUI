@@ -24,6 +24,7 @@ public class Hitbox {
         int xCell = (piece.getX() - piece.xStart()) / Board.squareDim;
         int yCell = (piece.getY() - piece.yStart()) / Board.squareDim;
         this.gridLoc = new int[4][2];
+        
 
         //Does this cause a memory leak?
         switch (pieceType) {
@@ -59,10 +60,11 @@ public class Hitbox {
             break;
 
             case 4:
+            //Orange
                 int[][] temp5 = {{xCell,yCell+1},
                                 {xCell+1,yCell+1},
                                 {xCell+2,yCell+1},
-                                {xCell+3,yCell}};
+                                {xCell+2,yCell}};
                 this.specialConditions = temp5;
             break;
 
@@ -86,8 +88,6 @@ public class Hitbox {
     }
 
 
-
-
     public void updateGridLoc() {
         int tempY;
         int tempX;
@@ -109,7 +109,7 @@ public class Hitbox {
         for (int i = 0; i < gridLoc.length; i++) {
             int x = gridLoc[i][1];
             int y = gridLoc[i][0];
-            System.out.println("at location > ("+gridLoc[i][0] +", "+gridLoc[i][1]);
+            System.out.println("at location > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
             temp[x][y] = 1;
         }
         
@@ -143,32 +143,25 @@ public class Hitbox {
 
     }
 
-    public ArrayList<Line2D> getPoints() {
-        return points;
-    }
-
-
- 
-    public void rotateHitBox() {
-
-    }
-
-    private void changeXAndY(int[][] temp) {
-
-    }
-
     public int[][] getGridLocations() {
         return gridLoc;
     }
 
+    public void setGridLoc(int[][] locations) {
+        gridLoc = locations;
+    }
+
+    public void setSpecialConditions(int[][] piece) {
+        specialConditions = piece;
+    }
+
+    public int[][] getSpecialLocations() {
+        return specialConditions;
+    }
 
     //This should alwyas be the last value in gridLoc
     public int[] getBottomMostLocation() {
         return gridLoc[gridLoc.length-1];
-    }
-
-    private void changeBottomMostLocation() {
-
     }
 
     public void clear() {

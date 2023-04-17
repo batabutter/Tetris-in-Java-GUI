@@ -2,9 +2,13 @@ package BackEnd;
 
 public class BoardGrid {
     private int[][] board;
+    private int height;
+    private int width;
 
-    public BoardGrid (int xStart, int yStart) {
+    public BoardGrid () {
         board = new int[20][10];
+        height = 20;
+        width = 10;
     }
 
     public int[][] getBoard() {
@@ -13,6 +17,14 @@ public class BoardGrid {
 
     public int nextRow(int row, int col) {
         return board[row][col+1];
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
 
@@ -29,19 +41,11 @@ public class BoardGrid {
         }
 
         //Second: Create a way to determine how many lines are filled and where the locations are 
-
+        
 
 
         //Third: Create a buffered image based on the grid data. Everytime a piece is placed. a buffered image is created for every line,
         //can have multiple per line
-
-
-
-
-
-        //Fourth: Move the buffered images accordingly, creating the appropiate hitboxes for those buffered images, adding them to the list, and
-        //updating their locations and displaying them to the JFrame
-        //Also updating "allLines" to account for the new hitboxes created
 
 
 
@@ -50,12 +54,14 @@ public class BoardGrid {
     }
 
     public void printGrid() {
+        System.out.println("--------------------");
         for (int i = 0; i < board.length; i++) {
             for (int k = 0; k < board[0].length; k++) {
                System.out.print(board[i][k]+" ");
             }
             System.out.println("\n");
         }
+        System.out.println("--------------------");
     }
 
     public boolean validLocationY(PuzzlePiece piece) {
@@ -109,5 +115,125 @@ public class BoardGrid {
         }
 
         return temp;
+    }
+
+    public PuzzlePiece rotatePiece(PuzzlePiece piece, int timesRotated) {
+        int xCell = piece.getX();
+        int yCell = piece.getY();
+        int xStart = piece.xStart();
+        int yStart = piece.yStart();
+        int pieceType = piece.getPieceType();
+        PuzzlePiece testPiece = new PuzzlePiece(xCell, yCell, xStart, yStart, pieceType);
+        int[][] locations = piece.getHitbox().getGridLocations();  
+        
+        /* 
+        for (int n = 0; n < locations.length; n++) {
+            System.out.println(n + ": "+"("+locations[n][0]+", "+locations[n][1]+")");
+        }
+        */
+        rotatePieceInArr(locations, pieceType, timesRotated, piece);
+        testPiece.getHitbox().setGridLoc(locations);
+        rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
+        testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
+
+        if (validLocationX(testPiece) && validLocationY(testPiece)) {
+            return testPiece;
+        }
+
+        return null;
+    }
+
+    private void rotatePieceInArr(int[][] locations, int pieceType, int timesRotated, PuzzlePiece piece) {
+        int minX = 100;
+        int maxX = 0;
+        int maxY = 0;
+
+        for (int k = 0; k < locations.length; k++) {
+            int temp = locations[k][0];
+            if (temp > maxX) {
+                maxX = temp;
+            }
+            temp = locations[k][1];
+            if (temp > maxY) {
+                maxY = temp;
+            }
+        }
+
+        int minY = 100;
+
+        for (int k = 0; k < locations.length; k++) {
+            int temp = locations[k][1];
+            if (temp < minY) {
+                minY = temp;
+            }
+        }
+
+        int orgMinX = 100;
+            for (int k = 0; k < locations.length; k++) {
+                int temp = locations[k][0];
+                if (temp < orgMinX) {
+                    orgMinX = temp;
+                }
+            }
+
+        for (int i = 0; i < locations.length; i++) {
+            int temp = locations[i][0];
+            locations[i][0] = locations[i][1];
+            locations[i][1] = temp;
+            locations[i][0] = locations[i][0] * -1;
+        }
+
+        for (int n = 0; n < locations.length; n++) {
+            System.out.println(n + ": "+"("+locations[n][0]+", "+locations[n][1]+")");
+        }
+
+        int minY2 = 100;
+
+        for (int k = 0; k < locations.length; k++) {
+            int temp = locations[k][1];
+            if (temp < minY2) {
+                minY2 = temp;
+            }
+        }
+        minX = 100;
+            for (int k = 0; k < locations.length; k++) {
+                int temp = locations[k][0];
+                if (temp < minX) {
+                    minX = temp;
+                }
+            }
+        int offSet = 2;
+        //If the order of the pieces in the array are ever changed, this code will break
+        int tempMax = -1000;
+        int tempMin = 100;
+
+        for (int k = 0; k < locations.length; k++) {
+            int temp = locations[k][0];
+            if (temp > tempMax) {
+                tempMax = temp;
+            }
+            if (temp < tempMin) {
+                tempMin = temp;
+            }
+        }
+
+        int newMaxDifference = tempMax-tempMin;
+        int oldMaxDifference = maxX-orgMinX;
+        int totalDiff = Math.abs(newMaxDifference - oldMaxDifference);
+        if (totalDiff > 0) {
+            if (newMaxDifference > oldMaxDifference)
+                piece.setFarthestX(newMaxDifference);   
+            else 
+                piece.setFarthestX(oldMaxDifference); 
+        }
+        if ((piece.getFarthestX() != -1)) {
+            if (newMaxDifference >= piece.getFarthestX())
+                maxX = maxX + totalDiff;
+        }
+        for (int m = 0; m < locations.length; m++) {
+            locations[m][0] = locations[m][0]+(maxX - minX)-offSet;
+            locations[m][1] = locations[m][1]-(minY2-minY);
+        }
+
     }
 }
