@@ -1,14 +1,17 @@
 package BackEnd;
+import java.util.ArrayList;
 
 public class BoardGrid {
     private int[][] board;
     private int height;
     private int width;
+    private int shifts;
 
     public BoardGrid () {
         board = new int[20][10];
         height = 20;
         width = 10;
+         shifts = 0;
     }
 
     public int[][] getBoard() {
@@ -40,17 +43,66 @@ public class BoardGrid {
             }
         }
 
-        //Second: Create a way to determine how many lines are filled and where the locations are 
-        
-
-
-        //Third: Create a buffered image based on the grid data. Everytime a piece is placed. a buffered image is created for every line,
+        //Second: Create a buffered image based on the grid data. Everytime a piece is placed. a buffered image is created for every line,
         //can have multiple per line
 
 
+        //Third: Create a way to determine how many lines are filled and where the locations are
+        ArrayList<Integer> lines = linesCleared();
+
+        for (int i = 0 ; i < lines.size(); i++) {
+            moveGridDown(lines.get(i), lines.size());
+            shifts++;
+            for (int k = i+1; k < lines.size(); k++) {
+                lines.set(k, shifts+lines.get(i));
+            }
+            
+        }
+        
+
+
+        //Fourth: Adjust the positions of the buffered images based on the grid data
+
 
         //Lastly, clear the current piece of all of it's data to avoid any memory leaks
+        printGrid();
+        shifts = 0;
         currentPiece.getHitbox().clear();
+    }
+
+    public void moveGridDown(int row, int N) {
+        for (int i = 0; i < board[0].length; i++) {
+            board[row][i] = 0;
+        }
+
+        int count = 0; 
+        for (int i = row - count ; i > 1; i--) {
+            int[] temp = board[i];
+            board[i] = board[i-1];
+            board[i-1] = temp;
+        }
+        System.out.println("Swap");
+        printGrid();
+        count++;
+        
+        
+
+    }
+
+    public ArrayList<Integer> linesCleared() {
+        int count = 0; 
+        ArrayList<Integer> lines = new ArrayList<Integer>(); 
+        for (int i = 0; i < board.length; i++) {
+            for (int k = 0; k < board[0].length; k++) {
+                if (board[i][k] == 1) 
+                    count++;
+            }
+            if (count == 10)
+                lines.add(i);
+            count = 0;
+        }
+
+        return lines;
     }
 
     public void printGrid() {
@@ -183,9 +235,11 @@ public class BoardGrid {
             locations[i][0] = locations[i][0] * -1;
         }
 
+        /* 
         for (int n = 0; n < locations.length; n++) {
             System.out.println(n + ": "+"("+locations[n][0]+", "+locations[n][1]+")");
         }
+        */
 
         int minY2 = 100;
 

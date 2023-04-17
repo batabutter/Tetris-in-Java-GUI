@@ -24,6 +24,7 @@ public class PuzzlePiece {
     private int xStart;
     private int yStart;
     private int farthestX;
+    private String color;
 
 
     public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType){
@@ -42,6 +43,9 @@ public class PuzzlePiece {
         size = pieceLabel.getPreferredSize();
         hitbox = new Hitbox(this.pieceType, this, xStart, yStart);
         farthestX = -1;
+
+        //I will alter this later
+        color = "blackBlock";
     }
 
     public int getPieceType() {

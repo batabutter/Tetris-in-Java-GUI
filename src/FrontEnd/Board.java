@@ -20,12 +20,10 @@ public class Board {
     final static public int boardWidth = 300;
     final static public int squareDim = boardWidth / 10;
     private double dropSpeed;
-    private BufferedImage pieces;
     private int startX;
     private int startY;
     private JFrame frame;
-    private ArrayList<Line2D> allLines;
-    private ArrayList<BufferedImage> filledCells;
+    private ArrayList<JLabel> pieceImages;
     //Array board > 
     private BoardGrid arrBoard;
     private ArrayList<PuzzlePiece> boardPieces;
@@ -36,8 +34,7 @@ public class Board {
         startY = y;
         dropSpeed = 1.5;
         this.frame = frame;
-        allLines = new ArrayList<Line2D>();
-        filledCells = new ArrayList<BufferedImage>();
+        pieceImages = new ArrayList<JLabel>();
         arrBoard = new BoardGrid();
         timesRotated = 0;
     }
@@ -76,14 +73,27 @@ public class Board {
     //This will cause a memory leak (maybe)
 
     public void update() {
-
-
         arrBoard.updateGrid(currentPiece);
-        
+        removePieceImages();
+        updateImagesOfBoard();
+
         //clear the current piece of all of it's data to avoid any memory leaks
-        currentPiece.getHitbox().clear();
+        remove();
     }
 
+    private void updateImagesOfBoard() {
+        //Create a way here to make split pieces based off of the pieceLabels
+        //Then alter the pieceImages
+        int[][] grid = arrBoard.getBoard();
+        for (int i  = 0; i < grid.length; i++) {
+            for (int k = 0; k < grid[0].length; k++) {
+                if (grid[i][k] != 0) {
+                    add(grid[i][k], i, k);
+                }
+            }
+        }
+
+    }
 
     public void add(PuzzlePiece piece) {
         currentPiece = piece;
@@ -92,15 +102,41 @@ public class Board {
         piece.setX(piece.xStart() + 4*30);
         piece.setY(piece.yStart());
         frame.add(piece.getLabel());
-        currentPiece.getHitbox().printGridLoc();
+        //currentPiece.getHitbox().printGridLoc();
+    }
+
+    public void add(int numColor, int row, int col) {
+        String color = ";";
+        if (numColor == 1) {
+            color = "images/blackBlock.png";
+        }
+
+        int newX = startX + (squareDim * col);
+        int newY = startY + (squareDim * row);
+    
+        JLabel temp = new JLabel(new ImageIcon(color));
+        Dimension size = temp.getPreferredSize();
+        temp.setBounds(newX, newY, size.width, size.height);
+        pieceImages.add(temp);
+        frame.add(temp);
     }
 
     public PuzzlePiece remove() {
 
         frame.remove(currentPiece.getLabel());
         PuzzlePiece temp = currentPiece;
+        currentPiece.getHitbox().clear();
         currentPiece = null;
         return temp;
+    }
+
+    public void removePieceImages() {
+        for (int i =0 ; i < pieceImages.size(); i++) {
+            frame.remove(pieceImages.get(i));
+        }
+
+        pieceImages.clear();
+
     }
 
     //We most likely are going to have to rework some of these methods in order to account for different types of collisions
@@ -116,10 +152,11 @@ public class Board {
             futureLocations[i][0] = currentLocations[i][0] + 1;
             futureLocations[i][1] = currentLocations[i][1];
         }
-
+        /* 
         for (int n = 0; n < futureLocations.length; n++) {
             System.out.println(n + ": "+"("+futureLocations[n][0]+", "+futureLocations[n][1]+")");
         }
+        */
 
         boolean cont = true;
         for (int k = 0; k < futureLocations.length; k++) {
@@ -142,7 +179,7 @@ public class Board {
         if (piece.getX()-squareDim >= startX && arrBoard.validLocationX(testColPiece))
             piece.setX(piece.getX()-squareDim);
         
-        currentPiece.getHitbox().printGridLoc();
+        //currentPiece.getHitbox().printGridLoc();
     }
 
     public void movePieceDown() {
