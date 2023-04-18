@@ -38,6 +38,10 @@ public class Board {
         arrBoard = new BoardGrid();
         timesRotated = 0;
     }
+
+    public BoardGrid getBoardGrid() {
+        return arrBoard;
+    }
     
     public int getXStart(){
         return startX;
@@ -185,8 +189,9 @@ public class Board {
     public void movePieceDown() {
         PuzzlePiece piece = currentPiece;
 
-        if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight)
-            piece.setY(piece.getY()+squareDim);
+        if (!pieceSettled())
+            if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight)
+                piece.setY(piece.getY()+squareDim);
 
         //currentPiece.getHitbox().printGridLoc();
         
@@ -255,7 +260,7 @@ public class Board {
 
     public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
         BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = bufferedImage.createGraphics();
         icon.paintIcon(null, graphics, 0, 0);
         graphics.dispose();

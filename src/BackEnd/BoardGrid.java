@@ -52,9 +52,8 @@ public class BoardGrid {
 
         for (int i = 0 ; i < lines.size(); i++) {
             moveGridDown(lines.get(i), lines.size());
-            shifts++;
             for (int k = i+1; k < lines.size(); k++) {
-                lines.set(k, shifts+lines.get(i));
+                lines.set(k, 1+lines.get(i));
             }
             
         }
@@ -65,12 +64,13 @@ public class BoardGrid {
 
 
         //Lastly, clear the current piece of all of it's data to avoid any memory leaks
-        printGrid();
+        //printGrid();
         shifts = 0;
         currentPiece.getHitbox().clear();
     }
 
     public void moveGridDown(int row, int N) {
+        System.out.println("Clearing row > "+row);
         for (int i = 0; i < board[0].length; i++) {
             board[row][i] = 0;
         }
@@ -82,7 +82,7 @@ public class BoardGrid {
             board[i-1] = temp;
         }
         System.out.println("Swap");
-        printGrid();
+        //printGrid();
         count++;
         
         
@@ -178,19 +178,23 @@ public class BoardGrid {
         PuzzlePiece testPiece = new PuzzlePiece(xCell, yCell, xStart, yStart, pieceType);
         int[][] locations = piece.getHitbox().getGridLocations();  
         
-        /* 
+        
         for (int n = 0; n < locations.length; n++) {
             System.out.println(n + ": "+"("+locations[n][0]+", "+locations[n][1]+")");
         }
-        */
+        
         rotatePieceInArr(locations, pieceType, timesRotated, piece);
         testPiece.getHitbox().setGridLoc(locations);
         rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
         testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
 
+        testPiece.getHitbox().printGridLoc();
+
         if (validLocationX(testPiece) && validLocationY(testPiece)) {
             return testPiece;
         }
+
+        
 
         return null;
     }

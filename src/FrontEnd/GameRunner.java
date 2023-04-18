@@ -17,14 +17,16 @@ public class GameRunner {
 
         //You would want to get both games, running at the same time
         //Whichever game ends first 
-        Game game = new Game(human);
+        //Game game = new Game(human);
         
         //This will be changed to run both games at once using threads.
         //The next thread should be run in this class
         int score; 
+        /*
         while (!game.gameOver()) {
             score = game.start();
         }
+        */
         
 
     }

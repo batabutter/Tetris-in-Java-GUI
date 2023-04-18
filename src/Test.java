@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import FrontEnd.Player;
+import FrontEnd.ComputerPlayer;
 import BackEnd.Game;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -41,16 +42,13 @@ public class Test extends Thread{
         //Most important piece of code in the entire project
         frame.setLayout(null);
 
-
-        Player human = new Player(250, 70, frame);
-        Game game = new Game(human);
-        game.start();
+        runGame(frame);
     }
 
-    
-    public void run(){
-        Player human = new Player(250,70,frame);
-        Game game = new Game(human);
+    public void runGame(JFrame frame) {
+        Player human = new Player(250, 70, frame);
+        Player computer = new ComputerPlayer(1050, 70, frame);
+        Game game = new Game(human, computer);
         game.start();
     }
 
