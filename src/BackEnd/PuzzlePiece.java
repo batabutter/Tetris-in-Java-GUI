@@ -24,7 +24,7 @@ public class PuzzlePiece {
     private int xStart;
     private int yStart;
     private int farthestX;
-    private String color;
+    private int color;
 
 
     public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType){
@@ -45,7 +45,7 @@ public class PuzzlePiece {
         farthestX = -1;
 
         //I will alter this later
-        color = "blackBlock";
+        color = this.pieceType + 2;
     }
 
     public int getPieceType() {
@@ -137,5 +137,9 @@ public class PuzzlePiece {
 
     public void setHitbox(Hitbox h) {
         hitbox = h;
+    }
+
+    public int getColor() {
+        return color;
     }
 }

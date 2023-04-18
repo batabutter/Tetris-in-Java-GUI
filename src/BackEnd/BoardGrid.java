@@ -37,8 +37,8 @@ public class BoardGrid {
         int[][] temp = currentPiece.getHitbox().getGrid();
         for (int i = 0; i < temp.length; i++) {
             for (int k = 0; k < temp[0].length; k++) {
-                if (temp[i][k] == 1) {
-                    board[i][k] = 1;
+                if (temp[i][k] != 0) {
+                    board[i][k] = temp[i][k];
                 }
             }
         }
@@ -88,7 +88,7 @@ public class BoardGrid {
         ArrayList<Integer> lines = new ArrayList<Integer>(); 
         for (int i = 0; i < board.length; i++) {
             for (int k = 0; k < board[0].length; k++) {
-                if (board[i][k] == 1) 
+                if (board[i][k] != 0) 
                     count++;
             }
             if (count == 10)
@@ -120,7 +120,7 @@ public class BoardGrid {
                 return false;
             } 
 
-            if (board[y][x] == 1)
+            if (board[y][x] != 0)
                 return false;
 
         }
@@ -139,7 +139,7 @@ public class BoardGrid {
                 return false;
             } 
 
-            if (board[y][x] == 1)
+            if (board[y][x] != 0)
                 return false;
 
         }
@@ -182,10 +182,10 @@ public class BoardGrid {
 
             for (int i = 0; i < locations.length; i++) {
                 for (int k = 0; k < locations[0].length-1; k++) {
-                    System.out.println("at location > ("+locations[i][k]+", "+locations[i][k+1]+")");
+                    //System.out.println("at location > ("+locations[i][k]+", "+locations[i][k+1]+")");
                 }
             }
-            System.out.println("------------------------------");
+            //System.out.println("------------------------------");
             int prevX = piece.getFarthestX();
             rotatePieceInArr(tempLocations, pieceType, timesRotated, piece);
             testPiece.getHitbox().setGridLoc(tempLocations);
@@ -198,10 +198,9 @@ public class BoardGrid {
             rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
             testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
 
-            testPiece.getHitbox().printGridLoc();
+            //testPiece.getHitbox().printGridLoc();
 
             if (validLocationX(testPiece) && validLocationY(testPiece)) {
-                System.out.println("You are fat");
                 return testPiece;
             }
         }

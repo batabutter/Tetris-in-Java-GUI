@@ -110,7 +110,7 @@ public class Hitbox {
             int x = gridLoc[i][1];
             int y = gridLoc[i][0];
             System.out.println("at location > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
-            temp[x][y] = 1;
+            temp[x][y] = piece.getColor();
         }
         
         for (int k = 0; k < temp.length; k++) {
@@ -130,7 +130,7 @@ public class Hitbox {
         for (int i = 0; i < gridLoc.length; i++) {
             int x = gridLoc[i][1];
             int y = gridLoc[i][0];
-            temp[x][y] = 1;
+            temp[x][y] = piece.getColor();
         }
         return temp;
     }

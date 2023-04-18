@@ -83,6 +83,7 @@ public class Board {
 
         //clear the current piece of all of it's data to avoid any memory leaks
         remove();
+        arrBoard.printGrid();
     }
 
     private void updateImagesOfBoard() {
@@ -111,10 +112,41 @@ public class Board {
 
     public void add(int numColor, int row, int col) {
         String color = ";";
-        if (numColor == 1) {
-            color = "images/blackBlock.png";
-        }
+        System.out.println("Num color > "+numColor);
 
+        switch(numColor) {
+            case 1:
+            color = "images/blackBlock.png";
+            break;
+
+            case 2:
+            color = "images/yellowBlock.png";
+            break; 
+
+            case 3: 
+            color = "images/tealBlock.png";
+            break;
+
+            case 4: 
+            color = "images/redBlock.png";
+            break;
+
+            case 5: 
+            color = "images/purpleBlock.png";
+            break;
+
+            case 6: 
+            color = "images/orangeBlock.png";
+            break;
+
+            case 7: 
+            color = "images/blueBlock.png";
+            break;
+
+            case 8: 
+            color = "images/greenBlock.png";
+            break;
+        }
         int newX = startX + (squareDim * col);
         int newY = startY + (squareDim * row);
     
@@ -216,7 +248,7 @@ public class Board {
                 return true;
             }
 
-            if (grid[futureLocations[k][1]][futureLocations[k][0]] == 1) {
+            if (grid[futureLocations[k][1]][futureLocations[k][0]] != 0) {
                 return true;
             }
         }
