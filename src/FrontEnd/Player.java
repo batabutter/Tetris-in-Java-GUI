@@ -58,6 +58,7 @@ public class Player {
    //Most likely are just going to specify how this method works ofr both computer and human
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
         board.add(piece);
+        board.addNextPiece(nextPiece);
         SwingUtilities.updateComponentTreeUI(frame);
    }
 

@@ -38,6 +38,7 @@ public class Game {
         boolean pieceSettled = true;
         int tempCount = 0;
         int tempTime = 0;
+        PuzzlePiece piece;
 
         while (!(p1.gameOver() && p2.gameOver())) {
             end = (int) System.currentTimeMillis();
@@ -46,7 +47,8 @@ public class Game {
             if ((end-start) % 16 == 0 && (end-start) != tempTime) {
                 frameCounter++;
                 tempTime = (end-start);
-                PuzzlePiece piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1);
+                piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), board.nextPiece());
+
                 PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1);
                 end = (int) System.currentTimeMillis();
 
