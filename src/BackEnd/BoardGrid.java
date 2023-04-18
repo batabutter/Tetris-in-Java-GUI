@@ -63,6 +63,10 @@ public class BoardGrid {
         currentPiece.getHitbox().clear();
     }
 
+    public void getLinesCleared () {
+
+    }
+
     public void moveGridDown(int row, int N) {
         System.out.println("Clearing row > "+row);
         for (int i = 0; i < board[0].length; i++) {
@@ -79,8 +83,6 @@ public class BoardGrid {
         //printGrid();
         count++;
         
-        
-
     }
 
     public ArrayList<Integer> linesCleared() {

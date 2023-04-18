@@ -31,7 +31,7 @@ public class PuzzlePiece {
         int index = pieceType;
         if (pieceType < 0 || pieceType >= blocks.length)
             index = (int)(Math.random()*blocks.length);
-        this.pieceType = 0;
+        this.pieceType = index;
 
         //System.out.println("piece type here > " + index);
         shape = blocks[this.pieceType];

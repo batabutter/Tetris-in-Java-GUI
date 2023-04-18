@@ -62,15 +62,15 @@ public class Game {
 
 
                 if (frameCounter == 60) {
-                    tempCount++;
                     //System.out.println("Temp count >" +tempCount);
                     //System.out.println("Temp >"+tempCount);
-                    if (tempCount == 1) {
+                    tempCount++;
+                    if (tempCount == (board.getDropSpeed() / frameCounter)) {
                         tempCount = 0;
                         board.movePieceDown();
-
                     }
                 }
+
                 
                 //This can be adjusted later on as well
                 if (board.pieceSettled()) {

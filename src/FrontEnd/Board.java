@@ -19,7 +19,7 @@ public class Board {
     final static public int boardHeight = 600;
     final static public int boardWidth = 300;
     final static public int squareDim = boardWidth / 10;
-    private double dropSpeed;
+    private int dropSpeed;
     private int startX;
     private int startY;
     private JFrame frame;
@@ -28,15 +28,17 @@ public class Board {
     private BoardGrid arrBoard;
     private ArrayList<PuzzlePiece> boardPieces;
     private int timesRotated;
+    private int score;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
         startY = y;
-        dropSpeed = 1.5;
+        dropSpeed = 60;
         this.frame = frame;
         pieceImages = new ArrayList<JLabel>();
         arrBoard = new BoardGrid();
         timesRotated = 0;
+        score = 0;
     }
 
     public BoardGrid getBoardGrid() {
@@ -55,12 +57,12 @@ public class Board {
         return frame;
     }
 
-    public double getDropSpeed() {
+    public int getDropSpeed() {
         return dropSpeed;
     }
 
     //This might also need to be changed depending on how Tetris changes the speed depending on the level
-    public void setDropSpeed(double speed) {
+    public void setDropSpeed(int speed) {
         dropSpeed = speed;
     }
 
@@ -84,6 +86,14 @@ public class Board {
         //clear the current piece of all of it's data to avoid any memory leaks
         remove();
         arrBoard.printGrid();
+    }
+
+    public void addScore(int x) {
+        score = score + x;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     private void updateImagesOfBoard() {
@@ -227,8 +237,9 @@ public class Board {
 
         //currentPiece.getHitbox().printGridLoc();
         
-
     }
+
+
 
     //Change to be more simplistic
     public boolean pieceSettled () {
