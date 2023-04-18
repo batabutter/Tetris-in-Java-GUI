@@ -29,6 +29,7 @@ public class Board {
     private ArrayList<PuzzlePiece> boardPieces;
     private int timesRotated;
     private int score;
+    private PuzzlePiece nextPiece;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -39,6 +40,7 @@ public class Board {
         arrBoard = new BoardGrid();
         timesRotated = 0;
         score = 0;
+        nextPiece = null;
     }
 
     public BoardGrid getBoardGrid() {
@@ -59,6 +61,17 @@ public class Board {
 
     public int getDropSpeed() {
         return dropSpeed;
+    }
+
+    public int nextPiece() {
+        if (nextPiece == null)
+            return -1;
+        
+        return nextPiece.getPieceType();
+    }
+
+    public void setNextPiece(PuzzlePiece piece) {
+        nextPiece = piece;
     }
 
     //This might also need to be changed depending on how Tetris changes the speed depending on the level
@@ -82,6 +95,7 @@ public class Board {
         arrBoard.updateGrid(currentPiece);
         removePieceImages();
         updateImagesOfBoard();
+        frame.remove(nextPiece.getLabel());
 
         //clear the current piece of all of it's data to avoid any memory leaks
         remove();
@@ -119,6 +133,17 @@ public class Board {
         frame.add(piece.getLabel());
         //currentPiece.getHitbox().printGridLoc();
     }
+
+    public void addNextPiece(PuzzlePiece piece ) {
+        setNextPiece(piece);
+        //For some reason, the piece wouldn't show unless I set it twice.
+        //So yeah...
+        nextPiece.setX(boardWidth + 90+startX);
+        nextPiece.setY(140);
+        frame.add(nextPiece.getLabel());
+        //currentPiece.getHitbox().printGridLoc();
+    }
+
 
     public void add(int numColor, int row, int col) {
         String color = ";";
@@ -236,7 +261,12 @@ public class Board {
                 piece.setY(piece.getY()+squareDim);
 
         //currentPiece.getHitbox().printGridLoc();
-        
+    }
+
+    public void settlePiece() {
+        while (!pieceSettled()) {
+            
+        }
     }
 
 
