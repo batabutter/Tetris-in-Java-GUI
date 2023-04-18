@@ -81,7 +81,7 @@ public class Game {
 
                 //System.out.println("Settlecount >" +settleCount);
 
-                if (settleCount % 120 == 0 && settleCount != 0){
+                if (settleCount % 30 == 0 && settleCount != 0){
                     board.update();
                     pieceSettled = true;
                 }
