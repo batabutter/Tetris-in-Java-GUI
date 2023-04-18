@@ -50,33 +50,16 @@ public class Player {
     }
    }
 
+   public boolean gameOver() {
+    return false;
+   }
+
    //Creates new piece at given location
    //Most likely are just going to specify how this method works ofr both computer and human
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
         board.add(piece);
-        //board.showBoard();
         SwingUtilities.updateComponentTreeUI(frame);
-
-        //SwingUtilities.updateComponentTreeUI(frame);
-        double start = System.currentTimeMillis() / 1000.00;
-        double end = 0;
-
-        while (!board.pieceSettled()) {
-            movePiece(board.getCurrentPiece());
-            end = System.currentTimeMillis()/ 1000.00;
-            //We would have to change the speed as we go on, but this is a good demo
-            //For now, it moves the piece down every second
-            if (((end-start) % board.getDropSpeed() == 0)) {
-                try {
-                Thread.sleep(20);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-                board.movePieceDown();
-            }
-        }
-        board.update();
-    }
+   }
 
     class KeyboardControls implements KeyListener {
         private int x;
