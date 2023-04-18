@@ -59,12 +59,6 @@ public class BoardGrid {
         }
         
 
-
-        //Fourth: Adjust the positions of the buffered images based on the grid data
-
-
-        //Lastly, clear the current piece of all of it's data to avoid any memory leaks
-        //printGrid();
         shifts = 0;
         currentPiece.getHitbox().clear();
     }
@@ -141,7 +135,7 @@ public class BoardGrid {
         for (int i = 0; i < locations.length; i++) {
             int x = locations[i][0];
             int y = locations[i][1];
-            if (x == board[0].length){
+            if (x >= board[0].length){
                 return false;
             } 
 
@@ -176,25 +170,41 @@ public class BoardGrid {
         int yStart = piece.yStart();
         int pieceType = piece.getPieceType();
         PuzzlePiece testPiece = new PuzzlePiece(xCell, yCell, xStart, yStart, pieceType);
-        int[][] locations = piece.getHitbox().getGridLocations();  
-        
-        
-        for (int n = 0; n < locations.length; n++) {
-            System.out.println(n + ": "+"("+locations[n][0]+", "+locations[n][1]+")");
+        int[][] locations = piece.getHitbox().getGridLocations();
+        int[][] tempLocations = new int[4][2];
+
+        if (pieceType != 0) {
+            for (int i = 0; i < locations.length; i++) {
+                for (int k = 0; k < locations[0].length; k++) {
+                    tempLocations[i][k] = locations[i][k];
+                }
+            }
+
+            for (int i = 0; i < locations.length; i++) {
+                for (int k = 0; k < locations[0].length-1; k++) {
+                    System.out.println("at location > ("+locations[i][k]+", "+locations[i][k+1]+")");
+                }
+            }
+            System.out.println("------------------------------");
+            int prevX = piece.getFarthestX();
+            rotatePieceInArr(tempLocations, pieceType, timesRotated, piece);
+            testPiece.getHitbox().setGridLoc(tempLocations);
+            
+            if (!validLocationX(testPiece)) {
+                piece.setFarthestX(prevX);
+                return null;
+            }
+
+            rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
+            testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
+
+            testPiece.getHitbox().printGridLoc();
+
+            if (validLocationX(testPiece) && validLocationY(testPiece)) {
+                System.out.println("You are fat");
+                return testPiece;
+            }
         }
-        
-        rotatePieceInArr(locations, pieceType, timesRotated, piece);
-        testPiece.getHitbox().setGridLoc(locations);
-        rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
-        testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
-
-        testPiece.getHitbox().printGridLoc();
-
-        if (validLocationX(testPiece) && validLocationY(testPiece)) {
-            return testPiece;
-        }
-
-        
 
         return null;
     }
@@ -261,6 +271,9 @@ public class BoardGrid {
                 }
             }
         int offSet = 2;
+        if (pieceType == 1){
+            offSet = 3;
+        }
         //If the order of the pieces in the array are ever changed, this code will break
         int tempMax = -1000;
         int tempMin = 100;

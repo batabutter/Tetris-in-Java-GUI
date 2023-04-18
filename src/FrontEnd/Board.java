@@ -252,8 +252,8 @@ public class Board {
             System.out.println("Board > ");
             currentPiece.getHitbox().printGridLoc();
             System.out.println("-----------------------------------------------------------");
-            
             */
+            System.out.println("Bruh");
         }
 
     }
