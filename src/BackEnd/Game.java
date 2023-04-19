@@ -38,6 +38,7 @@ public class Game {
         boolean pieceSettled = true;
         int tempCount = 0;
         int tempTime = 0;
+        PuzzlePiece piece;
 
         while (!(p1.gameOver() && p2.gameOver())) {
             end = (int) System.currentTimeMillis();
@@ -46,11 +47,14 @@ public class Game {
             if ((end-start) % 16 == 0 && (end-start) != tempTime) {
                 frameCounter++;
                 tempTime = (end-start);
-                PuzzlePiece piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1);
+                piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), board.nextPiece());
+
                 PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1);
                 end = (int) System.currentTimeMillis();
 
-                if (pieceSettled) {
+                if (board.getCurrentPiece() == null) {
+                    System.out.println("A");
+                    
                     p1.createNewPiece(piece, nextPiece);
                     pieceSettled = false;
                 }
@@ -73,19 +77,21 @@ public class Game {
 
                 
                 //This can be adjusted later on as well
-                if (board.pieceSettled()) {
-                    settleCount++;
-                } else {
-                    settleCount = 0;
+                if (board.getCurrentPiece() != null) {
+                    if (board.pieceSettled()) {
+                        settleCount++;
+                    } else {
+                        settleCount = 0;
+                    }
+
+                    if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
+                        System.out.println("What??");
+                        board.update();
+                        pieceSettled = true;
+                    }
                 }
 
                 //System.out.println("Settlecount >" +settleCount);
-
-                if (settleCount % 30 == 0 && settleCount != 0){
-                    board.update();
-                    pieceSettled = true;
-                }
-                
                 if (frameCounter == 60) {
                     frameCounter = 0;
                 }

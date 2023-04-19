@@ -47,6 +47,12 @@ public class Player {
     } else if (moveDir ==4) {
         moveDir = 0;
         board.rotatePiece();
+    } else if (moveDir == 5) {
+        moveDir = 0;
+        board.settlePiece();
+    } else if (moveDir == 6) {
+        moveDir = 0;
+        board.holdPiece();
     }
    }
 
@@ -58,6 +64,7 @@ public class Player {
    //Most likely are just going to specify how this method works ofr both computer and human
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
         board.add(piece);
+        board.addNextPiece(nextPiece);
         SwingUtilities.updateComponentTreeUI(frame);
    }
 
@@ -95,6 +102,14 @@ public class Player {
 			
 			if (event.getKeyCode() == KeyEvent.VK_LEFT) {
                 moveDir = 3;
+			}
+
+            if (event.getKeyCode() == 32) {
+                moveDir = 5;
+			}
+
+            if (event.getKeyCode() == 67) {
+                moveDir = 6;
 			}
 		}
 

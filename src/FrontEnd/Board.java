@@ -20,6 +20,7 @@ public class Board {
     final static public int boardWidth = 300;
     final static public int squareDim = boardWidth / 10;
     private int dropSpeed;
+    private int settledFrames;
     private int startX;
     private int startY;
     private JFrame frame;
@@ -29,6 +30,8 @@ public class Board {
     private ArrayList<PuzzlePiece> boardPieces;
     private int timesRotated;
     private int score;
+    private PuzzlePiece nextPiece;
+    private PuzzlePiece hold;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -39,6 +42,9 @@ public class Board {
         arrBoard = new BoardGrid();
         timesRotated = 0;
         score = 0;
+        settledFrames = 30;
+        nextPiece = null;
+        hold = null;
     }
 
     public BoardGrid getBoardGrid() {
@@ -59,6 +65,21 @@ public class Board {
 
     public int getDropSpeed() {
         return dropSpeed;
+    }
+
+    public int getSettledFrames() {
+        return settledFrames;
+    }
+
+    public int nextPiece() {
+        if (nextPiece == null)
+            return -1;
+        
+        return nextPiece.getPieceType();
+    }
+
+    public void setNextPiece(PuzzlePiece piece) {
+        nextPiece = piece;
     }
 
     //This might also need to be changed depending on how Tetris changes the speed depending on the level
@@ -82,6 +103,7 @@ public class Board {
         arrBoard.updateGrid(currentPiece);
         removePieceImages();
         updateImagesOfBoard();
+        frame.remove(nextPiece.getLabel());
 
         //clear the current piece of all of it's data to avoid any memory leaks
         remove();
@@ -120,9 +142,24 @@ public class Board {
         //currentPiece.getHitbox().printGridLoc();
     }
 
+    public void addNextPiece(PuzzlePiece piece) {
+        if (nextPiece != null) {
+            frame.remove(nextPiece.getLabel());
+        }
+
+        setNextPiece(piece);
+        //For some reason, the piece wouldn't show unless I set it twice.
+        //So yeah...
+        nextPiece.setX(boardWidth + 90+startX);
+        nextPiece.setY(140);
+        frame.add(nextPiece.getLabel());
+        //currentPiece.getHitbox().printGridLoc();
+    }
+
+
     public void add(int numColor, int row, int col) {
         String color = ";";
-        System.out.println("Num color > "+numColor);
+        //System.out.println("Num color > "+numColor);
 
         switch(numColor) {
             case 1:
@@ -236,7 +273,36 @@ public class Board {
                 piece.setY(piece.getY()+squareDim);
 
         //currentPiece.getHitbox().printGridLoc();
-        
+    }
+
+    public void holdPiece() {
+        if (hold == null) {
+            hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+            hold.setX(startX -180);
+            hold.setY(140);
+            remove();
+            frame.add(hold.getLabel());
+            add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece()));
+            addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1));
+        } else {
+            int pieceTypeHold = hold.getPieceType();
+            frame.remove(hold.getLabel());
+            hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+            hold.setX(startX -180);
+            hold.setY(140);
+            frame.add(hold.getLabel());
+            remove();
+            add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold));
+        }
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void settlePiece() {
+        while (!pieceSettled()) {
+            movePieceDown();
+        }
+
+        update();
     }
 
 
@@ -245,24 +311,27 @@ public class Board {
     public boolean pieceSettled () {
         PuzzlePiece piece = currentPiece;
 
-        int[][] futureLocations = new int[4][2];
-        int[][] currentLocations = piece.getHitbox().getGridLocations();
-        int[][] grid = arrBoard.getBoard();
+        if (currentPiece != null) {
+            int[][] futureLocations = new int[4][2];
+            int[][] currentLocations = piece.getHitbox().getGridLocations();
+            int[][] grid = arrBoard.getBoard();
 
-        for (int i = 0 ; i < futureLocations.length; i++) {
-            futureLocations[i][0] = currentLocations[i][0];
-            futureLocations[i][1] = currentLocations[i][1] + 1;
+            for (int i = 0 ; i < futureLocations.length; i++) {
+                futureLocations[i][0] = currentLocations[i][0];
+                futureLocations[i][1] = currentLocations[i][1] + 1;
+            }
+            
+            for (int k = 0; k < futureLocations.length; k++) {
+                if (futureLocations[k][1] >= arrBoard.getHeight()) {
+                    return true;
+                }
+
+                if (grid[futureLocations[k][1]][futureLocations[k][0]] != 0) {
+                    return true;
+                }
+            }
         }
         
-        for (int k = 0; k < futureLocations.length; k++) {
-            if (futureLocations[k][1] >= arrBoard.getHeight()) {
-                return true;
-            }
-
-            if (grid[futureLocations[k][1]][futureLocations[k][0]] != 0) {
-                return true;
-            }
-        }
         return false;
 
     }
