@@ -14,6 +14,7 @@ public class Player {
     private int xStart;
     private int yStart;
     private int moveDir;
+    private boolean gameOver;
 
     public Player(int xStart, int yStart, JFrame frame) {
         this.board = new Board(xStart,yStart, frame);
@@ -22,6 +23,7 @@ public class Player {
         this.frame = frame;
         keyAdded = false;
         moveDir = 0;
+        gameOver = false;
    }
 
    public Board getBoard(){
@@ -56,8 +58,12 @@ public class Player {
     }
    }
 
+   public void setGameOver(boolean gameOver) {
+    this.gameOver = gameOver;
+   }
+
    public boolean gameOver() {
-    return false;
+    return gameOver;
    }
 
    //Creates new piece at given location

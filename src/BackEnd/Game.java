@@ -53,8 +53,6 @@ public class Game {
                 end = (int) System.currentTimeMillis();
 
                 if (board.getCurrentPiece() == null) {
-                    System.out.println("A");
-                    
                     p1.createNewPiece(piece, nextPiece);
                     pieceSettled = false;
                 }
@@ -85,7 +83,6 @@ public class Game {
                     }
 
                     if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
-                        System.out.println("What??");
                         board.update();
                         pieceSettled = true;
                     }

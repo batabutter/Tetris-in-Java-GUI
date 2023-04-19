@@ -6,12 +6,15 @@ public class BoardGrid {
     private int height;
     private int width;
     private int shifts;
+    private ArrayList<Integer> lines;
+    private ArrayList<Integer> prevLinesCleared;
 
     public BoardGrid () {
         board = new int[20][10];
         height = 20;
         width = 10;
-         shifts = 0;
+        shifts = 0;
+
     }
 
     public int[][] getBoard() {
@@ -48,7 +51,8 @@ public class BoardGrid {
 
 
         //Third: Create a way to determine how many lines are filled and where the locations are
-        ArrayList<Integer> lines = linesCleared();
+        lines = linesCleared();
+        prevLinesCleared = getLinesCleared();
 
         for (int i = 0 ; i < lines.size(); i++) {
             moveGridDown(lines.get(i), lines.size());
@@ -63,8 +67,26 @@ public class BoardGrid {
         currentPiece.getHitbox().clear();
     }
 
-    public void getLinesCleared () {
+    public ArrayList<Integer> getLinesCleared() {
+        int count = 1;
+        ArrayList<Integer> linesInSucc = new ArrayList<Integer>();
+        lines = linesCleared();
+        System.out.println("Checking the amount of lines cleared > "+lines.size());
+        for (int i = 1; i < lines.size(); i++) {
+            int current = lines.get(i);
+            int prev = lines.get(i-1);
+            if (prev != (current-1)) {
+                linesInSucc.add(count);
+                count = 0;
+            }
+                count++;
+            }
+            linesInSucc.add(count);
+        return linesInSucc;
+    }
 
+    public ArrayList<Integer> getPrevLinesCleared() {
+        return prevLinesCleared;
     }
 
     public void moveGridDown(int row, int N) {
@@ -79,7 +101,7 @@ public class BoardGrid {
             board[i] = board[i-1];
             board[i-1] = temp;
         }
-        System.out.println("Swap");
+        //System.out.println("Swap");
         //printGrid();
         count++;
         
@@ -210,6 +232,8 @@ public class BoardGrid {
 
         return null;
     }
+
+    //Possibly change this to SRS in the future, but for now it's beyond the scope of the project
 
     private void rotatePieceInArr(int[][] locations, int pieceType, int timesRotated, PuzzlePiece piece) {
         int minX = 100;

@@ -32,6 +32,10 @@ public class Board {
     private int score;
     private PuzzlePiece nextPiece;
     private PuzzlePiece hold;
+    private JLabel visScore;
+    private JLabel visLevel;
+    private int level;
+    private int holdCount;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -42,9 +46,22 @@ public class Board {
         arrBoard = new BoardGrid();
         timesRotated = 0;
         score = 0;
+        level = 1;
         settledFrames = 30;
         nextPiece = null;
         hold = null;
+        holdCount = 0;
+
+        visScore = new JLabel();
+        visLevel = new JLabel();
+        visScore.setText(String.valueOf(score));
+        visLevel.setText("Level: "+String.valueOf(level));
+        visScore.setFont(new Font("Serif", Font.PLAIN, 24));
+        visLevel.setFont(new Font("Serif", Font.PLAIN, 24));
+        visScore.setBounds(boardWidth + 90+startX, 350 + startY, 100, 100);
+        visLevel.setBounds(boardWidth + 90+startX, 400 + startY, 100, 100);
+        frame.add(visScore);
+        frame.add(visLevel);
     }
 
     public BoardGrid getBoardGrid() {
@@ -104,18 +121,47 @@ public class Board {
         removePieceImages();
         updateImagesOfBoard();
         frame.remove(nextPiece.getLabel());
+        holdCount = 0;
+
+        ArrayList<Integer> linesCleared = arrBoard.getPrevLinesCleared();
+
+        for (int i = 0; i < linesCleared.size(); i++) {
+            if (linesCleared.get(i) == 1) {
+                addScore(100 * level);
+                System.out.println("You cleared 1 line");
+            } else if (linesCleared.get(i) == 2) {
+                addScore(300 * level);
+                System.out.println("You cleared 2 lines in a row");
+            } else if (linesCleared.get(i) == 3) {
+                addScore(500 * level);
+                System.out.println("You cleared 3 lines in a row");
+            } else if (linesCleared.get(i) == 4) {
+                addScore(800 * level);
+                System.out.println("You cleared 4 lines in a row");
+            }
+        }
 
         //clear the current piece of all of it's data to avoid any memory leaks
         remove();
-        arrBoard.printGrid();
+        //arrBoard.printGrid();
     }
 
     public void addScore(int x) {
         score = score + x;
+        visScore.setText(String.valueOf(score));
     }
 
     public int getScore() {
         return score;
+    }
+
+    public void increaseLevel(int x) {
+        level++;
+        visLevel.setText("Level: "+String.valueOf(level));
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     private void updateImagesOfBoard() {
@@ -269,37 +315,43 @@ public class Board {
         PuzzlePiece piece = currentPiece;
 
         if (!pieceSettled())
-            if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight)
+            if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight) {
                 piece.setY(piece.getY()+squareDim);
+                addScore(1);
+            }
 
         //currentPiece.getHitbox().printGridLoc();
     }
 
     public void holdPiece() {
-        if (hold == null) {
-            hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
-            hold.setX(startX -180);
-            hold.setY(140);
-            remove();
-            frame.add(hold.getLabel());
-            add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece()));
-            addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1));
-        } else {
-            int pieceTypeHold = hold.getPieceType();
-            frame.remove(hold.getLabel());
-            hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
-            hold.setX(startX -180);
-            hold.setY(140);
-            frame.add(hold.getLabel());
-            remove();
-            add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold));
+        if (holdCount == 0) {
+            if (hold == null) {
+                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+                hold.setX(startX -180);
+                hold.setY(140);
+                remove();
+                frame.add(hold.getLabel());
+                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece()));
+                addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1));
+            } else {
+                int pieceTypeHold = hold.getPieceType();
+                frame.remove(hold.getLabel());
+                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+                hold.setX(startX -180);
+                hold.setY(140);
+                frame.add(hold.getLabel());
+                remove();
+                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold));
+            }
+            SwingUtilities.updateComponentTreeUI(frame);
+            holdCount++;
         }
-        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void settlePiece() {
         while (!pieceSettled()) {
             movePieceDown();
+            addScore(2);
         }
 
         update();
