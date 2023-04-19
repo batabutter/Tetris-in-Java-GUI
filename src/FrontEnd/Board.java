@@ -289,7 +289,7 @@ public class Board {
 
         boolean cont = true;
         for (int k = 0; k < futureLocations.length; k++) {
-            if ((futureLocations[k][0] >= arrBoard.getWidth()) || (grid[futureLocations[k][1]][futureLocations[k][0]] == 1)) {
+            if ((futureLocations[k][0] >= arrBoard.getWidth()) || (grid[futureLocations[k][1]][futureLocations[k][0]] != 0)) {
                 cont = false;
                 //System.out.println("Invalid!");
             }

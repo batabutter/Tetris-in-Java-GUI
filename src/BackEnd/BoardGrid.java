@@ -71,7 +71,7 @@ public class BoardGrid {
         int count = 1;
         ArrayList<Integer> linesInSucc = new ArrayList<Integer>();
         lines = linesCleared();
-        System.out.println("Checking the amount of lines cleared > "+lines.size());
+        //System.out.println("Checking the amount of lines cleared > "+lines.size());
         for (int i = 1; i < lines.size(); i++) {
             int current = lines.get(i);
             int prev = lines.get(i-1);
@@ -80,7 +80,8 @@ public class BoardGrid {
                 count = 0;
             }
                 count++;
-            }
+        }
+        if (lines.size() > 0)
             linesInSucc.add(count);
         return linesInSucc;
     }
