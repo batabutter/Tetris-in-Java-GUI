@@ -52,7 +52,9 @@ public class Game {
                 PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1);
                 end = (int) System.currentTimeMillis();
 
-                if (pieceSettled) {
+                if (board.getCurrentPiece() == null) {
+                    System.out.println("A");
+                    
                     p1.createNewPiece(piece, nextPiece);
                     pieceSettled = false;
                 }
@@ -75,19 +77,21 @@ public class Game {
 
                 
                 //This can be adjusted later on as well
-                if (board.pieceSettled()) {
-                    settleCount++;
-                } else {
-                    settleCount = 0;
+                if (board.getCurrentPiece() != null) {
+                    if (board.pieceSettled()) {
+                        settleCount++;
+                    } else {
+                        settleCount = 0;
+                    }
+
+                    if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
+                        System.out.println("What??");
+                        board.update();
+                        pieceSettled = true;
+                    }
                 }
 
                 //System.out.println("Settlecount >" +settleCount);
-
-                if (settleCount % 30 == 0 && settleCount != 0){
-                    board.update();
-                    pieceSettled = true;
-                }
-                
                 if (frameCounter == 60) {
                     frameCounter = 0;
                 }
