@@ -27,7 +27,7 @@ public class PuzzlePiece {
     private int color;
 
 
-    public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType){
+    public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType) {
         int index = pieceType;
         if (pieceType < 0 || pieceType >= blocks.length)
             index = (int)(Math.random()*blocks.length);
