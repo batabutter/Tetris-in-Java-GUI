@@ -12,6 +12,8 @@ public class ComputerPlayer extends Player{
 
     public void movePiece(PuzzlePiece piece) {
         double endTime = System.currentTimeMillis() / 1000.0;
+        Board board = getBoard();
+        int[][] boardArr = board.getBoardGrid().getBoard();
 
         //System.out.println("Time elasped > "+(endTime-startTime));
 
