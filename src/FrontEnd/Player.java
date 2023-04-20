@@ -81,7 +81,10 @@ public class Player {
     PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType() + 7);
     board.addProjPiece(projPiece);
     while (!board.pieceSettled(projPiece)) {
+        int befScore = board.getScore();
         board.movePieceDown(projPiece);
+        int aftScore = board.getScore();
+        board.addScore(-1 * (aftScore - befScore));
     }
     SwingUtilities.updateComponentTreeUI(frame);
    }

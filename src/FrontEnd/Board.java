@@ -330,10 +330,30 @@ public class Board {
 
     public void movePieceLeft() {
         PuzzlePiece piece = currentPiece;
-        PuzzlePiece testColPiece = new PuzzlePiece(currentPiece.xStart(), currentPiece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
-        testColPiece.setX(currentPiece.getX() - squareDim);
-        testColPiece.setY(currentPiece.getY());
-        if (piece.getX()-squareDim >= startX && arrBoard.validLocationX(testColPiece))
+
+        int[][] futureLocations = new int[4][2];
+        int[][] currentLocations = piece.getHitbox().getGridLocations();
+        int[][] grid = arrBoard.getBoard();
+
+        for (int i = 0 ; i < futureLocations.length; i++) {
+            futureLocations[i][0] = currentLocations[i][0] - 1;
+            futureLocations[i][1] = currentLocations[i][1];
+        }
+        /* 
+        for (int n = 0; n < futureLocations.length; n++) {
+            System.out.println(n + ": "+"("+futureLocations[n][0]+", "+futureLocations[n][1]+")");
+        }
+        */
+
+        boolean cont = true;
+        for (int k = 0; k < futureLocations.length; k++) {
+            if ((futureLocations[k][0] < 0) || (grid[futureLocations[k][1]][futureLocations[k][0]] != 0)) {
+                cont = false;
+                //System.out.println("Invalid!");
+            }
+        }
+
+        if (cont)
             piece.setX(piece.getX()-squareDim);
         
         //currentPiece.getHitbox().printGridLoc();
