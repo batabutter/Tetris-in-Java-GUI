@@ -11,7 +11,9 @@ public class PuzzlePiece {
     */
 
     private ImageIcon[] blocks = {new ImageIcon("images/yellow.png"), new ImageIcon("images/teal.png"), new ImageIcon("images/red.png"),  
-    new ImageIcon("images/purple.png"), new ImageIcon("images/orange.png"), new ImageIcon("images/blue.png"), new ImageIcon("images/green.png")};
+    new ImageIcon("images/purple.png"), new ImageIcon("images/orange.png"), new ImageIcon("images/blue.png"), new ImageIcon("images/green.png"), 
+    new ImageIcon("images/yellowTrans.png"), new ImageIcon("images/tealTrans.png"), new ImageIcon("images/redTrans.png"),  
+    new ImageIcon("images/purpleTrans.png"), new ImageIcon("images/orangeTrans.png"), new ImageIcon("images/blueTrans.png"), new ImageIcon("images/greenTrans.png")};
 
     private ImageIcon shape;
     private Dimension size;
@@ -29,12 +31,21 @@ public class PuzzlePiece {
 
     public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType) {
         int index = pieceType;
-        if (pieceType < 0 || pieceType >= blocks.length)
-            index = (int)(Math.random()*blocks.length);
-        this.pieceType = index;
+        if (pieceType < 0) {
+            index = (int)(Math.random()*7);
+            this.pieceType = index;
+            shape = blocks[this.pieceType];
+        } else if (pieceType > 6) {
+            index = pieceType - 7;
+            this.pieceType = index;
+            shape = blocks[pieceType];
+        } else {
+            this.pieceType = index;
+            shape = blocks[this.pieceType];
+        }
+
 
         //System.out.println("piece type here > " + index);
-        shape = blocks[this.pieceType];
         this.xStart = boardXStart;
         this.yStart = boardYStart;
         xCell = xStart;

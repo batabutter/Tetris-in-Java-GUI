@@ -70,7 +70,7 @@ public class Game {
                         if (tempCount == (board.getDropSpeed() / frameCounter)) {
                             tempCount = 0;
                             int befScore = board.getScore();
-                            board.movePieceDown();
+                            board.movePieceDown(board.getCurrentPiece());
                             int aftScore = board.getScore();
                             board.addScore(-1 * (aftScore - befScore));
                         }
@@ -80,7 +80,7 @@ public class Game {
                 
                 //This can be adjusted later on as well
                 if (board.getCurrentPiece() != null) {
-                    if (board.pieceSettled()) {
+                    if (board.pieceSettled(board.getCurrentPiece())) {
                         settleCount++;
                     } else {
                         settleCount = 0;

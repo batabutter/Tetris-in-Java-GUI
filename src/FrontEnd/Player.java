@@ -39,7 +39,7 @@ public class Player {
     }
     if (moveDir == 1) {
         moveDir = 0;
-        board.movePieceDown();
+        board.movePieceDown(board.getCurrentPiece());
     } else if (moveDir == 2) {
         moveDir = 0;
         board.movePieceRight();
@@ -51,10 +51,13 @@ public class Player {
         board.rotatePiece();
     } else if (moveDir == 5) {
         moveDir = 0;
-        board.settlePiece();
+        board.settlePiece(board.getCurrentPiece());
     } else if (moveDir == 6) {
         moveDir = 0;
         board.holdPiece();
+    }
+    if (board.getCurrentPiece() != null) {
+        projPiece(board.getCurrentPiece());
     }
    }
 
@@ -72,6 +75,15 @@ public class Player {
         board.add(piece);
         board.addNextPiece(nextPiece);
         SwingUtilities.updateComponentTreeUI(frame);
+   }
+
+   public void projPiece(PuzzlePiece piece) {
+    PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType() + 7);
+    board.addProjPiece(projPiece);
+    while (!board.pieceSettled(projPiece)) {
+        board.movePieceDown(projPiece);
+    }
+    SwingUtilities.updateComponentTreeUI(frame);
    }
 
     class KeyboardControls implements KeyListener {
