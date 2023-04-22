@@ -57,7 +57,11 @@ public class Player {
         board.holdPiece();
     }
     if (board.getCurrentPiece() != null) {
-        projPiece(board.getCurrentPiece());
+        if (!board.pieceSettled(board.getCurrentPiece()))
+            projPiece(board.getCurrentPiece());
+        else 
+            board.removeProjPiece();
+
     }
    }
 
@@ -74,11 +78,12 @@ public class Player {
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
         board.add(piece);
         board.addNextPiece(nextPiece);
+        projPiece(board.getCurrentPiece());
         SwingUtilities.updateComponentTreeUI(frame);
    }
 
    public void projPiece(PuzzlePiece piece) {
-    PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType() + 7);
+    PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType(), true);
     board.addProjPiece(projPiece);
     while (!board.pieceSettled(projPiece)) {
         int befScore = board.getScore();

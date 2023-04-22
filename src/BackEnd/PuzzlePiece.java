@@ -29,23 +29,9 @@ public class PuzzlePiece {
     private int color;
 
 
-    public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType) {
-        int index = pieceType;
-        if (pieceType < 0) {
-            index = (int)(Math.random()*7);
-            this.pieceType = index;
-            shape = blocks[this.pieceType];
-        } else if (pieceType > 6) {
-            index = pieceType - 7;
-            this.pieceType = index;
-            shape = blocks[pieceType];
-        } else {
-            this.pieceType = index;
-            shape = blocks[this.pieceType];
-        }
+    public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType, boolean hollow) {
+        setPieceType(pieceType, hollow);
 
-
-        //System.out.println("piece type here > " + index);
         this.xStart = boardXStart;
         this.yStart = boardYStart;
         xCell = xStart;
@@ -57,6 +43,22 @@ public class PuzzlePiece {
 
         //I will alter this later
         color = this.pieceType + 2;
+    }
+
+    private void setPieceType(int pieceType, boolean hollow) {
+        int index = pieceType;
+        if (pieceType < 0) {
+            index = (int)(Math.random()*7);
+            this.pieceType = index;
+            shape = blocks[this.pieceType];
+        } else if (hollow) {
+            index = pieceType + 7;
+            this.pieceType = pieceType;
+            shape = blocks[index];
+        } else {
+            this.pieceType = index;
+            shape = blocks[this.pieceType];
+        }
     }
 
     public int getPieceType() {
@@ -153,4 +155,9 @@ public class PuzzlePiece {
     public int getColor() {
         return color;
     }
+
+    public String toString() {
+        return "Piece type > "+this.pieceType +" at > "+"("+getX()+", "+getY()+")";
+    }
+
 }

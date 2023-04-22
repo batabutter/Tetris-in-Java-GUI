@@ -46,8 +46,8 @@ public class Game {
             if ((end-start) % 16 == 0 && (end-start) != tempTime) {
                 frameCounter++;
                 tempTime = (end-start);
-                piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), board.nextPiece());
-                PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1);
+                piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), board.nextPiece(), false);
+                PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1, false);
 
                 end = (int) System.currentTimeMillis();
 
