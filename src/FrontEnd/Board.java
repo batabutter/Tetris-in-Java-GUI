@@ -197,18 +197,26 @@ public class Board {
         if (projPiece != null) {
             frame.remove(projPiece.getLabel());
             projPiece.getHitbox().clear();
-            projPiece = null;
         }
         projPiece = piece;
         projPiece.setX(piece.getX());
         projPiece.setY(piece.getY());
 
         for (int i = 0; i < timesRotated; i++) {
-            rotatePiece(projPiece);
+            rotatePiece(projPiece, false);
         }
 
         frame.add(projPiece.getLabel());
         //currentPiece.getHitbox().printGridLoc();
+    }
+
+    public void removeProjPiece() {
+        if (this.projPiece != null) {
+            frame.remove(projPiece.getLabel());
+            projPiece.getHitbox().clear();
+            projPiece = null;
+        }
+
     }
 
     public void addNextPiece(PuzzlePiece piece) {
@@ -280,9 +288,7 @@ public class Board {
         currentPiece.getHitbox().clear();
         currentPiece = null;
 
-        frame.remove(projPiece.getLabel());
-        projPiece.getHitbox().clear();
-        projPiece = null;
+        removeProjPiece();
 
         return temp;
     }
@@ -373,24 +379,24 @@ public class Board {
     public void holdPiece() {
         if (holdCount == 0) {
             if (hold == null) {
-                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType(), false);
                 hold.setX(startX -180);
                 hold.setY(140);
                 remove();
                 frame.add(hold.getLabel());
-                PuzzlePiece newPiece = new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece());
-                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece()));
+                PuzzlePiece newPiece = new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false);
+                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false));
                 addProjPiece(newPiece);
-                addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1));
+                addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1, false));
             } else {
                 int pieceTypeHold = hold.getPieceType();
                 frame.remove(hold.getLabel());
-                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType(), false);
                 hold.setX(startX -180);
                 hold.setY(140);
                 frame.add(hold.getLabel());
                 remove();
-                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold));
+                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold, false));
             }
             SwingUtilities.updateComponentTreeUI(frame);
             holdCount++;
@@ -446,7 +452,7 @@ public class Board {
 
     public void rotatePiece() {
         PuzzlePiece piece = currentPiece;
-        PuzzlePiece tempPiece = arrBoard.rotatePiece(currentPiece, timesRotated);
+        PuzzlePiece tempPiece = arrBoard.rotatePiece(currentPiece, timesRotated, true);
 
         if (tempPiece != null) {
             timesRotated++;
@@ -469,9 +475,9 @@ public class Board {
 
     }
 
-    public void rotatePiece(PuzzlePiece piece) {
+    public void rotatePiece(PuzzlePiece piece, boolean checkCol) {
             ImageIcon shape = piece.getShape();
-            PuzzlePiece tempPiece = arrBoard.rotatePiece(piece, timesRotated);
+            PuzzlePiece tempPiece = arrBoard.rotatePiece(piece, timesRotated, checkCol);
 
             BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
             ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
