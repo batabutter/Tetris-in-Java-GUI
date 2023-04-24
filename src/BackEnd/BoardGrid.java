@@ -188,13 +188,13 @@ public class BoardGrid {
         return temp;
     }
 
-    public PuzzlePiece rotatePiece(PuzzlePiece piece, int timesRotated) {
+    public PuzzlePiece rotatePiece(PuzzlePiece piece, int timesRotated, boolean checkCol) {
         int xCell = piece.getX();
         int yCell = piece.getY();
         int xStart = piece.xStart();
         int yStart = piece.yStart();
         int pieceType = piece.getPieceType();
-        PuzzlePiece testPiece = new PuzzlePiece(xCell, yCell, xStart, yStart, pieceType);
+        PuzzlePiece testPiece = new PuzzlePiece(xCell, yCell, xStart, yStart, pieceType, false);
         int[][] locations = piece.getHitbox().getGridLocations();
         int[][] tempLocations = new int[4][2];
 
@@ -215,9 +215,11 @@ public class BoardGrid {
             rotatePieceInArr(tempLocations, pieceType, timesRotated, piece);
             testPiece.getHitbox().setGridLoc(tempLocations);
             
-            if (!validLocationX(testPiece)) {
-                piece.setFarthestX(prevX);
-                return null;
+            if (checkCol) {
+                if (!validLocationX(testPiece)) {
+                    piece.setFarthestX(prevX);
+                    return null;
+                }
             }
 
             rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
@@ -225,12 +227,15 @@ public class BoardGrid {
 
             //testPiece.getHitbox().printGridLoc();
 
-            if (validLocationX(testPiece) && validLocationY(testPiece)) {
+            if (checkCol) {
+                if (validLocationX(testPiece) && validLocationY(testPiece)) {
+                    return testPiece;
+                }
+            } else {
                 return testPiece;
             }
-        }
-        
 
+        }
         return null;
     }
 

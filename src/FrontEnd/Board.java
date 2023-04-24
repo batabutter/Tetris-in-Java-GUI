@@ -32,6 +32,7 @@ public class Board {
     private int score;
     private PuzzlePiece nextPiece;
     private PuzzlePiece hold;
+    private PuzzlePiece projPiece;
     private JLabel visScore;
     private JLabel visLevel;
     private int level;
@@ -50,6 +51,7 @@ public class Board {
         settledFrames = 30;
         nextPiece = null;
         hold = null;
+        projPiece = null;
         holdCount = 0;
 
         visScore = new JLabel();
@@ -122,6 +124,7 @@ public class Board {
         updateImagesOfBoard();
         frame.remove(nextPiece.getLabel());
         holdCount = 0;
+        timesRotated = 0;
 
         ArrayList<Integer> linesCleared = arrBoard.getPrevLinesCleared();
 
@@ -186,6 +189,34 @@ public class Board {
         piece.setY(piece.yStart());
         frame.add(piece.getLabel());
         //currentPiece.getHitbox().printGridLoc();
+    }
+
+    public void addProjPiece(PuzzlePiece piece) {
+        //For some reason, the piece wouldn't show unless I set it twice.
+        //So yeah...
+        if (projPiece != null) {
+            frame.remove(projPiece.getLabel());
+            projPiece.getHitbox().clear();
+        }
+        projPiece = piece;
+        projPiece.setX(piece.getX());
+        projPiece.setY(piece.getY());
+
+        for (int i = 0; i < timesRotated; i++) {
+            rotatePiece(projPiece, false);
+        }
+
+        frame.add(projPiece.getLabel());
+        //currentPiece.getHitbox().printGridLoc();
+    }
+
+    public void removeProjPiece() {
+        if (this.projPiece != null) {
+            frame.remove(projPiece.getLabel());
+            projPiece.getHitbox().clear();
+            projPiece = null;
+        }
+
     }
 
     public void addNextPiece(PuzzlePiece piece) {
@@ -256,6 +287,9 @@ public class Board {
         PuzzlePiece temp = currentPiece;
         currentPiece.getHitbox().clear();
         currentPiece = null;
+
+        removeProjPiece();
+
         return temp;
     }
 
@@ -302,19 +336,38 @@ public class Board {
 
     public void movePieceLeft() {
         PuzzlePiece piece = currentPiece;
-        PuzzlePiece testColPiece = new PuzzlePiece(currentPiece.xStart(), currentPiece.yStart(), getXStart(), getYStart(), currentPiece.getPieceType());
-        testColPiece.setX(currentPiece.getX() - squareDim);
-        testColPiece.setY(currentPiece.getY());
-        if (piece.getX()-squareDim >= startX && arrBoard.validLocationX(testColPiece))
+
+        int[][] futureLocations = new int[4][2];
+        int[][] currentLocations = piece.getHitbox().getGridLocations();
+        int[][] grid = arrBoard.getBoard();
+
+        for (int i = 0 ; i < futureLocations.length; i++) {
+            futureLocations[i][0] = currentLocations[i][0] - 1;
+            futureLocations[i][1] = currentLocations[i][1];
+        }
+        /* 
+        for (int n = 0; n < futureLocations.length; n++) {
+            System.out.println(n + ": "+"("+futureLocations[n][0]+", "+futureLocations[n][1]+")");
+        }
+        */
+
+        boolean cont = true;
+        for (int k = 0; k < futureLocations.length; k++) {
+            if ((futureLocations[k][0] < 0) || (grid[futureLocations[k][1]][futureLocations[k][0]] != 0)) {
+                cont = false;
+                //System.out.println("Invalid!");
+            }
+        }
+
+        if (cont)
             piece.setX(piece.getX()-squareDim);
         
         //currentPiece.getHitbox().printGridLoc();
     }
 
-    public void movePieceDown() {
-        PuzzlePiece piece = currentPiece;
+    public void movePieceDown(PuzzlePiece piece) {
 
-        if (!pieceSettled())
+        if (!pieceSettled(piece))
             if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight) {
                 piece.setY(piece.getY()+squareDim);
                 addScore(1);
@@ -326,31 +379,33 @@ public class Board {
     public void holdPiece() {
         if (holdCount == 0) {
             if (hold == null) {
-                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType(), false);
                 hold.setX(startX -180);
                 hold.setY(140);
                 remove();
                 frame.add(hold.getLabel());
-                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece()));
-                addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1));
+                PuzzlePiece newPiece = new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false);
+                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false));
+                addProjPiece(newPiece);
+                addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1, false));
             } else {
                 int pieceTypeHold = hold.getPieceType();
                 frame.remove(hold.getLabel());
-                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType());
+                hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType(), false);
                 hold.setX(startX -180);
                 hold.setY(140);
                 frame.add(hold.getLabel());
                 remove();
-                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold));
+                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold, false));
             }
             SwingUtilities.updateComponentTreeUI(frame);
             holdCount++;
         }
     }
 
-    public void settlePiece() {
-        while (!pieceSettled()) {
-            movePieceDown();
+    public void settlePiece(PuzzlePiece piece) {
+        while (!pieceSettled(piece)) {
+            movePieceDown(piece);
             addScore(2);
         }
 
@@ -360,10 +415,9 @@ public class Board {
 
 
     //Change to be more simplistic
-    public boolean pieceSettled () {
-        PuzzlePiece piece = currentPiece;
+    public boolean pieceSettled (PuzzlePiece piece) {
 
-        if (currentPiece != null) {
+        if (piece != null) {
             int[][] futureLocations = new int[4][2];
             int[][] currentLocations = piece.getHitbox().getGridLocations();
             int[][] grid = arrBoard.getBoard();
@@ -398,7 +452,7 @@ public class Board {
 
     public void rotatePiece() {
         PuzzlePiece piece = currentPiece;
-        PuzzlePiece tempPiece = arrBoard.rotatePiece(currentPiece, timesRotated);
+        PuzzlePiece tempPiece = arrBoard.rotatePiece(currentPiece, timesRotated, true);
 
         if (tempPiece != null) {
             timesRotated++;
@@ -417,8 +471,21 @@ public class Board {
             currentPiece.getHitbox().printGridLoc();
             System.out.println("-----------------------------------------------------------");
             */
-            System.out.println("Bruh");
         }
+
+    }
+
+    public void rotatePiece(PuzzlePiece piece, boolean checkCol) {
+            ImageIcon shape = piece.getShape();
+            PuzzlePiece tempPiece = arrBoard.rotatePiece(piece, timesRotated, checkCol);
+
+            BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
+            ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
+
+            //This causes a memory leak, I need ot fix once I get it working
+            piece.setShape(temp);
+            piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
+            piece.getHitbox().setSpecialConditions(tempPiece.getHitbox().getSpecialLocations());
 
     }
 

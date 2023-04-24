@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import FrontEnd.Player;
-import FrontEnd.ComputerPlayer;
 import BackEnd.Game;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,25 +13,24 @@ public class Test extends Thread{
     public Test() {
         //Test thread = new Test();
         //frame.setPreferredSize(new Dimension(1600,800));
-        frame.setSize(1600,800);
+        int boardWidth = 300;
+        int boardHeight = 600;
+        int frameWidth = 900;
+        int frameHeight = 800; 
+        int squareDim = 30;
+        frame.setSize(frameWidth,frameHeight);
         frame.setBackground(Color.black);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        int boardWidth = 300;
-        int boardHeight = 600;
-        int frameWidth = 1600;
-        int frameHeight = 800; 
-        int squareDim = 30;
 
         Dimension size = new Dimension(frameWidth,frameHeight);
         BufferedImage background = new BufferedImage(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
         Graphics g = background.createGraphics();
 
-        drawBoard(1050,70,boardWidth, boardHeight, squareDim, g);
         drawBoard(250,70,boardWidth, boardHeight, squareDim, g);
         JLabel backGroundImg = new JLabel();
         backGroundImg.setIcon(new ImageIcon(background.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));;
-        Image myImage = background.getScaledInstance(1600, 800, squareDim);
+        Image myImage = background.getScaledInstance(frameWidth, frameHeight, squareDim);
 
 
         frame.setContentPane(new ImagePanel(myImage));
@@ -47,8 +45,8 @@ public class Test extends Thread{
 
     public void runGame(JFrame frame) {
         Player human = new Player(250, 70, frame);
-        Player computer = new ComputerPlayer(1050, 70, frame);
-        Game game = new Game(human, computer);
+
+        Game game = new Game(human);
         game.start();
     }
 
@@ -102,8 +100,6 @@ public class Test extends Thread{
         g.setColor(Color.gray);
         g.drawRect(startX -230, startY, 200, 200);
 
-        g.setColor(Color.white);
-        g.drawLine(frame.getWidth()/2, 0, frame.getWidth()/2, frame.getHeight());
     }
 
     public static void main(String args[]) {
