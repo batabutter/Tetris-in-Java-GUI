@@ -33,7 +33,6 @@ public class Game {
         start = (int) System.currentTimeMillis();
         int frameCounter = 0;
         int settleCount = 0;
-        int settleCount2 = 0;
         boolean pieceSettled = true;
         int tempCount = 0;
         int tempTime = 0;
@@ -88,7 +87,6 @@ public class Game {
 
                     if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
                         board.update();
-                        pieceSettled = true;
                     }
                 }
 

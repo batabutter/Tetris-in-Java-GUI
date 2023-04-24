@@ -367,12 +367,12 @@ public class Board {
 
     public void movePieceDown(PuzzlePiece piece) {
 
-        if (!pieceSettled(piece))
+        if (!pieceSettled(piece)) {
             if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight) {
                 piece.setY(piece.getY()+squareDim);
                 addScore(1);
             }
-
+        }
         //currentPiece.getHitbox().printGridLoc();
     }
 
@@ -386,7 +386,8 @@ public class Board {
                 frame.add(hold.getLabel());
                 PuzzlePiece newPiece = new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false);
                 add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false));
-                addProjPiece(newPiece);
+                timesRotated = 0;
+                addProjPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), newPiece.getPieceType(), true));
                 addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1, false));
             } else {
                 int pieceTypeHold = hold.getPieceType();
@@ -396,6 +397,8 @@ public class Board {
                 hold.setY(140);
                 frame.add(hold.getLabel());
                 remove();
+                timesRotated = 0;
+                addProjPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), hold.getPieceType(), true));
                 add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold, false));
             }
             SwingUtilities.updateComponentTreeUI(frame);

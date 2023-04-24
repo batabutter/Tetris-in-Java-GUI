@@ -38,31 +38,31 @@ public class Player {
         keyAdded = true;
     }
     if (moveDir == 1) {
-        moveDir = 0;
         board.movePieceDown(board.getCurrentPiece());
     } else if (moveDir == 2) {
-        moveDir = 0;
         board.movePieceRight();
     } else if (moveDir == 3) {
-        moveDir = 0;
         board.movePieceLeft();
     } else if (moveDir ==4) {
-        moveDir = 0;
         board.rotatePiece();
     } else if (moveDir == 5) {
-        moveDir = 0;
         board.settlePiece(board.getCurrentPiece());
     } else if (moveDir == 6) {
-        moveDir = 0;
         board.holdPiece();
     }
-    if (board.getCurrentPiece() != null) {
-        if (!board.pieceSettled(board.getCurrentPiece()))
-            projPiece(board.getCurrentPiece());
-        else 
-            board.removeProjPiece();
-
+    if (moveDir != 0) {
+        
+         
+         if (board.getCurrentPiece() != null) {
+            if (!board.pieceSettled(board.getCurrentPiece()))
+                projPiece(board.getCurrentPiece());
+            else 
+                board.removeProjPiece();
+    
+        }
+         
     }
+    moveDir = 0;
    }
 
    public void setGameOver(boolean gameOver) {
