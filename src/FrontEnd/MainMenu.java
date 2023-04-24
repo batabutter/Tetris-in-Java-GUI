@@ -1,4 +1,5 @@
 package FrontEnd;
+import BackEnd.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,7 @@ public class MainMenu extends JPanel implements ActionListener{
 		start = new JButton("",startButton);
         start.setBorder(BorderFactory.createLineBorder(Color.green,4));
         start.setActionCommand("start");
-        start.setBounds(550,600,276,112);
+        start.setBounds(300,600,276,112);
         frame.add(start);
         start.addActionListener(this);
         JLabel label;
@@ -31,7 +32,7 @@ public class MainMenu extends JPanel implements ActionListener{
         label = new JLabel(logo);
         frame.add(label);
         label.setBounds(525,50,label.getWidth(),label.getHeight());
-        frame.setSize(1600,800);
+        frame.setSize(900,800);
         frame.setLocationRelativeTo(label);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
@@ -41,7 +42,7 @@ public class MainMenu extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         //throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
         if(e.getActionCommand().equals("start")){
-            
+            GameRunner game = new GameRunner();
         }
     }
     
