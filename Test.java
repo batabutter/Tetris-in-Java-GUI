@@ -1,6 +1,7 @@
+package FrontEnd;
 import javax.swing.*;
 import java.awt.*;
-import FrontEnd.Player;
+
 import BackEnd.Game;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -102,7 +103,40 @@ public class Test extends Thread{
 
     }
 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static void main(String args[]) {
         Test t = new Test();
     }
+    
 }
