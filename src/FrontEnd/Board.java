@@ -289,6 +289,7 @@ public class Board {
         currentPiece = null;
 
         removeProjPiece();
+        timesRotated = 0;
 
         return temp;
     }
