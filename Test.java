@@ -1,6 +1,7 @@
-package FrontEnd;
+
 import javax.swing.*;
 import java.awt.*;
+import FrontEnd.Player;
 
 import BackEnd.Game;
 import java.awt.Color;
