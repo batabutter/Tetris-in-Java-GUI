@@ -1,4 +1,6 @@
 package BackEnd;
+import javax.swing.SwingUtilities;
+
 import FrontEnd.Board;
 import FrontEnd.Player;
 
@@ -37,13 +39,15 @@ public class Game {
         int tempCount = 0;
         int tempTime = 0;
         PuzzlePiece piece;
-
+        
         while (!(p1.gameOver() && p2.gameOver())) {
+            
             end = (int) System.currentTimeMillis();
 
             
             if ((end-start) % 16 == 0 && (end-start) != tempTime) {
                 frameCounter++;
+                
                 tempTime = (end-start);
                 piece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), board.nextPiece(), false);
                 PuzzlePiece nextPiece = new PuzzlePiece(board.getXStart() + 4*30, board.getYStart(), board.getXStart(), board.getYStart(), -1, false);
@@ -97,9 +101,11 @@ public class Game {
                 //board.getBoardGrid().printGrid();
 
                 //p2.createNewPiece()
+                 
             }
+            
         }   
-
+        
         return 0;
     }
 

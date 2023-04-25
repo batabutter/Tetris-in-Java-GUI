@@ -146,7 +146,7 @@ public class Board {
 
         //clear the current piece of all of it's data to avoid any memory leaks
         remove();
-        //arrBoard.printGrid();
+        arrBoard.printGrid();
     }
 
     public void addScore(int x) {
