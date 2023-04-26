@@ -1,24 +1,85 @@
 package FrontEnd;
-import javax.swing.*;
+import BackEnd.*;
 import java.awt.*;
-import FrontEnd.Player;
-import BackEnd.Game;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
-import java.awt.Font;
+import java.awt.Graphics;
+import javax.swing.*;
+import java.util.*;
+import java.util.Timer;
+public class GameRunner extends JPanel implements ActionListener{
+    private JFrame mainMenu;
+    private JFrame board;
+    private JFrame gameOverScreen;
+    private JButton start;
+    private boolean startGame = false;
+    private int frameCounter;
+    private int boardWidth = 300;
+    private int boardHeight = 600;
+    private int frameWidth = 900;
+    private int frameHeight = 800; 
+    private int squareDim = 30;
+    Timer timer = null;
 
-public class GameRunner extends Thread{
-    static JFrame frame = new JFrame("Tetris");
+    ImageIcon background;
     public GameRunner() {
-        //Test thread = new Test();
-        //frame.setPreferredSize(new Dimension(1600,800));
-        int boardWidth = 300;
-        int boardHeight = 600;
-        int frameWidth = 900;
-        int frameHeight = 800; 
-        int squareDim = 30;
+
+        mainMenu = new JFrame("Menu");
+        //contentPane.setBackground(Color.black);
+        mainMenuScreen(mainMenu);
+
+        //If any needed animations or differnet displays are needed, you can just use this loop
+        while (!startGame) {
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+
+            while (elapsedTime < 16) {
+                //perform db poll/check
+                elapsedTime = (new Date()).getTime() - startTime;
+            }
+            frameCounter++;
+            System.out.println("On frame > "+frameCounter);
+
+            if (frameCounter == 60)
+                frameCounter = 0;
+        }
+        mainMenu.setVisible(false);
+        int score = runGame(board);
+        board.setVisible(false);
+
+        gameOverScreen = new JFrame("Tetris");
+        gameOverScreen(gameOverScreen, score);
+
+
+        //frame.setVisible(false);
+    }
+    @Override
+    
+    public void actionPerformed(ActionEvent e) {
+        //throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+        if(e.getActionCommand().equals("start")){
+            board = new JFrame("Tetris");
+            changeBoard(board);
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+
+            double waitTime = 0;
+
+            while (elapsedTime < waitTime*1000) {
+                //can be implemented to change for like, a countdown or something
+                elapsedTime = (new Date()).getTime() - startTime;
+            }
+            startGame = true;
+            
+            //The frame will not update for some reason until this method has finished
+        }
+
+
+    }
+
+    public void changeBoard(JFrame frame) {
         frame.setSize(frameWidth,frameHeight);
         frame.setBackground(Color.black);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,16 +102,8 @@ public class GameRunner extends Thread{
         //Most important piece of code in the entire project
         frame.setLayout(null);
 
-        runGame(frame);
     }
-
-    public void runGame(JFrame frame) {
-        Player human = new Player(250, 70, frame);
-
-        Game game = new Game(human);
-        game.start();
-    }
-
+    
     class ImagePanel extends JComponent {
         private Image image;
         public ImagePanel(Image image) {
@@ -61,6 +114,34 @@ public class GameRunner extends Thread{
             super.paintComponent(g);
             g.drawImage(image, 0, 0, this);
         }
+    }
+
+    public int runGame(JFrame frame) {
+        Player human = new Player(250, 70, frame);
+
+        Game game = new Game(human);
+        return game.start();
+    }
+
+    public void mainMenuScreen(JFrame frame) {
+        ImageIcon startButton = new ImageIcon("Images//button_start (1).png");
+		start = new JButton("",startButton);
+        start.setBorder(BorderFactory.createLineBorder(Color.green,4));
+        start.setActionCommand("start");
+        start.setBounds(300,600,276,112);
+        frame.add(start);
+        start.addActionListener(this);
+        JLabel label;
+        //frame.setBackground(Color.black);
+        frame.getContentPane().setBackground(Color.black);
+        ImageIcon logo = new ImageIcon("Images//tetris_logo.png");
+        label = new JLabel(logo);
+        frame.add(label);
+        label.setBounds(525,50,label.getWidth(),label.getHeight());
+        frame.setSize(frameWidth,frameHeight);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void drawBoard(int startX, int startY, int boardWidth, int boardHeight, int squareDim, Graphics g) {
@@ -103,7 +184,49 @@ public class GameRunner extends Thread{
 
     }
 
-    /*public static void main(String args[]) {
-        GameRunner t = new GameRunner();
-    }*/
+    public void drawGameOverGraphics(int startX, int startY, int boardWidth, int boardHeight, int squareDim, Graphics g) {
+        g.setColor(Color.black);
+        g.fillRect(startX, startY, boardWidth, boardHeight);
+
+        g.setColor(Color.yellow);
+        g.setFont(new Font("Arial", Font.BOLD, 50));
+        g.drawString("Game Over", frameWidth/2, frameHeight/2);
+
+
+        //Draw the previous high scores and everything here
+
+
+    }
+
+    public void gameOverScreen(JFrame frame, int score) {
+        frame.setSize(frameWidth,frameHeight);
+        frame.setBackground(Color.black);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+
+        Dimension size = new Dimension(frameWidth,frameHeight);
+        BufferedImage background = new BufferedImage(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
+        Graphics g = background.createGraphics();
+
+        addHighScore(score);
+
+        drawGameOverGraphics(250,70,boardWidth, boardHeight, squareDim, g);
+        JLabel backGroundImg = new JLabel();
+        backGroundImg.setIcon(new ImageIcon(background.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));;
+        Image myImage = background.getScaledInstance(frameWidth, frameHeight, squareDim);
+
+
+
+        frame.setContentPane(new ImagePanel(myImage));
+        frame.setVisible(true);
+    }
+
+    private void addHighScore(int score) {
+
+    }
+
+    public static void main(String[] args) {
+    	new GameRunner();
+	}
+
 }
