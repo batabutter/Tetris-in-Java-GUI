@@ -74,10 +74,10 @@ public class Player {
    }
 
    //Creates new piece at given location
-   //Most likely are just going to specify how this method works ofr both computer and human
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
         piece.setX(piece.xStart() + 4*30);
         piece.setY(piece.yStart());
+        //Maybe change to be more accurate, but in my opinion, this looks nicer
         setGameOver(board.getBoardGrid().gameOverCondition(piece));
         if (!gameOver){
             board.add(piece);
