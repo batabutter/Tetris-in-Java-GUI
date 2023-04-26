@@ -40,7 +40,7 @@ public class Game {
         int tempTime = 0;
         PuzzlePiece piece;
         
-        while (!(p1.gameOver() && p2.gameOver())) {
+        while (!(p1.gameOver())) {
             
             end = (int) System.currentTimeMillis();
 
@@ -60,43 +60,45 @@ public class Game {
                 }
                 //p1.movePiece(board.getCurrentPiece());
                 //System.out.println("Settled? "+board.pieceSettled());
+                if (!p1.gameOver()) {
 
                 //System.out.println("On frame >" +frameCounter);
-                p1.movePiece(piece);
+                    p1.movePiece(piece);
 
-
-                if (frameCounter == 60) {
-                    //System.out.println("Temp count >" +tempCount);
-                    //System.out.println("Temp >"+tempCount);
-                    if (board.getCurrentPiece() != null) {
-                        tempCount++;
-                        if (tempCount == (board.getDropSpeed() / frameCounter)) {
-                            tempCount = 0;
-                            int befScore = board.getScore();
-                            board.movePieceDown(board.getCurrentPiece());
-                            int aftScore = board.getScore();
-                            board.addScore(-1 * (aftScore - befScore));
+                    if (frameCounter == 60) {
+                        //System.out.println("Temp count >" +tempCount);
+                        //System.out.println("Temp >"+tempCount);
+                        if (board.getCurrentPiece() != null) {
+                            tempCount++;
+                            if (tempCount == (board.getDropSpeed() / frameCounter)) {
+                                tempCount = 0;
+                                int befScore = board.getScore();
+                                board.movePieceDown(board.getCurrentPiece());
+                                int aftScore = board.getScore();
+                                board.addScore(-1 * (aftScore - befScore));
+                            }
                         }
                     }
-                }
 
-                
-                //This can be adjusted later on as well
-                if (board.getCurrentPiece() != null) {
-                    if (board.pieceSettled(board.getCurrentPiece())) {
-                        settleCount++;
-                    } else {
-                        settleCount = 0;
+                    
+                    //This can be adjusted later on as well
+                    if (board.getCurrentPiece() != null) {
+                        if (board.pieceSettled(board.getCurrentPiece())) {
+                            settleCount++;
+                        } else {
+                            settleCount = 0;
+                        }
+
+                        if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
+                            board.update();
+                        }
                     }
 
-                    if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
-                        board.update();
+                    //System.out.println("Settlecount >" +settleCount);
+                    if (frameCounter == 60) {
+                        frameCounter = 0;
                     }
-                }
 
-                //System.out.println("Settlecount >" +settleCount);
-                if (frameCounter == 60) {
-                    frameCounter = 0;
                 }
                 //board.getBoardGrid().printGrid();
 
@@ -106,7 +108,7 @@ public class Game {
             
         }   
         
-        return 0;
+        return board.getScore();
     }
 
     public Player getPlayer1() {

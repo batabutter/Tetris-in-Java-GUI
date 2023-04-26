@@ -174,6 +174,15 @@ public class BoardGrid {
         return true;
     }
 
+    public boolean gameOverCondition(PuzzlePiece piece) {
+
+        if (validLocationX(piece) && validLocationY(piece))
+            return false;
+
+
+        return true;
+    }
+
 
     public int[][] getCurrentState(PuzzlePiece currentPiece) {
         int[][] temp = currentPiece.getHitbox().getGrid();

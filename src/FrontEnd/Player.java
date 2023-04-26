@@ -76,10 +76,16 @@ public class Player {
    //Creates new piece at given location
    //Most likely are just going to specify how this method works ofr both computer and human
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
-        board.add(piece);
-        board.addNextPiece(nextPiece);
-        projPiece(board.getCurrentPiece());
+        piece.setX(piece.xStart() + 4*30);
+        piece.setY(piece.yStart());
+        setGameOver(board.getBoardGrid().gameOverCondition(piece));
+        if (!gameOver){
+            board.add(piece);
+            board.addNextPiece(nextPiece);
+            projPiece(board.getCurrentPiece());
+        }
         SwingUtilities.updateComponentTreeUI(frame);
+
    }
 
    public void projPiece(PuzzlePiece piece) {
