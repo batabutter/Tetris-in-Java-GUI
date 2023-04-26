@@ -66,7 +66,7 @@ public class MainMenu extends JPanel implements ActionListener{
         board.setVisible(false);
 
         gameOverScreen = new JFrame("Tetris");
-        gameOverScreen(gameOverScreen);
+        gameOverScreen(gameOverScreen, score);
 
 
         //frame.setVisible(false);
@@ -188,9 +188,13 @@ public class MainMenu extends JPanel implements ActionListener{
         g.setFont(new Font("Arial", Font.BOLD, 50));
         g.drawString("Game Over", frameWidth/2, frameHeight/2);
 
+
+        //Draw the previous high scores and everything here
+
+
     }
 
-    public void gameOverScreen(JFrame frame) {
+    public void gameOverScreen(JFrame frame, int score) {
         frame.setSize(frameWidth,frameHeight);
         frame.setBackground(Color.black);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -200,10 +204,13 @@ public class MainMenu extends JPanel implements ActionListener{
         BufferedImage background = new BufferedImage(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
         Graphics g = background.createGraphics();
 
+        addHighScore(score);
+
         drawGameOverGraphics(250,70,boardWidth, boardHeight, squareDim, g);
         JLabel backGroundImg = new JLabel();
         backGroundImg.setIcon(new ImageIcon(background.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));;
         Image myImage = background.getScaledInstance(frameWidth, frameHeight, squareDim);
+
 
 
         frame.setContentPane(new ImagePanel(myImage));
@@ -219,5 +226,3 @@ public class MainMenu extends JPanel implements ActionListener{
 	}
 
 }
-
-
