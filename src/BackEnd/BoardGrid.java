@@ -9,12 +9,36 @@ public class BoardGrid {
     private ArrayList<Integer> lines;
     private ArrayList<Integer> prevLinesCleared;
 
+    private int[][][] wallKickDataJLSTZ = {
+        {{0,0}, {-1, 0}, {-1, 1}, {0,-2}, {-1,-2}},
+        {{0,0}, {1,0}, {1, -1}, {0, 2}, {1, 2}},
+        {{0,0}, {1,0}, {1, -1}, {0, 2}, {1, 2}},
+        {{0,0}, {-1,0}, {-1, 1}, {0, -2}, {-1, -2}},
+        {{0,0}, {1,0}, {1, 1}, {0, -2}, {1, -2}},
+        {{0,0}, {-1,0}, {-1, -1}, {0, 2}, {-1, 2}},
+        {{0,0}, {-1,0}, {-1, -1}, {0, 2}, {-1, 2}},
+        {{0,0}, {1,0}, {1, 1}, {0, -2}, {1, -2}}
+    };
+
+    private int[][][] wallKickDataI = {
+        {{0,0}, {2, 0}, {-1, 0}, {2,-1}, {-1,2}},
+        {{0,0}, {-2,0}, {1, 0}, {-2, 1}, {1, -2}},
+        {{0,0}, {1,0}, {-2, 0}, {1, 2}, {-2, -1}},
+        {{0,0}, {1,0}, {2, 0}, {-1, -2}, {2, 1}},
+        {{0,0}, {-2,0}, {1, 0}, {-2, 1}, {1, -2}},
+        {{0,0}, {2,0}, {-1, 0}, {2, -1}, {-1, 2}},
+        {{0,0}, {-1,0}, {2, 0}, {-1, -2}, {2, 1}},
+        {{0,0}, {1,0}, {-2, 0}, {3, 2}, {-2, -1}}
+    };
+
+    private int[] srsOffSet;
+
     public BoardGrid () {
         board = new int[20][10];
         height = 20;
         width = 10;
         shifts = 0;
-
+        srsOffSet = null;
     }
 
     public int[][] getBoard() {
@@ -32,7 +56,6 @@ public class BoardGrid {
     public int getWidth() {
         return width;
     }
-
 
     public void updateGrid(PuzzlePiece currentPiece) {
 
@@ -174,6 +197,28 @@ public class BoardGrid {
         return true;
     }
 
+    public boolean validLocationX(int[][] arr) {
+        int[][] locations = arr;
+        for (int i = 0; i < locations.length; i++) {
+            int x = locations[i][0];
+            int y = locations[i][1];
+            if (x >= board[0].length){
+                return false;
+            }
+
+            if (y >= board.length)
+                return false;
+
+            if (board[y][x] != 0)
+                return false;
+
+        }
+
+        //System.out.println("valid");
+
+        return true;
+    }
+
     public boolean gameOverCondition(PuzzlePiece piece) {
 
         if (validLocationX(piece) && validLocationY(piece))
@@ -206,46 +251,98 @@ public class BoardGrid {
         PuzzlePiece testPiece = new PuzzlePiece(xCell, yCell, xStart, yStart, pieceType, false);
         int[][] locations = piece.getHitbox().getGridLocations();
         int[][] tempLocations = new int[4][2];
+        int[][][] wallKickData;
+
+        rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
+        testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
+        int multi = -1;
+        
 
         if (pieceType != 0) {
-            for (int i = 0; i < locations.length; i++) {
-                for (int k = 0; k < locations[0].length; k++) {
-                    tempLocations[i][k] = locations[i][k];
-                }
-            }
 
-            for (int i = 0; i < locations.length; i++) {
-                for (int k = 0; k < locations[0].length-1; k++) {
-                    //System.out.println("at location > ("+locations[i][k]+", "+locations[i][k+1]+")");
-                }
-            }
-            //System.out.println("------------------------------");
-            int prevX = piece.getFarthestX();
-            rotatePieceInArr(tempLocations, pieceType, timesRotated, piece);
-            testPiece.getHitbox().setGridLoc(tempLocations);
-            
-            if (checkCol) {
-                if (!validLocationX(testPiece)) {
-                    piece.setFarthestX(prevX);
-                    return null;
-                }
-            }
-
-            rotatePieceInArr(piece.getHitbox().getSpecialLocations(), pieceType, timesRotated, piece);
-            testPiece.getHitbox().setSpecialConditions(piece.getHitbox().getSpecialLocations());
-
-            //testPiece.getHitbox().printGridLoc();
-
-            if (checkCol) {
-                if (validLocationX(testPiece) && validLocationY(testPiece)) {
-                    return testPiece;
-                }
+            if (pieceType == 1) {
+                wallKickData = wallKickDataI;
+                System.out.println("Here");
             } else {
-                return testPiece;
+                wallKickData = wallKickDataJLSTZ;
             }
 
+                for (int i = 0; i < 5; i++) {
+                    tempLocations = getTempLocations(locations);
+                    rotatePieceInArr(tempLocations, pieceType, timesRotated, piece);
+                    System.out.println("------------------------------");
+                    int prevX = piece.getFarthestX();
+                    System.out.println("Times rotated > "+timesRotated);
+
+                    System.out.println("Trying > "+ i);
+
+                    for (int m = 0; m < tempLocations.length; m++) {
+                        for (int k = 0; k < tempLocations[0].length-1; k++) {
+                            System.out.println("at location > ("+tempLocations[m][k]+", "+tempLocations[m][k+1]+") before wall kick");
+                        }
+                    }
+
+                    for (int k = 0; k < tempLocations.length; k++) {
+                        tempLocations[k][0] = tempLocations[k][0] - wallKickData[timesRotated][i][0];
+                        tempLocations[k][1] = tempLocations[k][1] + wallKickData[timesRotated][i][1];
+                    }
+
+                    setSRSOffSet(wallKickData[timesRotated][i]);
+                    
+                    for (int m = 0; m < tempLocations.length; m++) {
+                        for (int k = 0; k < tempLocations[0].length-1; k++) {
+                            System.out.println("now at location > ("+tempLocations[m][k]+", "+tempLocations[m][k+1]+") after wall kick");
+                        }
+                    }
+
+                    //testPiece.getHitbox().setGridLoc(tempLocations);
+                    boolean cont = true;
+                    if (checkCol) {
+                        if (!validLocationX(tempLocations)) {
+                            piece.setFarthestX(prevX);
+                            cont = false;
+                        }
+                    }
+
+                    prevX = piece.getFarthestX();
+                    testPiece.getHitbox().setGridLoc(tempLocations);
+                    
+                    if (cont) {
+                        
+                        if (checkCol) {
+                            
+                            if (validLocationX(testPiece) && validLocationY(testPiece)) {
+                                System.out.println("Valid");
+                                return testPiece;
+                            }
+                        } else {
+                            return testPiece;
+                        }
+                    }
+
+                }
+            
         }
         return null;
+    }
+
+    private int[][] getTempLocations(int[][] locations) {
+        int[][] tempLocations = new int[4][2];
+        for (int i = 0; i < locations.length; i++) {
+            for (int k = 0; k < locations[0].length; k++) {
+                tempLocations[i][k] = locations[i][k];
+            }
+        }
+        
+        return tempLocations;
+    }
+
+    public int[] getSRSOffset() {
+        return srsOffSet;
+    }
+
+    public void setSRSOffSet(int[] arr) {
+        srsOffSet = arr;
     }
 
     //Possibly change this to SRS in the future, but for now it's beyond the scope of the project
@@ -313,7 +410,7 @@ public class BoardGrid {
             }
         int offSet = 2;
         if (pieceType == 1){
-            offSet = 3;
+            offSet = 2;
         }
         //If the order of the pieces in the array are ever changed, this code will break
         int tempMax = -1000;

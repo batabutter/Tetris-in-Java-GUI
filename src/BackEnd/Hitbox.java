@@ -5,8 +5,6 @@ import java.awt.geom.Line2D;
 
 public class Hitbox {
     private ArrayList<Line2D> points;
-    private int xCell;
-    private int yCell;
     private int pieceType;
     private PuzzlePiece piece;
     private int xStart;
@@ -136,8 +134,6 @@ public class Hitbox {
     }
 
     public Hitbox(int xStart, int yStart, int pieceType) {
-        xCell = xStart;
-        yCell = yStart;
         this.pieceType = pieceType;
         points = new ArrayList<Line2D>();
 

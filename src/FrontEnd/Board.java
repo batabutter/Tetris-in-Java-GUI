@@ -37,6 +37,7 @@ public class Board {
     private JLabel visLevel;
     private int level;
     private int holdCount;
+    private int numberOfLinesClearedOnLevel;
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -48,6 +49,7 @@ public class Board {
         timesRotated = 0;
         score = 0;
         level = 1;
+        numberOfLinesClearedOnLevel = 0;
         settledFrames = 30;
         nextPiece = null;
         hold = null;
@@ -102,8 +104,8 @@ public class Board {
     }
 
     //This might also need to be changed depending on how Tetris changes the speed depending on the level
-    public void setDropSpeed(int speed) {
-        dropSpeed = speed;
+    public void setDropSpeed(double speed) {
+        dropSpeed = (int) speed;
     }
 
     public void setCurrentPiece(PuzzlePiece temp) {
@@ -125,6 +127,8 @@ public class Board {
         frame.remove(nextPiece.getLabel());
         holdCount = 0;
         timesRotated = 0;
+        int tempCleared = 0;
+
 
         ArrayList<Integer> linesCleared = arrBoard.getPrevLinesCleared();
 
@@ -142,6 +146,17 @@ public class Board {
                 addScore(800 * level);
                 System.out.println("You cleared 4 lines in a row");
             }
+           numberOfLinesClearedOnLevel = numberOfLinesClearedOnLevel + linesCleared.get(i);
+
+           if (numberOfLinesClearedOnLevel >= level * 10) {
+            numberOfLinesClearedOnLevel = 0;
+            increaseLevel();
+            if (level < 14) {
+                setDropSpeed(Math.pow((0.8-((level-1)*0.007)), level-1) * 60);
+                System.out.println("Drop speed is now > "+getDropSpeed());
+            }
+           }
+
         }
 
         //clear the current piece of all of it's data to avoid any memory leaks
@@ -158,7 +173,7 @@ public class Board {
         return score;
     }
 
-    public void increaseLevel(int x) {
+    public void increaseLevel() {
         level++;
         visLevel.setText("Level: "+String.valueOf(level));
     }
@@ -172,7 +187,7 @@ public class Board {
         //Then alter the pieceImages
         int[][] grid = arrBoard.getBoard();
         for (int i  = 0; i < grid.length; i++) {
-            for (int k = 0; k < grid[0].length; k++) {
+            for (int k = 0; k < grid[0].length; k++) {   
                 if (grid[i][k] != 0) {
                     add(grid[i][k], i, k);
                 }
@@ -218,6 +233,10 @@ public class Board {
         }
 
     }
+
+    public PuzzlePiece getProjPiece() {
+        return projPiece
+;    }
 
     public void addNextPiece(PuzzlePiece piece) {
         if (nextPiece != null) {
@@ -367,14 +386,20 @@ public class Board {
     }
 
     public void movePieceDown(PuzzlePiece piece) {
-
+        /* 
+        System.out.println("Before > ");
+        piece.getHitbox().printGridLoc();
+        */
         if (!pieceSettled(piece)) {
             if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight) {
                 piece.setY(piece.getY()+squareDim);
+                /* 
+                System.out.println("After > ");
+                piece.getHitbox().printGridLoc();
+                */
                 addScore(1);
             }
         }
-        //currentPiece.getHitbox().printGridLoc();
     }
 
     public void holdPiece() {
@@ -467,9 +492,24 @@ public class Board {
 
             //This causes a memory leak, I need ot fix once I get it working
             piece.setShape(temp);
+            piece.setX(piece.getX() - (arrBoard.getSRSOffset()[0] * squareDim));
+            piece.setY(piece.getY() + (arrBoard.getSRSOffset()[1] * squareDim));
+            System.out.println("Test piece at > "+"("+tempPiece.getX()+", "+tempPiece.getY()+")");
+            System.out.println("piece at > "+"("+piece.getX()+", "+piece.getY()+")");
             piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
             piece.getHitbox().setSpecialConditions(tempPiece.getHitbox().getSpecialLocations());
-            
+
+            if (timesRotated == 4)
+                timesRotated = 0;
+
+            currentPiece.getHitbox().printGridLoc();
+            int[][] specialLocations = piece.getHitbox().getSpecialLocations();
+
+            for (int m = 0; m < specialLocations.length; m++) {
+                for (int k = 0; k < specialLocations[0].length-1; k++) {
+                    System.out.println("Special Location after > ("+specialLocations[m][k]+", "+specialLocations[m][k+1]);
+                }
+            }
             /* 
             System.out.println("Board > ");
             currentPiece.getHitbox().printGridLoc();
@@ -488,8 +528,15 @@ public class Board {
 
             //This causes a memory leak, I need ot fix once I get it working
             piece.setShape(temp);
+            piece.setX(piece.getX() - (arrBoard.getSRSOffset()[0] * squareDim));
+            piece.setY(piece.getY() + (arrBoard.getSRSOffset()[1] * squareDim));
+            System.out.println("Test piece at > "+"("+tempPiece.getX()+", "+tempPiece.getY()+")");
+            System.out.println("piece at > "+"("+piece.getX()+", "+piece.getY()+")");
             piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
             piece.getHitbox().setSpecialConditions(tempPiece.getHitbox().getSpecialLocations());
+
+            if (timesRotated == 4)
+                timesRotated = 0;
 
     }
 

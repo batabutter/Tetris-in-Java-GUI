@@ -45,6 +45,7 @@ public class Player {
         board.movePieceLeft();
     } else if (moveDir ==4) {
         board.rotatePiece();
+        moveDir = 0;
     } else if (moveDir == 5) {
         board.settlePiece(board.getCurrentPiece());
     } else if (moveDir == 6) {
@@ -53,7 +54,7 @@ public class Player {
     if (moveDir != 0) {
         
          
-         if (board.getCurrentPiece() != null) {
+         if (board.getCurrentPiece() != null && board.getProjPiece() != null) {
             if (!board.pieceSettled(board.getCurrentPiece()))
                 projPiece(board.getCurrentPiece());
             else 

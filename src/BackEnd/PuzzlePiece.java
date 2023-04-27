@@ -19,6 +19,7 @@ public class PuzzlePiece {
     private Dimension size;
     private JLabel pieceLabel;
     private int pieceType;
+    private int timesRotated;
     //Temp
     private int xCell;
     private int yCell;
@@ -30,7 +31,7 @@ public class PuzzlePiece {
 
 
     public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType, boolean hollow) {
-        setPieceType(pieceType, hollow);
+        setPieceType(1, hollow);
 
         this.xStart = boardXStart;
         this.yStart = boardYStart;
@@ -160,4 +161,11 @@ public class PuzzlePiece {
         return "Piece type > "+this.pieceType +" at > "+"("+getX()+", "+getY()+")";
     }
 
+    public void setTimesRotated(int timesRotated) {
+        this.timesRotated = timesRotated;
+    }
+
+    public int getTimesRotated(){
+        return this.timesRotated;
+    }
 }

@@ -65,19 +65,18 @@ public class Game {
                 //System.out.println("On frame >" +frameCounter);
                     p1.movePiece(piece);
 
+                    if (board.getCurrentPiece() != null) {
+                        if (board.getDropSpeed() == frameCounter) {
+                            int befScore = board.getScore();
+                            board.movePieceDown(board.getCurrentPiece());
+                            int aftScore = board.getScore();
+                            board.addScore(-1 * (aftScore - befScore));
+                        }
+                    }
+
                     if (frameCounter == 60) {
                         //System.out.println("Temp count >" +tempCount);
                         //System.out.println("Temp >"+tempCount);
-                        if (board.getCurrentPiece() != null) {
-                            tempCount++;
-                            if (tempCount == (board.getDropSpeed() / frameCounter)) {
-                                tempCount = 0;
-                                int befScore = board.getScore();
-                                board.movePieceDown(board.getCurrentPiece());
-                                int aftScore = board.getScore();
-                                board.addScore(-1 * (aftScore - befScore));
-                            }
-                        }
                     }
 
                     
@@ -94,15 +93,11 @@ public class Game {
                         }
                     }
 
-                    //System.out.println("Settlecount >" +settleCount);
                     if (frameCounter == 60) {
                         frameCounter = 0;
                     }
 
                 }
-                //board.getBoardGrid().printGrid();
-
-                //p2.createNewPiece()
                  
             }
             
