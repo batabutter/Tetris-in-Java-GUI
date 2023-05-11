@@ -193,7 +193,11 @@ public class BoardGrid {
             int y = locations[i][1];
             if (x >= board[0].length || x < 0){
                 return false;
-            } 
+            }
+
+            if (y >= board.length || y < 0) {
+                return false;
+            }
 
             if (board[y][x] != 0)
                 return false;
