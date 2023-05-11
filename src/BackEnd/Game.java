@@ -64,13 +64,10 @@ public class Game {
 
                 //System.out.println("On frame >" +frameCounter);
                     p1.movePiece(piece);
-
+                    SwingUtilities.updateComponentTreeUI(board.getFrame());
                     if (board.getCurrentPiece() != null) {
                         if (board.getDropSpeed() == frameCounter) {
-                            int befScore = board.getScore();
                             board.movePieceDown(board.getCurrentPiece());
-                            int aftScore = board.getScore();
-                            board.addScore(-1 * (aftScore - befScore));
                         }
                     }
 
@@ -98,7 +95,6 @@ public class Game {
                     }
 
                 }
-                 
             }
             
         }   

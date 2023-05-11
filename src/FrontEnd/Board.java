@@ -38,6 +38,7 @@ public class Board {
     private int level;
     private int holdCount;
     private int numberOfLinesClearedOnLevel;
+    //CurrentPiece Data
 
     public Board(int x, int y, JFrame frame) {
         startX = x;
@@ -108,11 +109,7 @@ public class Board {
         dropSpeed = (int) speed;
     }
 
-    public void setCurrentPiece(PuzzlePiece temp) {
-        frame.remove(currentPiece.getLabel());
-        currentPiece = temp;
-        frame.add(currentPiece.getLabel());
-    }
+
 
     public PuzzlePiece getCurrentPiece() {
         return currentPiece;
@@ -124,7 +121,6 @@ public class Board {
         arrBoard.updateGrid(currentPiece);
         removePieceImages();
         updateImagesOfBoard();
-        frame.remove(nextPiece.getLabel());
         holdCount = 0;
         timesRotated = 0;
         int tempCleared = 0;
@@ -189,7 +185,7 @@ public class Board {
         for (int i  = 0; i < grid.length; i++) {
             for (int k = 0; k < grid[0].length; k++) {   
                 if (grid[i][k] != 0) {
-                    add(grid[i][k], i, k);
+                    add(grid[i][k], i, k, false, currentPiece);
                 }
             }
         }
@@ -200,34 +196,51 @@ public class Board {
         currentPiece = piece;
         //For some reason, the piece wouldn't show unless I set it twice.
         //So yeah...
-        piece.setX(piece.xStart() + 4*30);
-        piece.setY(piece.yStart());
-        frame.add(piece.getLabel());
-        //currentPiece.getHitbox().printGridLoc();
+        if (piece.getPieceType() != 1) {
+            piece.setY(piece.yStart());
+        } else {
+            piece.setY(piece.yStart() + squareDim);
+        }
+        
+        if (piece.getPieceType() == 3 || piece.getPieceType() == 6) {
+            piece.setX(piece.xStart() + 4*30);
+        } else if (piece.getPieceType() == 4) {
+            piece.setX(piece.xStart() + 5*30);
+        } else {
+            piece.setX(piece.xStart() + 3*30);
+        }
+
+        System.out.println("Piece type > "+piece.getPieceType());
+        addPiece(piece);
+        currentPiece.getHitbox().printGridLoc();
     }
 
     public void addProjPiece(PuzzlePiece piece) {
         //For some reason, the piece wouldn't show unless I set it twice.
         //So yeah...
+        System.out.println("Proj piece > ");
         if (projPiece != null) {
-            frame.remove(projPiece.getLabel());
-            projPiece.getHitbox().clear();
+            System.out.println("Removing projPiece");
+            removeProjPiece();
         }
-        projPiece = piece;
-        projPiece.setX(piece.getX());
-        projPiece.setY(piece.getY());
 
+        System.out.println("piece is at > "+piece.getX()+", "+piece.getY());
+        projPiece = piece;
         for (int i = 0; i < timesRotated; i++) {
             rotatePiece(projPiece, false);
         }
+        projPiece.setX(piece.getX());
+        projPiece.setY(piece.getY());
+        System.out.println("proj piece is at > "+projPiece.getX()+", "+projPiece.getY());
+        addPiece(projPiece);
 
-        frame.add(projPiece.getLabel());
-        //currentPiece.getHitbox().printGridLoc();
+        //addPiece(projPiece);
+        projPiece.getHitbox().printGridLoc();
     }
 
     public void removeProjPiece() {
         if (this.projPiece != null) {
-            frame.remove(projPiece.getLabel());
+            removePiece(projPiece);
             projPiece.getHitbox().clear();
             projPiece = null;
         }
@@ -246,16 +259,17 @@ public class Board {
         setNextPiece(piece);
         //For some reason, the piece wouldn't show unless I set it twice.
         //So yeah...
-        nextPiece.setX(boardWidth + 90+startX);
-        nextPiece.setY(140);
+        nextPiece.setXLabel(boardWidth + 90+startX);
+        nextPiece.setYLabel(140);
         frame.add(nextPiece.getLabel());
         //currentPiece.getHitbox().printGridLoc();
     }
 
 
-    public void add(int numColor, int row, int col) {
+    public void add(int numColor, int row, int col, boolean addToPieceLabels, PuzzlePiece piece) {
         String color = ";";
         //System.out.println("Num color > "+numColor);
+        ArrayList<JLabel> currentPieceLabels = piece.getPieceImages();
 
         switch(numColor) {
             case 1:
@@ -289,6 +303,34 @@ public class Board {
             case 8: 
             color = "images/greenBlock.png";
             break;
+
+            case 9: 
+            color = "images/yellowTrans.png";
+            break;
+
+            case 10: 
+            color = "images/tealTrans.png";
+            break;
+
+            case 11: 
+            color = "images/redTrans.png";
+            break;
+            
+            case 12: 
+            color = "images/purpleTrans.png";
+            break;
+
+            case 13: 
+            color = "images/orangeTrans.png";
+            break;
+
+            case 14: 
+            color = "images/blueTrans.png";
+            break;
+
+            case 15: 
+            color = "images/greenTrans.png";
+            break;
         }
         int newX = startX + (squareDim * col);
         int newY = startY + (squareDim * row);
@@ -296,21 +338,47 @@ public class Board {
         JLabel temp = new JLabel(new ImageIcon(color));
         Dimension size = temp.getPreferredSize();
         temp.setBounds(newX, newY, size.width, size.height);
-        pieceImages.add(temp);
         frame.add(temp);
+
+        if (addToPieceLabels) {
+            currentPieceLabels.add(temp);
+        } else {
+            pieceImages.add(temp);
+        }
     }
 
     public PuzzlePiece remove() {
 
-        frame.remove(currentPiece.getLabel());
         PuzzlePiece temp = currentPiece;
         currentPiece.getHitbox().clear();
+        removePiece(currentPiece);
         currentPiece = null;
 
-        removeProjPiece();
+        removePiece(projPiece);
         timesRotated = 0;
 
         return temp;
+    }
+
+    public void removePiece(PuzzlePiece piece) {
+        if (piece != null) {
+            ArrayList<JLabel> currentPieceLabels = piece.getPieceImages();
+            for (int i = 0; i < currentPieceLabels.size(); i++) {
+                frame.remove(currentPieceLabels.get(i));
+            }
+            currentPieceLabels.clear();
+        }
+
+    }
+
+    public void addPiece(PuzzlePiece piece) {
+        int[][] locations = piece.getHitbox().getGridLocations();   
+        for (int i = 0; i < locations.length; i++) {
+            int row = locations[i][1];
+            int col = locations[i][0];
+
+            add(piece.getColor(), row, col, true, piece);
+        }
     }
 
     public void removePieceImages() {
@@ -349,8 +417,12 @@ public class Board {
             }
         }
 
-        if (cont)
+        if (cont) {
+            removePiece(piece);
             piece.setX(piece.getX()+squareDim);
+            addPiece(piece);
+            //SwingUtilities.updateComponentTreeUI(frame);
+        }
 
     }
 
@@ -375,59 +447,86 @@ public class Board {
         for (int k = 0; k < futureLocations.length; k++) {
             if ((futureLocations[k][0] < 0) || (grid[futureLocations[k][1]][futureLocations[k][0]] != 0)) {
                 cont = false;
-                //System.out.println("Invalid!");
             }
         }
 
-        if (cont)
+        if (cont) {
+            removePiece(piece);
+            //System.out.println("Piece is at > "+piece.getX()+", "+piece.getY());
             piece.setX(piece.getX()-squareDim);
+            //System.out.println("Piece is now at > "+piece.getX()+", "+piece.getY());
+            addPiece(piece);
+            //SwingUtilities.updateComponentTreeUI(frame);
+        }
+        
         
         //currentPiece.getHitbox().printGridLoc();
     }
 
     public void movePieceDown(PuzzlePiece piece) {
+        int[][] futureLocations = new int[4][2];
+        int[][] currentLocations = piece.getHitbox().getGridLocations();
+
+        for (int i = 0 ; i < futureLocations.length; i++) {
+            futureLocations[i][0] = currentLocations[i][0];
+            futureLocations[i][1] = currentLocations[i][1]+1;
+        }
+        
         /* 
-        System.out.println("Before > ");
-        piece.getHitbox().printGridLoc();
+        for (int n = 0; n < futureLocations.length; n++) {
+            System.out.println(n + ": "+"("+futureLocations[n][0]+", "+futureLocations[n][1]+")");
+        }
         */
-        if (!pieceSettled(piece)) {
-            if ((piece.getY()+squareDim)+piece.getHeight() <= startY+Board.boardHeight) {
-                piece.setY(piece.getY()+squareDim);
-                /* 
-                System.out.println("After > ");
-                piece.getHitbox().printGridLoc();
-                */
-                addScore(1);
+
+        boolean cont = true;
+        for (int k = 0; k < futureLocations.length; k++) {
+            if ((futureLocations[k][1] >= arrBoard.getHeight())) {
+                cont = false;
             }
         }
+
+        if (cont) {
+            removePiece(piece);
+            piece.setY(piece.getY()+squareDim);
+            addPiece(piece);
+            //SwingUtilities.updateComponentTreeUI(frame);
+        }
+        //piece.getHitbox().printGridLoc();
     }
 
     public void holdPiece() {
         if (holdCount == 0) {
             if (hold == null) {
                 hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType(), false);
-                hold.setX(startX -180);
-                hold.setY(140);
+                hold.setXLabel(startX -180);
+                hold.setYLabel(140);
                 remove();
                 frame.add(hold.getLabel());
+
                 PuzzlePiece newPiece = new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false);
-                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), nextPiece(), false));
+                add(newPiece);
                 timesRotated = 0;
-                addProjPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), newPiece.getPieceType(), true));
+
+                addProjPiece(new PuzzlePiece(newPiece.getX(), newPiece.getY(), startX, startY, newPiece.getPieceType(), true));
                 addNextPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), -1, false));
             } else {
                 int pieceTypeHold = hold.getPieceType();
                 frame.remove(hold.getLabel());
                 hold = new PuzzlePiece(startX, startY, getXStart(), getYStart(), currentPiece.getPieceType(), false);
-                hold.setX(startX -180);
-                hold.setY(140);
+                hold.setXLabel(startX -180);
+                hold.setYLabel(140);
                 frame.add(hold.getLabel());
                 remove();
                 timesRotated = 0;
-                addProjPiece(new PuzzlePiece(startX, startY, getXStart(), getYStart(), hold.getPieceType(), true));
-                add(new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold, false));
+
+                PuzzlePiece newPiece = new PuzzlePiece(startX, startY, getXStart(), getYStart(), pieceTypeHold, false);
+                add(newPiece);
+                timesRotated = 0;
+
+                addProjPiece(new PuzzlePiece(newPiece.getX(), newPiece.getY(), startX, startY, pieceTypeHold, true));
+
             }
-            SwingUtilities.updateComponentTreeUI(frame);
+            //SwingUtilities.updateComponentTreeUI(frame);
             holdCount++;
         }
     }
@@ -445,7 +544,7 @@ public class Board {
 
     //Change to be more simplistic
     public boolean pieceSettled (PuzzlePiece piece) {
-
+        
         if (piece != null) {
             int[][] futureLocations = new int[4][2];
             int[][] currentLocations = piece.getHitbox().getGridLocations();
@@ -455,7 +554,7 @@ public class Board {
                 futureLocations[i][0] = currentLocations[i][0];
                 futureLocations[i][1] = currentLocations[i][1] + 1;
             }
-            
+
             for (int k = 0; k < futureLocations.length; k++) {
                 if (futureLocations[k][1] >= arrBoard.getHeight()) {
                     return true;
@@ -485,31 +584,23 @@ public class Board {
 
         if (tempPiece != null) {
             timesRotated++;
-            ImageIcon shape = piece.getShape();
-
-            BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
-            ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
-
             //This causes a memory leak, I need ot fix once I get it working
-            piece.setShape(temp);
-            piece.setX(piece.getX() - (arrBoard.getSRSOffset()[0] * squareDim));
-            piece.setY(piece.getY() + (arrBoard.getSRSOffset()[1] * squareDim));
-            System.out.println("Test piece at > "+"("+tempPiece.getX()+", "+tempPiece.getY()+")");
-            System.out.println("piece at > "+"("+piece.getX()+", "+piece.getY()+")");
+            removePiece(piece);
             piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
-            piece.getHitbox().setSpecialConditions(tempPiece.getHitbox().getSpecialLocations());
+            //currentPiece.getHitbox().printGridLoc();
+            
+            piece.setX(tempPiece.getX());
+            piece.setY(tempPiece.getY());
 
             if (timesRotated == 4)
                 timesRotated = 0;
 
-            currentPiece.getHitbox().printGridLoc();
-            int[][] specialLocations = piece.getHitbox().getSpecialLocations();
+            addPiece(piece);
+            //SwingUtilities.updateComponentTreeUI(frame);
+            
+            //currentPiece.getHitbox().printGridLoc();
 
-            for (int m = 0; m < specialLocations.length; m++) {
-                for (int k = 0; k < specialLocations[0].length-1; k++) {
-                    System.out.println("Special Location after > ("+specialLocations[m][k]+", "+specialLocations[m][k+1]);
-                }
-            }
+            
             /* 
             System.out.println("Board > ");
             currentPiece.getHitbox().printGridLoc();
@@ -520,49 +611,25 @@ public class Board {
     }
 
     public void rotatePiece(PuzzlePiece piece, boolean checkCol) {
-            ImageIcon shape = piece.getShape();
+            System.out.println("Rotating the projPiece > ");
             PuzzlePiece tempPiece = arrBoard.rotatePiece(piece, timesRotated, checkCol);
+            if (tempPiece != null) {
+                //This causes a memory leak, I need ot fix once I get it working
+                System.out.println("Test piece at > "+"("+tempPiece.getX()+", "+tempPiece.getY()+")");
+                System.out.println("piece at > "+"("+piece.getX()+", "+piece.getY()+")");
+                piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
+                System.out.println("Before > ");
+                int[][] locations = piece.getHitbox().getGridLocations();
+                for (int m = 0; m < locations.length; m++) {
+                    for (int k = 0; k < locations[0].length-1; k++) {
+                        System.out.println("now at location > ("+locations[m][k]+", "+locations[m][k+1]+") after projRotation");
+                    }
+                }
 
-            BufferedImage rotated = rotate(imageIconToBufferedImage(shape), 90.0);
-            ImageIcon temp = new ImageIcon(rotated.getScaledInstance(rotated.getWidth(),rotated.getHeight(), java.awt.Image.SCALE_SMOOTH));
-
-            //This causes a memory leak, I need ot fix once I get it working
-            piece.setShape(temp);
-            piece.setX(piece.getX() - (arrBoard.getSRSOffset()[0] * squareDim));
-            piece.setY(piece.getY() + (arrBoard.getSRSOffset()[1] * squareDim));
-            System.out.println("Test piece at > "+"("+tempPiece.getX()+", "+tempPiece.getY()+")");
-            System.out.println("piece at > "+"("+piece.getX()+", "+piece.getY()+")");
-            piece.getHitbox().setGridLoc(tempPiece.getHitbox().getGridLocations());
-            piece.getHitbox().setSpecialConditions(tempPiece.getHitbox().getSpecialLocations());
-
-            if (timesRotated == 4)
-                timesRotated = 0;
-
+                //piece.getHitbox().printGridLoc();
+                System.out.println("after > ");
+                piece.getHitbox().printGridLoc();
+            }
     }
-
-    public static BufferedImage imageIconToBufferedImage(ImageIcon icon) {
-        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-        BufferedImage.TYPE_INT_ARGB);
-        Graphics graphics = bufferedImage.createGraphics();
-        icon.paintIcon(null, graphics, 0, 0);
-        graphics.dispose();
-        return bufferedImage;
-    }
-
-    public static BufferedImage rotate(BufferedImage bimg, Double angle) {
-	    double sin = Math.abs(Math.sin(Math.toRadians(angle))),
-	           cos = Math.abs(Math.cos(Math.toRadians(angle)));
-	    int w = bimg.getWidth();
-	    int h = bimg.getHeight();
-	    int neww = (int) Math.floor(w*cos + h*sin),
-	        newh = (int) Math.floor(h*cos + w*sin);
-	    BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
-	    Graphics2D graphic = rotated.createGraphics();
-	    graphic.translate((neww-w)/2, (newh-h)/2);
-	    graphic.rotate(Math.toRadians(angle), w/2, h/2);
-	    graphic.drawRenderedImage(bimg, null);
-	    graphic.dispose();
-	    return rotated;
-	}
     
 }

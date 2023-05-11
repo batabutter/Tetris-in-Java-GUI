@@ -39,21 +39,19 @@ public class Player {
     }
     if (moveDir == 1) {
         board.movePieceDown(board.getCurrentPiece());
+        board.addScore(2);
     } else if (moveDir == 2) {
         board.movePieceRight();
     } else if (moveDir == 3) {
         board.movePieceLeft();
     } else if (moveDir ==4) {
         board.rotatePiece();
-        moveDir = 0;
     } else if (moveDir == 5) {
         board.settlePiece(board.getCurrentPiece());
     } else if (moveDir == 6) {
         board.holdPiece();
     }
     if (moveDir != 0) {
-        
-         
          if (board.getCurrentPiece() != null && board.getProjPiece() != null) {
             if (!board.pieceSettled(board.getCurrentPiece()))
                 projPiece(board.getCurrentPiece());
@@ -76,8 +74,6 @@ public class Player {
 
    //Creates new piece at given location
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
-        piece.setX(piece.xStart() + 4*30);
-        piece.setY(piece.yStart());
         //Maybe change to be more accurate, but in my opinion, this looks nicer
         setGameOver(board.getBoardGrid().gameOverCondition(piece));
         if (!gameOver){
@@ -85,7 +81,7 @@ public class Player {
             board.addNextPiece(nextPiece);
             projPiece(board.getCurrentPiece());
         }
-        SwingUtilities.updateComponentTreeUI(frame);
+
 
    }
 
@@ -93,12 +89,8 @@ public class Player {
     PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType(), true);
     board.addProjPiece(projPiece);
     while (!board.pieceSettled(projPiece)) {
-        int befScore = board.getScore();
         board.movePieceDown(projPiece);
-        int aftScore = board.getScore();
-        board.addScore(-1 * (aftScore - befScore));
     }
-    SwingUtilities.updateComponentTreeUI(frame);
    }
 
     class KeyboardControls implements KeyListener {

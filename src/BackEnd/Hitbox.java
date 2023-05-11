@@ -10,7 +10,9 @@ public class Hitbox {
     private int xStart;
     private int yStart;
     private int[][] gridLoc;
-    private int[][] specialConditions;
+    private double xPivot;
+    private double yPivot;
+    private double[][] boundingBox;
 
     public Hitbox(int pieceType, PuzzlePiece piece, int xStart, int yStart) {
         //Always creates a hitbox starting at 0,0
@@ -22,7 +24,6 @@ public class Hitbox {
         int xCell = (piece.getX() - piece.xStart()) / Board.squareDim;
         int yCell = (piece.getY() - piece.yStart()) / Board.squareDim;
         this.gridLoc = new int[4][2];
-        
 
         //Does this cause a memory leak?
         switch (pieceType) {
@@ -31,14 +32,14 @@ public class Hitbox {
                                 {xCell,yCell+1},
                                 {xCell + 1,yCell},
                                 {xCell + 1,yCell + 1}};
-                this.specialConditions = temp;
+                this.gridLoc = temp;
                 break;
             case 1: 
                 int[][] temp2 = {{xCell,yCell},
-                                {xCell,yCell+1},
-                                {xCell,yCell+2},
-                                {xCell,yCell + 3}};
-                this.specialConditions = temp2;
+                                {xCell+1,yCell},
+                                {xCell+2,yCell},
+                                {xCell+3,yCell}};
+                this.gridLoc = temp2;
             break;
 
             case 2:
@@ -46,24 +47,24 @@ public class Hitbox {
                                 {xCell+1,yCell},
                                 {xCell+1,yCell+1},
                                 {xCell+2,yCell + 1}};
-                this.specialConditions = temp3;
+                this.gridLoc = temp3;
             break;
 
             case 3:
-                int[][] temp4 = {{xCell,yCell+1},
-                                {xCell+1,yCell+1},
-                                {xCell+1,yCell},
-                                {xCell+2,yCell + 1}};
-                this.specialConditions = temp4;
+                int[][] temp4 = {{xCell,yCell},
+                                {xCell-1,yCell+1},
+                                {xCell,yCell+1},
+                                {xCell+1,yCell + 1}};
+                this.gridLoc = temp4;
             break;
 
             case 4:
             //Orange
-                int[][] temp5 = {{xCell,yCell+1},
-                                {xCell+1,yCell+1},
-                                {xCell+2,yCell+1},
-                                {xCell+2,yCell}};
-                this.specialConditions = temp5;
+                int[][] temp5 = {{xCell,yCell},
+                                {xCell-1,yCell+1},
+                                {xCell-2,yCell+1},
+                                {xCell,yCell+1}};
+                this.gridLoc = temp5;
             break;
 
             case 5:
@@ -71,33 +72,63 @@ public class Hitbox {
                                 {xCell,yCell+1},
                                 {xCell+1,yCell+1},
                                 {xCell+2,yCell+1}};
-                this.specialConditions = temp6;
+                this.gridLoc = temp6;
             break;
 
             case 6:
-                int[][] temp7 = {{xCell,yCell+1},
-                                {xCell+1,yCell+1},
+                int[][] temp7 = {{xCell,yCell},
                                 {xCell+1,yCell},
-                                {xCell+2,yCell}};
-                this.specialConditions = temp7;
+                                {xCell,yCell+1},
+                                {xCell-1,yCell + 1}};
+                this.gridLoc = temp7;
             break;
 
         }
+
+        //Change
+        if (pieceType ==  1) {
+            xPivot = 1.5;
+            yPivot = 0.5;
+        } else {
+            xPivot = 1;
+            yPivot = 0; 
+        }
     }
 
-
     public void updateGridLoc() {
-        int tempY;
-        int tempX;
+        int tempY = 0;
+        int tempX = 0;
+        tempY = (piece.getY() - yStart) / Board.squareDim;
+        tempX = (piece.getX() - xStart) / Board.squareDim;
+        
+        //System.out.println("Temp y before > "+tempY);
+        //System.out.println("Temp x before > "+tempX);
+        //System.out.println("changing > "+gridLoc[0][1]);
+        
+        for (int i = 0; i < gridLoc.length; i++) {
+            //System.out.println("Before > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
+                
+        }
+        
+        tempX = tempX - gridLoc[0][0];
+        tempY = tempY - gridLoc[0][1];
+        //System.out.println("Tempx > "+tempX);
+        //System.out.println("Temp y after > "+tempY);
         if (piece.getY() != 0) {
             for (int i = 0; i < gridLoc.length; i++) {
-                tempY = (piece.getY()- yStart) / Board.squareDim;
-                tempX = (piece.getX() - xStart) / Board.squareDim;
-
-                gridLoc[i][0] = tempX + specialConditions[i][0];
-                gridLoc[i][1] = tempY + specialConditions[i][1];
+                
+                //System.out.println("before > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
+                //System.out.println("Piece is at > ("+piece.getX()+", "+piece.getY()+")");
+                //System.out.println("x and y start > ("+xStart+", "+yStart+")");
+                
+                
+                gridLoc[i][0] = tempX + gridLoc[i][0];
+                gridLoc[i][1] = gridLoc[i][1] + tempY;
+                //System.out.println("after > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
+                
             }
         }
+        //System.out.println("-----------------------");
     }
     
     public void printGridLoc() {
@@ -147,14 +178,6 @@ public class Hitbox {
         gridLoc = locations;
     }
 
-    public void setSpecialConditions(int[][] piece) {
-        specialConditions = piece;
-    }
-
-    public int[][] getSpecialLocations() {
-        return specialConditions;
-    }
-
     //This should alwyas be the last value in gridLoc
     public int[] getBottomMostLocation() {
         return gridLoc[gridLoc.length-1];
@@ -167,6 +190,30 @@ public class Hitbox {
 
     public int getPieceType() {
         return pieceType;
+    }
+
+    public double getXPivot() {
+        return xPivot;
+    }
+
+    public double getYPivot() {
+        return yPivot;
+    }
+    
+    public void setXPivot(double x) {
+        xPivot = x;
+    }
+
+    public void setYPivot(double y) {
+        yPivot = y;
+    }
+
+    private void calculateXPivot() {
+
+    }
+
+    private void calculateYPivot() {
+
     }
 
 }
