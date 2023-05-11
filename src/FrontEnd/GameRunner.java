@@ -185,22 +185,25 @@ public class GameRunner extends JPanel implements ActionListener{
     }
 
     public void drawGameOverGraphics(int startX, int startY, int boardWidth, int boardHeight, int squareDim, Graphics g) {
-        g.setColor(Color.black);
+        /*g.setColor(Color.black);
         g.fillRect(startX, startY, boardWidth, boardHeight);
 
         g.setColor(Color.yellow);
         g.setFont(new Font("Arial", Font.BOLD, 50));
-        g.drawString("Game Over", frameWidth/2, frameHeight/2);
+        g.drawString("Game Over", frameWidth/2, frameHeight/2);*/
+        GameOver over = new GameOver();
 
 
         //Draw the previous high scores and everything here
 
 
     }
-
+    public int retScore(){
+        return score;
+    }
     public void gameOverScreen(JFrame frame, int score) {
         frame.setSize(frameWidth,frameHeight);
-        frame.setBackground(Color.black);
+        //frame.setBackground(Color.black);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
@@ -211,14 +214,15 @@ public class GameRunner extends JPanel implements ActionListener{
         addHighScore(score);
 
         drawGameOverGraphics(250,70,boardWidth, boardHeight, squareDim, g);
+        //GameOver over = new GameOver();
         JLabel backGroundImg = new JLabel();
         backGroundImg.setIcon(new ImageIcon(background.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));;
         Image myImage = background.getScaledInstance(frameWidth, frameHeight, squareDim);
 
 
 
-        frame.setContentPane(new ImagePanel(myImage));
-        frame.setVisible(true);
+        //frame.setContentPane(new ImagePanel(myImage));
+        //frame.setVisible(true);
     }
 
     private void addHighScore(int score) {
@@ -228,5 +232,6 @@ public class GameRunner extends JPanel implements ActionListener{
     public static void main(String[] args) {
     	new GameRunner();
 	}
+
 
 }
