@@ -1,6 +1,7 @@
 package BackEnd;
 import java.awt.*;
 import javax.swing.*;
+import java.util.ArrayList;
 public class PuzzlePiece {
     //Orientation of these elements are dependent on the program working
 
@@ -28,10 +29,11 @@ public class PuzzlePiece {
     private int yStart;
     private int farthestX;
     private int color;
+    private ArrayList<JLabel> currentPieceLabels;
 
 
     public PuzzlePiece(int xStart, int yStart, int boardXStart, int boardYStart, int pieceType, boolean hollow) {
-        setPieceType(1, hollow);
+        setPieceType(pieceType, hollow);
 
         this.xStart = boardXStart;
         this.yStart = boardYStart;
@@ -39,11 +41,11 @@ public class PuzzlePiece {
         yCell = yStart;
         pieceLabel = new JLabel(shape);
         size = pieceLabel.getPreferredSize();
-        hitbox = new Hitbox(this.pieceType, this, xStart, yStart);
+        hitbox = new Hitbox(this.pieceType, this, this.xStart, this.yStart);
         farthestX = -1;
+        currentPieceLabels = new ArrayList<JLabel>();
 
         //I will alter this later
-        color = this.pieceType + 2;
     }
 
     private void setPieceType(int pieceType, boolean hollow) {
@@ -52,14 +54,18 @@ public class PuzzlePiece {
             index = (int)(Math.random()*7);
             this.pieceType = index;
             shape = blocks[this.pieceType];
+            this.color = this.pieceType + 2;
         } else if (hollow) {
             index = pieceType + 7;
             this.pieceType = pieceType;
             shape = blocks[index];
+            this.color = index + 2;
         } else {
             this.pieceType = index;
             shape = blocks[this.pieceType];
+            color = this.pieceType + 2;
         }
+        
     }
 
     public int getPieceType() {
@@ -86,8 +92,13 @@ public class PuzzlePiece {
     //Change Icon here too
     public void setX(int cell){
         xCell = cell;
-        pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+        //pieceLabel.setBounds(xCell, yCell, size.width, size.height);
         hitbox.updateGridLoc();
+    }
+
+    public void setXLabel(int cell){
+        xCell = cell;
+        pieceLabel.setBounds(xCell, yCell, size.width, size.height);
     }
 
     public int getX(){
@@ -95,8 +106,13 @@ public class PuzzlePiece {
     }
     public void setY(int cell){
         yCell = cell;
-        pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+        //pieceLabel.setBounds(xCell, yCell, size.width, size.height);
         hitbox.updateGridLoc();
+    }
+
+    public void setYLabel(int cell){
+        yCell = cell;
+        pieceLabel.setBounds(xCell, yCell, size.width, size.height);
     }
     public int getY(){
         return yCell;
@@ -119,7 +135,7 @@ public class PuzzlePiece {
         pieceLabel.setIcon(shape);
 
         size = pieceLabel.getPreferredSize();
-        pieceLabel.setBounds(xCell, yCell, size.width, size.height);
+        //pieceLabel.setBounds(xCell, yCell, size.width, size.height);
 
     }
 
@@ -145,7 +161,6 @@ public class PuzzlePiece {
     //Returns a boolean value: if the piece was successfully rotated or not
     public void changeToPiece(PuzzlePiece piece) {
         hitbox.setGridLoc(piece.getHitbox().getGridLocations());
-        hitbox.setSpecialConditions(piece.getHitbox().getGridLocations());
         //piece = null;
     }
 
@@ -167,5 +182,13 @@ public class PuzzlePiece {
 
     public int getTimesRotated(){
         return this.timesRotated;
+    }
+
+    public ArrayList<JLabel> getPieceImages (){
+        return currentPieceLabels;
+    }
+
+    public void addLabel(JLabel label) {
+        currentPieceLabels.add(label);
     }
 }
