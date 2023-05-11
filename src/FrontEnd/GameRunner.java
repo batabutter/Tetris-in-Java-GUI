@@ -198,7 +198,7 @@ public class GameRunner extends JPanel implements ActionListener{
 
 
     }
-    public int retScore(){
+    public int retScore(int score){
         return score;
     }
     public void gameOverScreen(JFrame frame, int score) {
