@@ -226,16 +226,20 @@ public class Board {
 
         System.out.println("piece is at > "+piece.getX()+", "+piece.getY());
         projPiece = piece;
-        for (int i = 0; i < timesRotated; i++) {
-            rotatePiece(projPiece, false);
+        int[][] tempLocations = currentPiece.getHitbox().getGridLocations();
+        int[][] newPieceLocations = new int[4][2];
+        for (int i = 0; i < tempLocations.length; i++){
+            newPieceLocations[i][0] = tempLocations[i][0];
+            newPieceLocations[i][1] = tempLocations[i][1];
         }
+        projPiece.getHitbox().setGridLoc(newPieceLocations);
         projPiece.setX(piece.getX());
         projPiece.setY(piece.getY());
         System.out.println("proj piece is at > "+projPiece.getX()+", "+projPiece.getY());
-        addPiece(projPiece);
+        //addPiece(projPiece);
 
         //addPiece(projPiece);
-        projPiece.getHitbox().printGridLoc();
+        //projPiece.getHitbox().printGridLoc();
     }
 
     public void removeProjPiece() {
@@ -463,7 +467,7 @@ public class Board {
         //currentPiece.getHitbox().printGridLoc();
     }
 
-    public void movePieceDown(PuzzlePiece piece) {
+    public void movePieceDown(PuzzlePiece piece, boolean displayPiece) {
         int[][] futureLocations = new int[4][2];
         int[][] currentLocations = piece.getHitbox().getGridLocations();
 
@@ -486,14 +490,20 @@ public class Board {
         }
 
         if (cont) {
-            removePiece(piece);
-            piece.setY(piece.getY()+squareDim);
-            addPiece(piece);
+            if (displayPiece) {
+                removePiece(piece);
+                piece.setY(piece.getY()+squareDim);
+                addPiece(piece);
+            } else {
+                piece.setY(piece.getY()+squareDim);
+            }
             //SwingUtilities.updateComponentTreeUI(frame);
         }
         //piece.getHitbox().printGridLoc();
     }
 
+    
+    
     public void holdPiece() {
         if (holdCount == 0) {
             if (hold == null) {
@@ -531,13 +541,15 @@ public class Board {
         }
     }
 
-    public void settlePiece(PuzzlePiece piece) {
+    public void settlePiece(PuzzlePiece piece, boolean update) {
         while (!pieceSettled(piece)) {
-            movePieceDown(piece);
+            movePieceDown(piece, false);
             addScore(2);
         }
+        addPiece(piece);
 
-        update();
+        if (update)
+            update();
     }
 
 

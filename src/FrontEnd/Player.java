@@ -38,7 +38,7 @@ public class Player {
         keyAdded = true;
     }
     if (moveDir == 1) {
-        board.movePieceDown(board.getCurrentPiece());
+        board.movePieceDown(board.getCurrentPiece(), true);
         board.addScore(2);
     } else if (moveDir == 2) {
         board.movePieceRight();
@@ -46,8 +46,9 @@ public class Player {
         board.movePieceLeft();
     } else if (moveDir ==4) {
         board.rotatePiece();
+        System.out.println("Rotating piece");
     } else if (moveDir == 5) {
-        board.settlePiece(board.getCurrentPiece());
+        board.settlePiece(board.getCurrentPiece(), true);
     } else if (moveDir == 6) {
         board.holdPiece();
     }
@@ -88,9 +89,8 @@ public class Player {
    public void projPiece(PuzzlePiece piece) {
     PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType(), true);
     board.addProjPiece(projPiece);
-    while (!board.pieceSettled(projPiece)) {
-        board.movePieceDown(projPiece);
-    }
+    System.out.println("ProjPiece called");
+    board.settlePiece(projPiece, false);
    }
 
     class KeyboardControls implements KeyListener {
