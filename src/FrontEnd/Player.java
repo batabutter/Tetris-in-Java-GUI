@@ -46,12 +46,8 @@ public class Player {
         board.holdPiece();
     }
     if (moveDir != 0) {
-         if (board.getCurrentPiece() != null && board.getProjPiece() != null) {
-            if (!board.pieceSettled(board.getCurrentPiece()))
-                projPiece(board.getCurrentPiece());
-            else 
-                board.removeProjPiece();
-    
+         if (board.getCurrentPiece() != null) {
+            projPiece(board.getCurrentPiece());
         }
          
     }
