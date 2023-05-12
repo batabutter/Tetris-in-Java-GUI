@@ -40,12 +40,18 @@ public class GameRunner extends JPanel implements ActionListener{
                 elapsedTime = (new Date()).getTime() - startTime;
             }
             frameCounter++;
-            System.out.println("On frame > "+frameCounter);
+            try {
+                Thread.sleep(10);     
+            } catch (Exception e) {
+                System.out.println("Frame unprocessed");
+            };
 
             if (frameCounter == 60)
                 frameCounter = 0;
         }
         mainMenu.setVisible(false);
+        mainMenu.setResizable(false);
+        board.setResizable(false);
         int score = runGame(board);
         board.setVisible(false);
 
@@ -192,11 +198,7 @@ public class GameRunner extends JPanel implements ActionListener{
         g.setFont(new Font("Arial", Font.BOLD, 50));
         g.drawString("Game Over", frameWidth/2, frameHeight/2);*/
         GameOver over = new GameOver();
-
-
-        //Draw the previous high scores and everything here
-
-
+     
     }
     public int retScore(int score){
         return score;

@@ -1,8 +1,6 @@
 package FrontEnd;
-import BackEnd.Game;
 import BackEnd.PuzzlePiece;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
@@ -11,15 +9,11 @@ public class Player {
     //private JFrame frame;
     private JFrame frame;
     private boolean keyAdded;
-    private int xStart;
-    private int yStart;
     private int moveDir;
     private boolean gameOver;
 
     public Player(int xStart, int yStart, JFrame frame) {
         this.board = new Board(xStart,yStart, frame);
-        this.xStart = xStart;
-        this.yStart = yStart;
         this.frame = frame;
         keyAdded = false;
         moveDir = 0;
@@ -32,7 +26,7 @@ public class Player {
 
    public void movePiece(PuzzlePiece piece) {
     
-    KeyboardControls k = new KeyboardControls(piece);
+    KeyboardControls k = new KeyboardControls();
     if (!keyAdded) {
         frame.addKeyListener(k);
         keyAdded = true;
@@ -46,7 +40,6 @@ public class Player {
         board.movePieceLeft();
     } else if (moveDir ==4) {
         board.rotatePiece();
-        System.out.println("Rotating piece");
     } else if (moveDir == 5) {
         board.settlePiece(board.getCurrentPiece(), true);
     } else if (moveDir == 6) {
@@ -89,22 +82,12 @@ public class Player {
    public void projPiece(PuzzlePiece piece) {
     PuzzlePiece projPiece = new PuzzlePiece(piece.getX(), piece.getY(), board.getXStart(), board.getYStart(), piece.getPieceType(), true);
     board.addProjPiece(projPiece);
-    System.out.println("ProjPiece called");
+    //System.out.println("ProjPiece called");
     board.settlePiece(projPiece, false);
    }
 
     class KeyboardControls implements KeyListener {
-        private int x;
-        private int y;
-        private PuzzlePiece piece;
 
-        KeyboardControls(PuzzlePiece piece) {
-            this.piece = piece;
-            x = piece.getX();
-            y = piece.getY();
-            Dimension size = piece.getLabel().getPreferredSize();
-        }
-        
         public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
 			

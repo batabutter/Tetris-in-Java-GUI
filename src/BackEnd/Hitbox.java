@@ -12,7 +12,6 @@ public class Hitbox {
     private int[][] gridLoc;
     private double xPivot;
     private double yPivot;
-    private double[][] boundingBox;
 
     public Hitbox(int pieceType, PuzzlePiece piece, int xStart, int yStart) {
         //Always creates a hitbox starting at 0,0
@@ -206,14 +205,6 @@ public class Hitbox {
 
     public void setYPivot(double y) {
         yPivot = y;
-    }
-
-    private void calculateXPivot() {
-
-    }
-
-    private void calculateYPivot() {
-
     }
 
 }

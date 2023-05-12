@@ -9,7 +9,6 @@ public class Game {
     private Player p1;
     private Player p2;
     private Board board;
-    private Board board2;
     
     public Game(Player p1) {
         gameOver = false;
@@ -17,9 +16,6 @@ public class Game {
         board = p1.getBoard();
     }
 
-    //This method will be given a current version of whatever board
-    //It will then anaylize the board to see if it is completely "settled"
-    //If it is, it will return a boolean
     public static boolean pieceSettled(Board board) {
         
         return false;
@@ -35,8 +31,6 @@ public class Game {
         start = (int) System.currentTimeMillis();
         int frameCounter = 0;
         int settleCount = 0;
-        boolean pieceSettled = true;
-        int tempCount = 0;
         int tempTime = 0;
         PuzzlePiece piece;
         
@@ -56,28 +50,15 @@ public class Game {
 
                 if (board.getCurrentPiece() == null) {
                     p1.createNewPiece(piece, nextPiece);
-                    pieceSettled = false;
                 }
-                //p1.movePiece(board.getCurrentPiece());
-                //System.out.println("Settled? "+board.pieceSettled());
                 if (!p1.gameOver()) {
-
-                //System.out.println("On frame >" +frameCounter);
                     p1.movePiece(piece);
-                    SwingUtilities.updateComponentTreeUI(board.getFrame());
                     if (board.getCurrentPiece() != null) {
-                        if (board.getDropSpeed() == frameCounter) {
+                        if (frameCounter % board.getDropSpeed() == 0) {
                             board.movePieceDown(board.getCurrentPiece(),true);
                         }
                     }
 
-                    if (frameCounter == 60) {
-                        //System.out.println("Temp count >" +tempCount);
-                        //System.out.println("Temp >"+tempCount);
-                    }
-
-                    
-                    //This can be adjusted later on as well
                     if (board.getCurrentPiece() != null) {
                         if (board.pieceSettled(board.getCurrentPiece())) {
                             settleCount++;
@@ -90,11 +71,8 @@ public class Game {
                         }
                     }
 
-                    if (frameCounter == 60) {
-                        frameCounter = 0;
-                    }
-
                 }
+                SwingUtilities.updateComponentTreeUI(board.getFrame());
             }
             
         }   

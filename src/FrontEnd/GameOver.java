@@ -46,10 +46,9 @@ public class GameOver {
                 frame.add(MainMenu);
                 frame.setSize(900,800);
                 frame.getContentPane().setBackground(Color.black);
-                //frame.setBackground(Color.black);
+                frame.setResizable(false);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.add(pane);
-                //frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }
@@ -99,18 +98,13 @@ public class GameOver {
                 g2d.setColor(Color.black);
                 g2d.fillRect(0,0,900,800);
                 g2d.setBackground(Color.black);
-                FontMetrics fm = g2d.getFontMetrics();
                 g2d.setColor(Color.blue);
-                Font stringFont = new Font(Font.DIALOG, Font.ITALIC, 100);
-                //g2d.setFont(stringFont);
                 g2d.setFont(new Font("Futura-Bold", Font.PLAIN, 100)); 
-                //int yPos = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
                 int yPos = 200;
                 g2d.drawString(message, xPos, yPos);
                 g2d.setFont(new Font("Futura-Bold", Font.PLAIN, 50));
                 g2d.setColor(Color.green);
                 g2d.drawString("Score: " + 1000, 300, 410);
-                //System.out.println("("+xPos + "," + yPos+")");
                 g2d.dispose();
             }
         }
