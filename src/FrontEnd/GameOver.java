@@ -20,12 +20,13 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class GameOver {
-
-    public static void main(String[] args) {
+    GameRunner runner;
+    /*public static void main(String[] args) {
         new GameOver();
-    }
+    }*/
 
-    public GameOver() {
+    public GameOver(GameRunner runner) {
+        this.runner = runner;
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -37,7 +38,7 @@ public class GameOver {
 
                 Queue<String> queue = new LinkedList<>();
                 queue.add("Game Over");
-                queue.add("Score : 1000");
+                queue.add("Score : " + runner.getScore());
 
                 Inner pane = new Inner();
                 pane.setMessages(queue);
@@ -109,7 +110,7 @@ public class GameOver {
                 g2d.drawString(message, xPos, yPos);
                 g2d.setFont(new Font("Futura-Bold", Font.PLAIN, 50));
                 g2d.setColor(Color.green);
-                g2d.drawString("Score: " + 1000, 300, 410);
+                g2d.drawString("Score: " + runner.getScore(), 300, 410);
                 //System.out.println("("+xPos + "," + yPos+")");
                 g2d.dispose();
             }

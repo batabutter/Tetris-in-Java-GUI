@@ -64,7 +64,7 @@ public class Game {
 
                 //System.out.println("On frame >" +frameCounter);
                     p1.movePiece(piece);
-                    SwingUtilities.updateComponentTreeUI(board.getFrame());
+                    //SwingUtilities.updateComponentTreeUI(board.getFrame());
                     if (board.getCurrentPiece() != null) {
                         if (board.getDropSpeed() == frameCounter) {
                             board.movePieceDown(board.getCurrentPiece(),true);
@@ -95,6 +95,7 @@ public class Game {
                     }
 
                 }
+                SwingUtilities.updateComponentTreeUI(board.getFrame());
             }
             
         }   

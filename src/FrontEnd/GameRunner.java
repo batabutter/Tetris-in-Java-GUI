@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.util.*;
 import java.util.Timer;
 public class GameRunner extends JPanel implements ActionListener{
+    private int score;
     private JFrame mainMenu;
     private JFrame board;
     private JFrame gameOverScreen;
@@ -46,7 +47,7 @@ public class GameRunner extends JPanel implements ActionListener{
                 frameCounter = 0;
         }
         mainMenu.setVisible(false);
-        int score = runGame(board);
+        score = runGame(board);
         board.setVisible(false);
 
         gameOverScreen = new JFrame("Tetris");
@@ -191,14 +192,14 @@ public class GameRunner extends JPanel implements ActionListener{
         g.setColor(Color.yellow);
         g.setFont(new Font("Arial", Font.BOLD, 50));
         g.drawString("Game Over", frameWidth/2, frameHeight/2);*/
-        GameOver over = new GameOver();
+        GameOver over = new GameOver(this);
 
 
         //Draw the previous high scores and everything here
 
 
     }
-    public int retScore(int score){
+    public int getScore(){
         return score;
     }
     public void gameOverScreen(JFrame frame, int score) {
@@ -211,7 +212,6 @@ public class GameRunner extends JPanel implements ActionListener{
         BufferedImage background = new BufferedImage(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
         Graphics g = background.createGraphics();
 
-        addHighScore(score);
 
         drawGameOverGraphics(250,70,boardWidth, boardHeight, squareDim, g);
         //GameOver over = new GameOver();
@@ -223,10 +223,6 @@ public class GameRunner extends JPanel implements ActionListener{
 
         //frame.setContentPane(new ImagePanel(myImage));
         //frame.setVisible(true);
-    }
-
-    private void addHighScore(int score) {
-
     }
 
     public static void main(String[] args) {
