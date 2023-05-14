@@ -28,10 +28,8 @@ public class GameRunner extends JPanel implements ActionListener{
     public GameRunner() {
 
         mainMenu = new JFrame("Menu");
-        //contentPane.setBackground(Color.black);
         mainMenuScreen(mainMenu);
 
-        //If any needed animations or differnet displays are needed, you can just use this loop
         while (!startGame) {
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
@@ -57,13 +55,10 @@ public class GameRunner extends JPanel implements ActionListener{
         gameOverScreen = new JFrame("Tetris");
         gameOverScreen(gameOverScreen, score);
 
-
-        //frame.setVisible(false);
     }
     @Override
     
     public void actionPerformed(ActionEvent e) {
-        //throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
         if(e.getActionCommand().equals("start")){
             board = new JFrame("Tetris");
             changeBoard(board);
@@ -73,12 +68,9 @@ public class GameRunner extends JPanel implements ActionListener{
             double waitTime = 0;
 
             while (elapsedTime < waitTime*1000) {
-                //can be implemented to change for like, a countdown or something
                 elapsedTime = (new Date()).getTime() - startTime;
             }
             startGame = true;
-            
-            //The frame will not update for some reason until this method has finished
         }
 
 
@@ -103,8 +95,6 @@ public class GameRunner extends JPanel implements ActionListener{
         frame.setContentPane(new ImagePanel(myImage));
         frame.setVisible(true);
         
-
-        //Most important piece of code in the entire project
         frame.setLayout(null);
 
     }
@@ -137,7 +127,6 @@ public class GameRunner extends JPanel implements ActionListener{
         frame.add(start);
         start.addActionListener(this);
         JLabel label;
-        //frame.setBackground(Color.black);
         frame.getContentPane().setBackground(Color.black);
         ImageIcon logo = new ImageIcon("Images//tetris_logo.png");
         label = new JLabel(logo);
@@ -156,15 +145,13 @@ public class GameRunner extends JPanel implements ActionListener{
         g.setColor(new Color(112,112,112));
             
             
-            for (int i = 0; i <= boardWidth; i = i+squareDim) {
-                g.drawLine(startX+i, startY, startX+i, startY + boardHeight);
-            }
+        for (int i = 0; i <= boardWidth; i = i+squareDim) {
+            g.drawLine(startX+i, startY, startX+i, startY + boardHeight);
+        }
             
-            for (int i = 0; i <= boardHeight; i+= squareDim) {
-                g.drawLine(startX, startY+i, startX+boardWidth, startY + i);
-            }
-
-            //In the future, variables should be created to designate where they are
+        for (int i = 0; i <= boardHeight; i+= squareDim) {
+            g.drawLine(startX, startY+i, startX+boardWidth, startY + i);
+        }  
 
         g.setColor(Color.yellow);
         g.setFont(new Font("Arial", Font.BOLD, 28));
@@ -190,18 +177,7 @@ public class GameRunner extends JPanel implements ActionListener{
     }
 
     public void drawGameOverGraphics(int startX, int startY, int boardWidth, int boardHeight, int squareDim, Graphics g) {
-        /*g.setColor(Color.black);
-        g.fillRect(startX, startY, boardWidth, boardHeight);
-
-        g.setColor(Color.yellow);
-        g.setFont(new Font("Arial", Font.BOLD, 50));
-        g.drawString("Game Over", frameWidth/2, frameHeight/2);*/
-        GameOver over = new GameOver(this);
-
-
-        //Draw the previous high scores and everything here
-
-     
+        GameOver over = new GameOver(this);  
     }
     public int getScore(){
         return score;
@@ -218,20 +194,13 @@ public class GameRunner extends JPanel implements ActionListener{
 
 
         drawGameOverGraphics(250,70,boardWidth, boardHeight, squareDim, g);
-        //GameOver over = new GameOver();
         JLabel backGroundImg = new JLabel();
         backGroundImg.setIcon(new ImageIcon(background.getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH)));;
         Image myImage = background.getScaledInstance(frameWidth, frameHeight, squareDim);
-
-
-
-        //frame.setContentPane(new ImagePanel(myImage));
-        //frame.setVisible(true);
     }
 
     public static void main(String[] args) {
     	new GameRunner();
 	}
-
 
 }

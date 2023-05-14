@@ -126,7 +126,6 @@ public class PuzzlePiece {
         pieceLabel.setIcon(shape);
 
         size = pieceLabel.getPreferredSize();
-        //pieceLabel.setBounds(xCell, yCell, size.width, size.height);
 
     }
 

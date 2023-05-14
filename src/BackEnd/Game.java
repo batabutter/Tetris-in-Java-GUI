@@ -66,14 +66,9 @@ public class Game {
                     p1.movePiece(piece);
                     //SwingUtilities.updateComponentTreeUI(board.getFrame());
                     if (board.getCurrentPiece() != null) {
-                        if (board.getDropSpeed() == frameCounter) {
+                        if (frameCounter % board.getDropSpeed() == 0) {
                             board.movePieceDown(board.getCurrentPiece(),true);
                         }
-                    }
-
-                    if (frameCounter == 60) {
-                        //System.out.println("Temp count >" +tempCount);
-                        //System.out.println("Temp >"+tempCount);
                     }
 
                     
@@ -88,10 +83,6 @@ public class Game {
                         if (settleCount % board.getSettledFrames() == 0 && settleCount != 0){
                             board.update();
                         }
-                    }
-
-                    if (frameCounter == 60) {
-                        frameCounter = 0;
                     }
 
                 }
