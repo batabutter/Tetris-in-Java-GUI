@@ -3,14 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
 public class PuzzlePiece {
-    //Orientation of these elements are dependent on the program working
-
-    /* 
-    private ImageIcon[] blocks = {new ImageIcon("images/yellow.png"), new ImageIcon("images/teal.png"), 
-    new ImageIcon("images/red.png"), new ImageIcon("images/purple.png"), new ImageIcon("images/orange.png"),
-    new ImageIcon("images/green.png"), new ImageIcon("images/blue.png")};
-    */
-
+    
     private ImageIcon[] blocks = {new ImageIcon("images/yellow.png"), new ImageIcon("images/teal.png"), new ImageIcon("images/red.png"),  
     new ImageIcon("images/purple.png"), new ImageIcon("images/orange.png"), new ImageIcon("images/blue.png"), new ImageIcon("images/green.png"), 
     new ImageIcon("images/yellowTrans.png"), new ImageIcon("images/tealTrans.png"), new ImageIcon("images/redTrans.png"),  
@@ -44,8 +37,6 @@ public class PuzzlePiece {
         hitbox = new Hitbox(this.pieceType, this, this.xStart, this.yStart);
         farthestX = -1;
         currentPieceLabels = new ArrayList<JLabel>();
-
-        //I will alter this later
     }
 
     private void setPieceType(int pieceType, boolean hollow) {

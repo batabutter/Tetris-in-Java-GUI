@@ -41,13 +41,23 @@ public class GameRunner extends JPanel implements ActionListener{
                 elapsedTime = (new Date()).getTime() - startTime;
             }
             frameCounter++;
-            System.out.println("On frame > "+frameCounter);
+            try {
+                Thread.sleep(10);     
+            } catch (Exception e) {
+                System.out.println("Frame unprocessed");
+            };
 
             if (frameCounter == 60)
                 frameCounter = 0;
         }
         mainMenu.setVisible(false);
+<<<<<<< HEAD
         score = runGame(board);
+=======
+        mainMenu.setResizable(false);
+        board.setResizable(false);
+        int score = runGame(board);
+>>>>>>> 84d9e351ac0a82e02ab1997fc09225b787d9f37d
         board.setVisible(false);
 
         gameOverScreen = new JFrame("Tetris");
@@ -192,12 +202,17 @@ public class GameRunner extends JPanel implements ActionListener{
         g.setColor(Color.yellow);
         g.setFont(new Font("Arial", Font.BOLD, 50));
         g.drawString("Game Over", frameWidth/2, frameHeight/2);*/
+<<<<<<< HEAD
         GameOver over = new GameOver(this);
 
 
         //Draw the previous high scores and everything here
 
 
+=======
+        GameOver over = new GameOver();
+     
+>>>>>>> 84d9e351ac0a82e02ab1997fc09225b787d9f37d
     }
     public int getScore(){
         return score;

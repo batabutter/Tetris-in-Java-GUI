@@ -5,10 +5,8 @@ public class BoardGrid {
     private int[][] board;
     private int height;
     private int width;
-    private int shifts;
     private ArrayList<Integer> lines;
     private ArrayList<Integer> prevLinesCleared;
-    private int smallestFarthestY;
 
     private int[][][] wallKickDataJLSTZ = {
         {{0,0}, {-1, 0}, {-1, 1}, {0,-2}, {-1,-2}, {0,0}, {1,0}, {1, -1}, {0, 2}, {1, 2}},
@@ -41,12 +39,35 @@ public class BoardGrid {
     private int[] srsOffSet;
 
     public BoardGrid () {
-        board = new int[20][10];
+        //board = new int[20][10];
+        
+        int[][] temp  = {{0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0,0,0}};
+        board = temp;
+        
+
+
         height = 20;
         width = 10;
-        shifts = 0;
         srsOffSet = null;
-        smallestFarthestY = 100;
     }
 
     public int[][] getBoard() {
@@ -87,14 +108,8 @@ public class BoardGrid {
 
         for (int i = 0 ; i < lines.size(); i++) {
             moveGridDown(lines.get(i), lines.size());
-            for (int k = i+1; k < lines.size(); k++) {
-                lines.set(k, 1+lines.get(i));
-            }
-            
         }
         
-
-        shifts = 0;
         currentPiece.getHitbox().clear();
     }
 
@@ -114,6 +129,16 @@ public class BoardGrid {
         }
         if (lines.size() > 0)
             linesInSucc.add(count);
+
+        for (int k = 0; k < lines.size(); k++) {
+            //System.out.println("Line cleared on > "+lines.get(k));
+        }
+
+        for (int k = 0; k < linesInSucc.size(); k++) {
+            //System.out.println("Line cleared on  in succ > "+linesInSucc.get(k));
+        }
+
+        
         return linesInSucc;
     }
 
@@ -122,7 +147,9 @@ public class BoardGrid {
     }
 
     public void moveGridDown(int row, int N) {
-        System.out.println("Clearing row > "+row);
+        //System.out.println("Before > ");
+        //printGrid();
+        //System.out.println("Clearing row > "+row);
         for (int i = 0; i < board[0].length; i++) {
             board[row][i] = 0;
         }
@@ -134,6 +161,7 @@ public class BoardGrid {
             board[i-1] = temp;
         }
         //System.out.println("Swap");
+        //System.out.println("After > ");
         //printGrid();
         count++;
         
@@ -147,8 +175,9 @@ public class BoardGrid {
                 if (board[i][k] != 0) 
                     count++;
             }
-            if (count == 10)
+            if (count == 10) {
                 lines.add(i);
+            }
             count = 0;
         }
 
@@ -364,7 +393,7 @@ public class BoardGrid {
                                 piece.getHitbox().setXPivot(rightRotationMatrix[timesRotated][0] * yPivot);
                                 piece.getHitbox().setYPivot(rightRotationMatrix[timesRotated][1] * xPivot);
                             } else {
-                                System.out.println("Left changing > ");
+                                //System.out.println("Left changing > ");
                                 piece.getHitbox().setXPivot(leftRotationMatrix[timesRotated][0] * yPivot);
                                 piece.getHitbox().setYPivot(leftRotationMatrix[timesRotated][1] * xPivot);
                             }
@@ -373,11 +402,11 @@ public class BoardGrid {
 
                             testPiece.setX(locations[0][0]*30 + 250);
                             testPiece.setY(locations[0][1]*30 + 70);
-                            System.out.println(testPiece.getX());
-                            System.out.println(testPiece.getY());
+                            //System.out.println(testPiece.getX());
+                            //System.out.println(testPiece.getY());
                             testPiece.getHitbox().setGridLoc(locations);
-                            testPiece.getHitbox().printGridLoc();
-                                //System.out.println("End change");
+                            //testPiece.getHitbox().printGridLoc();
+                            //System.out.println("End change");
                             return testPiece;
                         }
                     }
