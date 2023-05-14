@@ -104,7 +104,6 @@ public class Board {
 
     public void update() {
         arrBoard.updateGrid(currentPiece);
-        //arrBoard.printGrid();
         removePieceImages();
         updateImagesOfBoard();
         holdCount = 0;
@@ -115,20 +114,16 @@ public class Board {
         for (int i = 0; i < linesCleared.size(); i++) {
             if (linesCleared.get(i) == 1) {
                 addScore(100 * level);
-                System.out.println("You cleared 1 line");
             } else if (linesCleared.get(i) == 2) {
                 addScore(300 * level);
-                System.out.println("You cleared 2 lines in a row");
             } else if (linesCleared.get(i) == 3) {
                 addScore(500 * level);
-                System.out.println("You cleared 3 lines in a row");
             } else if (linesCleared.get(i) == 4) {
                 addScore(800 * level);
-                System.out.println("You cleared 4 lines in a row");
             }
            numberOfLinesClearedOnLevel = numberOfLinesClearedOnLevel + linesCleared.get(i);
 
-           if (numberOfLinesClearedOnLevel >= level * 10) {
+           if (numberOfLinesClearedOnLevel >=10) {
             numberOfLinesClearedOnLevel = 0;
             increaseLevel();
             if (level < 14) {
