@@ -64,13 +64,13 @@ public class Player {
 
    //Creates new piece at given location
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
-        //Maybe change to be more accurate, but in my opinion, this looks nicer
-        setGameOver(board.getBoardGrid().gameOverCondition(piece));
+        //Maybe change to be more accurate, but in my opinion, this looks nicer  
         if (!gameOver){
             board.add(piece);
             board.addNextPiece(nextPiece);
             projPiece(board.getCurrentPiece());
         }
+        setGameOver(board.getBoardGrid().gameOverCondition(piece));
 
 
    }
