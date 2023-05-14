@@ -105,7 +105,7 @@ public class GameOver {
                 g2d.drawString(message, xPos, yPos);
                 g2d.setFont(new Font("Futura-Bold", Font.PLAIN, 50));
                 g2d.setColor(Color.green);
-                g2d.drawString("Score: " + 1000, 300, 410);
+                g2d.drawString("Score: " + runner.getScore(), 300, 410);
                 g2d.dispose();
             }
         }
