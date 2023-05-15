@@ -14,7 +14,6 @@ public class Hitbox {
     private double yPivot;
 
     public Hitbox(int pieceType, PuzzlePiece piece, int xStart, int yStart) {
-        //Always creates a hitbox starting at 0,0
         points = new ArrayList<Line2D>();
         this.pieceType = pieceType;
         this.piece= piece;
@@ -24,7 +23,6 @@ public class Hitbox {
         int yCell = (piece.getY() - piece.yStart()) / Board.squareDim;
         this.gridLoc = new int[4][2];
 
-        //Does this cause a memory leak?
         switch (pieceType) {
             case 0 :
                 int[][] temp = {{xCell,yCell},
@@ -58,7 +56,6 @@ public class Hitbox {
             break;
 
             case 4:
-            //Orange
                 int[][] temp5 = {{xCell,yCell},
                                 {xCell-1,yCell+1},
                                 {xCell-2,yCell+1},
@@ -84,7 +81,6 @@ public class Hitbox {
 
         }
 
-        //Change
         if (pieceType ==  1) {
             xPivot = 1.5;
             yPivot = 0.5;
@@ -100,34 +96,14 @@ public class Hitbox {
         tempY = (piece.getY() - yStart) / Board.squareDim;
         tempX = (piece.getX() - xStart) / Board.squareDim;
         
-        //System.out.println("Temp y before > "+tempY);
-        //System.out.println("Temp x before > "+tempX);
-        //System.out.println("changing > "+gridLoc[0][1]);
-        
-        for (int i = 0; i < gridLoc.length; i++) {
-            //System.out.println("Before > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
-                
-        }
-        
         tempX = tempX - gridLoc[0][0];
         tempY = tempY - gridLoc[0][1];
-        //System.out.println("Tempx > "+tempX);
-        //System.out.println("Temp y after > "+tempY);
         if (piece.getY() != 0) {
             for (int i = 0; i < gridLoc.length; i++) {
-                
-                //System.out.println("before > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
-                //System.out.println("Piece is at > ("+piece.getX()+", "+piece.getY()+")");
-                //System.out.println("x and y start > ("+xStart+", "+yStart+")");
-                
-                
                 gridLoc[i][0] = tempX + gridLoc[i][0];
                 gridLoc[i][1] = gridLoc[i][1] + tempY;
-                //System.out.println("after > ("+gridLoc[i][0] +", "+gridLoc[i][1]+")");
-                
             }
         }
-        //System.out.println("-----------------------");
     }
     
     public void printGridLoc() {

@@ -62,9 +62,7 @@ public class Player {
     return gameOver;
    }
 
-   //Creates new piece at given location
    public void createNewPiece(PuzzlePiece piece, PuzzlePiece nextPiece) {
-        //Maybe change to be more accurate, but in my opinion, this looks nicer  
         if (!gameOver){
             board.add(piece);
             board.addNextPiece(nextPiece);

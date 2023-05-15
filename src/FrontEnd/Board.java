@@ -128,7 +128,6 @@ public class Board {
             increaseLevel();
             if (level < 14) {
                 setDropSpeed(Math.pow((0.8-((level-1)*0.007)), level-1) * 60);
-                System.out.println("Drop speed is now > "+getDropSpeed());
             }
            }
 
@@ -147,7 +146,6 @@ public class Board {
 
     public void increaseLevel() {
         level++;
-        visLevel.setText("Level: "+String.valueOf(level));
     }
 
     public int getLevel() {
@@ -182,9 +180,7 @@ public class Board {
             piece.setX(piece.xStart() + 3*30);
         }
 
-        //System.out.println("Piece type > "+piece.getPieceType());
         addPiece(piece);
-        //currentPiece.getHitbox().printGridLoc();
     }
 
     public void addProjPiece(PuzzlePiece piece) {

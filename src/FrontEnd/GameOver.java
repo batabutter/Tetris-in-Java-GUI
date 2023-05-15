@@ -64,8 +64,7 @@ public class GameOver {
         int xPos;
 
         public Inner() {
-            //menu.addActionListener((ActionListener)this);
-     
+
         	Timer timer = new Timer(20, new ActionListener() {
         		@Override
                
