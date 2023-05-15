@@ -185,7 +185,7 @@ public class GameRunner extends JPanel implements ActionListener{
     public void gameOverScreen(JFrame frame, int score) {
         frame.setSize(frameWidth,frameHeight);
         //frame.setBackground(Color.black);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
         frame.setLocationRelativeTo(null);
 
         Dimension size = new Dimension(frameWidth,frameHeight);
